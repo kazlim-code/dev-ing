@@ -1,4 +1,9 @@
-# DevIng (Dev - Ingley) :)
+# dev_ing - Developer Ingley
+
+[![Package Version](https://img.shields.io/hexpm/v/dev_ing)](https://hex.pm/packages/dev_ing)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/dev_ing/)
+
+Further documentation can be found at <https://hexdocs.pm/dev_ing>.
 
 ## Description
 This project is most likely going to end up being a front facing web
@@ -29,10 +34,11 @@ improve my knowledge in this area.
   - Will GitHub pages suffice for now?
 
 ## Installation
-- TBD (Step-by-step instructions on how to set up the project environment and
-install dependencies. This is crucial for an AI to be able to run and test your
-code.)
-  - TODO: Include the specific commands to be run.
+
+```sh
+gleam run   # Run the project
+gleam test  # Run the tests
+```
 
 ## Usage
 TODO: Provide clear instructions on how to run the project and use its
