@@ -10,8 +10,7 @@ This project is most likely going to end up being a front facing web
 application where I can showcase my own person development work and learnings.
 
 ## Features
-- Server written in Gleam using Wisp
-- Client written in Gleam using Lustre for the front end
+- SPA written in Gleam using Lustre
 - CMS capable of simple blog functionality
 - Potential to host/reference other projects and demos (most likely written in Gleam too)
 
@@ -23,10 +22,8 @@ and being new to functional programming I'd like to continue using it to
 improve my knowledge in this area.
 
 - Gleam
-  - Frontend
+  - SPA
     - Lustre
-  - Backend
-    - Wisp?
 - Database
   - Mysql?
     - What Gleam libraries can I use here?
