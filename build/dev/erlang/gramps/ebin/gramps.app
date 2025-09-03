@@ -5,10 +5,6 @@
                     gleam_http,
                     gleam_stdlib]},
     {description, "A Gleam HTTP and WebSocket helper library"},
-    {modules, [gramps@debug,
-               gramps@http,
-               gramps@websocket,
-               gramps@websocket@compression,
-               gramps_ffi]},
+    {modules, []},
     {registered, []}
 ]}.

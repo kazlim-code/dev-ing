@@ -5,9 +5,6 @@
                     gleam_stdlib,
                     snag]},
     {description, "Gleam command-line argument parsing with flags and automated help text generation."},
-    {modules, [glint,
-               glint@constraint,
-               glint@internal@help,
-               glint@internal@utils]},
+    {modules, []},
     {registered, []}
 ]}.

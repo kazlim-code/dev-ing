@@ -5,6 +5,6 @@
                     platform,
                     simplifile]},
     {description, "A lightweight package to get standard locations of directories for temporary files, config, cache, etc."},
-    {modules, [directories]},
+    {modules, []},
     {registered, []}
 ]}.

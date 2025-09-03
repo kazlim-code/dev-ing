@@ -13,10 +13,6 @@
                     mist,
                     simplifile]},
     {description, "A practical web framework for Gleam"},
-    {modules, [wisp,
-               wisp@internal,
-               wisp@testing,
-               wisp@wisp_mist,
-               wisp_ffi]},
+    {modules, []},
     {registered, []}
 ]}.

@@ -2,9 +2,6 @@
     {vsn, "1.2.0"},
     {applications, []},
     {description, "🪄 Fast HTML escaping"},
-    {modules, [houdini,
-               houdini@internal@escape_erl,
-               houdini@internal@escape_js,
-               houdini_ffi]},
+    {modules, []},
     {registered, []}
 ]}.

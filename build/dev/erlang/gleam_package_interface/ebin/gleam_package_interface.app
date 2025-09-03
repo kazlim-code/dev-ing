@@ -2,6 +2,6 @@
     {vsn, "3.0.1"},
     {applications, [gleam_stdlib]},
     {description, "Work with Gleam's package interfaces"},
-    {modules, [gleam@package_interface]},
+    {modules, []},
     {registered, []}
 ]}.

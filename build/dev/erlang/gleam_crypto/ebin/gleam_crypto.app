@@ -2,7 +2,6 @@
     {vsn, "1.5.1"},
     {applications, [gleam_stdlib]},
     {description, "A Gleam cryptography library supporting Erlang and JavaScript"},
-    {modules, [gleam@crypto,
-               gleam_crypto_ffi]},
+    {modules, []},
     {registered, []}
 ]}.
