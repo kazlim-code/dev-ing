@@ -30,16 +30,21 @@ improve my knowledge in this area.
 - Hosting
   - Will GitHub pages suffice for now?
 
-## Installation
+## Development
+
+To start the development server, run:
 
 ```sh
-gleam run   # Run the project
-gleam test  # Run the tests
+gleam run -m lustre/dev start
 ```
 
-## Usage
-TODO: Provide clear instructions on how to run the project and use its
-features. Provide code snippets and examples of command-line arguments.
+This will start a server at `http://localhost:8000` and automatically reload the browser when you make changes to the code.
+
+To run the tests, use:
+
+```sh
+gleam test
+```
 
 ## TODO
 What I will need to create to even get started displaying my work and blog posts:

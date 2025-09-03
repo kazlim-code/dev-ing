@@ -1,5 +1,15 @@
-import gleam/io
+import lustre
+import lustre/element.{text}
+import lustre/element/html.{div}
 
-pub fn main() -> Nil {
-  io.println("Hello from dev_ing!")
+pub fn main() {
+  let app = lustre.element(view())
+  let assert Ok(_) = lustre.start(app, "#app", Nil)
+  Nil
+}
+
+fn view() {
+  div([], [
+    text("Hello, world!")
+  ])
 }
