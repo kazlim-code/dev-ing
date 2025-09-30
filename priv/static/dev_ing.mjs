@@ -44,8 +44,8 @@ var List = class {
     return length2 - 1;
   }
 };
-function prepend(element5, tail) {
-  return new NonEmpty(element5, tail);
+function prepend(element4, tail) {
+  return new NonEmpty(element4, tail);
 }
 function toList(elements, tail) {
   return List.fromArray(elements, tail);
@@ -819,6 +819,9 @@ var always_kind = 2;
 function attribute2(name, value) {
   return attribute(name, value);
 }
+function class$(name) {
+  return attribute2("class", name);
+}
 
 // build/dev/javascript/lustre/lustre/effect.mjs
 var Effect = class extends CustomType {
@@ -977,12 +980,12 @@ var Element = class extends CustomType {
   }
 };
 var Text = class extends CustomType {
-  constructor(kind, key, mapper, content) {
+  constructor(kind, key, mapper, content2) {
     super();
     this.kind = kind;
     this.key = key;
     this.mapper = mapper;
-    this.content = content;
+    this.content = content2;
   }
 };
 var UnsafeInnerHtml = class extends CustomType {
@@ -1090,8 +1093,8 @@ function element(key, mapper, namespace, tag, attributes, children, keyed_childr
   );
 }
 var text_kind = 2;
-function text(key, mapper, content) {
-  return new Text(text_kind, key, mapper, content);
+function text(key, mapper, content2) {
+  return new Text(text_kind, key, mapper, content2);
 }
 var unsafe_inner_html_kind = 3;
 
@@ -1401,16 +1404,46 @@ function element2(tag, attributes, children) {
     false
   );
 }
-function text2(content) {
-  return text("", identity2, content);
+function text2(content2) {
+  return text("", identity2, content2);
 }
 function none2() {
   return text("", identity2, "");
 }
+function fragment2(children) {
+  return fragment("", identity2, children, empty2());
+}
 
 // build/dev/javascript/lustre/lustre/element/html.mjs
+function aside(attrs, children) {
+  return element2("aside", attrs, children);
+}
+function footer(attrs, children) {
+  return element2("footer", attrs, children);
+}
+function header(attrs, children) {
+  return element2("header", attrs, children);
+}
+function h1(attrs, children) {
+  return element2("h1", attrs, children);
+}
+function h2(attrs, children) {
+  return element2("h2", attrs, children);
+}
+function main(attrs, children) {
+  return element2("main", attrs, children);
+}
 function div(attrs, children) {
   return element2("div", attrs, children);
+}
+function li(attrs, children) {
+  return element2("li", attrs, children);
+}
+function p(attrs, children) {
+  return element2("p", attrs, children);
+}
+function ul(attrs, children) {
+  return element2("ul", attrs, children);
 }
 
 // build/dev/javascript/lustre/lustre/vdom/patch.mjs
@@ -1424,10 +1457,10 @@ var Patch = class extends CustomType {
   }
 };
 var ReplaceText = class extends CustomType {
-  constructor(kind, content) {
+  constructor(kind, content2) {
     super();
     this.kind = kind;
-    this.content = content;
+    this.content = content2;
   }
 };
 var ReplaceInnerHtml = class extends CustomType {
@@ -1480,8 +1513,8 @@ function new$5(index2, removed, changes, children) {
   return new Patch(index2, removed, changes, children);
 }
 var replace_text_kind = 0;
-function replace_text(content) {
-  return new ReplaceText(replace_text_kind, content);
+function replace_text(content2) {
+  return new ReplaceText(replace_text_kind, content2);
 }
 var replace_inner_html_kind = 1;
 function replace_inner_html(inner_html) {
@@ -2571,10 +2604,10 @@ var Reconciler = class {
   }
   // CHANGES -------------------------------------------------------------------
   #insert(parent, { children, before }) {
-    const fragment3 = createDocumentFragment();
+    const fragment4 = createDocumentFragment();
     const beforeEl = this.#getReference(parent, before);
-    this.#insertChildren(fragment3, null, parent, before | 0, children);
-    insertBefore(parent.parentNode, fragment3, beforeEl);
+    this.#insertChildren(fragment4, null, parent, before | 0, children);
+    insertBefore(parent.parentNode, fragment4, beforeEl);
   }
   #replace(parent, { index: index2, with: child }) {
     this.#removeChildren(parent, index2 | 0, 1);
@@ -2663,8 +2696,8 @@ var Reconciler = class {
     });
     iterate(added, (attribute3) => this.#createAttribute(node, attribute3));
   }
-  #replaceText({ node }, { content }) {
-    setData(node, content ?? "");
+  #replaceText({ node }, { content: content2 }) {
+    setData(node, content2 ?? "");
   }
   #replaceInnerHtml({ node }, { inner_html }) {
     setInnerHtml(node, inner_html ?? "");
@@ -2718,8 +2751,8 @@ var Reconciler = class {
     iterate(attributes, (attribute3) => this.#createAttribute(node, attribute3));
     return node;
   }
-  #createTextNode(parent, index2, { kind, key, content }) {
-    const node = createTextNode(content ?? "");
+  #createTextNode(parent, index2, { kind, key, content: content2 }) {
+    const node = createTextNode(content2 ?? "");
     insertMetadataChild(kind, parent, node, index2, key);
     return node;
   }
@@ -2966,7 +2999,7 @@ function namespaced2(namespace, tag, attributes, children) {
     false
   );
 }
-function fragment2(children) {
+function fragment3(children) {
   let $ = extract_keyed_children(children);
   let keyed_children;
   let children$1;
@@ -2996,7 +3029,7 @@ var virtualise = (root3) => {
   const fragmentMeta = insertMetadataChild(fragment_kind, rootMeta, fragmentHead, 0, null);
   const children = virtualiseChildNodes(fragmentMeta, root3);
   root3.insertBefore(fragmentHead, root3.firstChild);
-  return fragment2(children);
+  return fragment3(children);
 };
 var canVirtualiseNode = (node) => {
   switch (node.nodeType) {
@@ -3100,24 +3133,23 @@ var virtualiseAttribute = (attr) => {
 // build/dev/javascript/lustre/lustre/runtime/client/runtime.ffi.mjs
 var is_browser = () => !!document();
 var Runtime = class {
-  constructor(root3, [model, effects], view2, update2) {
+  constructor(root3, [model, effects], view2, update3) {
     this.root = root3;
     this.#model = model;
     this.#view = view2;
-    this.#update = update2;
+    this.#update = update3;
     this.root.addEventListener("context-request", (event2) => {
       if (!(event2.context && event2.callback)) return;
       if (!this.#contexts.has(event2.context)) return;
       event2.stopImmediatePropagation();
       const context = this.#contexts.get(event2.context);
       if (event2.subscribe) {
-        const callbackRef = new WeakRef(event2.callback);
         const unsubscribe = () => {
           context.subscribers = context.subscribers.filter(
-            (subscriber) => subscriber !== callbackRef
+            (subscriber) => subscriber !== event2.callback
           );
         };
-        context.subscribers.push([callbackRef, unsubscribe]);
+        context.subscribers.push([event2.callback, unsubscribe]);
         event2.callback(context.value, unsubscribe);
       } else {
         event2.callback(context.value);
@@ -3171,8 +3203,7 @@ var Runtime = class {
       const context = this.#contexts.get(key);
       context.value = value;
       for (let i = context.subscribers.length - 1; i >= 0; i--) {
-        const [subscriberRef, unsubscribe] = context.subscribers[i];
-        const subscriber = subscriberRef.deref();
+        const [subscriber, unsubscribe] = context.subscribers[i];
         if (!subscriber) {
           context.subscribers.splice(i, 1);
           continue;
@@ -3304,7 +3335,7 @@ var Config2 = class extends CustomType {
   }
 };
 function new$6(options) {
-  let init = new Config2(
+  let init2 = new Config2(
     true,
     true,
     false,
@@ -3318,7 +3349,7 @@ function new$6(options) {
   );
   return fold(
     options,
-    init,
+    init2,
     (config, option) => {
       return option.apply(config);
     }
@@ -3328,8 +3359,8 @@ function new$6(options) {
 // build/dev/javascript/lustre/lustre/runtime/client/spa.ffi.mjs
 var Spa = class {
   #runtime;
-  constructor(root3, [init, effects], update2, view2) {
-    this.#runtime = new Runtime(root3, [init, effects], view2, update2);
+  constructor(root3, [init2, effects], update3, view2) {
+    this.#runtime = new Runtime(root3, [init2, effects], view2, update3);
   }
   send(message) {
     switch (message.constructor) {
@@ -3352,19 +3383,19 @@ var Spa = class {
     this.#runtime.emit(event2, data);
   }
 };
-var start = ({ init, update: update2, view: view2 }, selector, flags) => {
+var start = ({ init: init2, update: update3, view: view2 }, selector, flags) => {
   if (!is_browser()) return new Error(new NotABrowser());
   const root3 = selector instanceof HTMLElement ? selector : document().querySelector(selector);
   if (!root3) return new Error(new ElementNotFound(selector));
-  return new Ok(new Spa(root3, init(flags), update2, view2));
+  return new Ok(new Spa(root3, init2(flags), update3, view2));
 };
 
 // build/dev/javascript/lustre/lustre.mjs
 var App = class extends CustomType {
-  constructor(init, update2, view2, config) {
+  constructor(init2, update3, view2, config) {
     super();
-    this.init = init;
-    this.update = update2;
+    this.init = init2;
+    this.update = update3;
     this.view = view2;
     this.config = config;
   }
@@ -3377,21 +3408,8 @@ var ElementNotFound = class extends CustomType {
 };
 var NotABrowser = class extends CustomType {
 };
-function application(init, update2, view2) {
-  return new App(init, update2, view2, new$6(empty_list));
-}
-function element4(view2) {
-  return application(
-    (_) => {
-      return [void 0, none()];
-    },
-    (_, _1) => {
-      return [void 0, none()];
-    },
-    (_) => {
-      return view2;
-    }
-  );
+function application(init2, update3, view2) {
+  return new App(init2, update3, view2, new$6(empty_list));
 }
 function start3(app, selector, start_args) {
   return guard(
@@ -3405,25 +3423,135 @@ function start3(app, selector, start_args) {
 
 // build/dev/javascript/dev_ing/dev_ing.mjs
 var FILEPATH = "src/dev_ing.gleam";
-function view() {
-  return div(toList([]), toList([text2("Hello, world!")]));
+var Model = class extends CustomType {
+  constructor($0) {
+    super();
+    this[0] = $0;
+  }
+};
+function init(_) {
+  return [new Model(void 0), none()];
 }
-function main() {
-  let app = element4(view());
+function update2(_, _1) {
+  return [new Model(void 0), none()];
+}
+function header2() {
+  return header(
+    toList([
+      class$(
+        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500"
+      )
+    ]),
+    toList([
+      div(
+        toList([
+          class$("w-full max-w-5xl mx-auto flex align-center gap-4")
+        ]),
+        toList([
+          div(
+            toList([class$("font-bold text-xl")]),
+            toList([text2("Dev-Ing")])
+          ),
+          ul(
+            toList([class$("flex flex-row gap-2")]),
+            toList([
+              li(toList([]), toList([text2("Blog")])),
+              li(toList([]), toList([text2("About")]))
+            ])
+          )
+        ])
+      )
+    ])
+  );
+}
+function content() {
+  return main(
+    toList([class$("px-4")]),
+    toList([
+      div(
+        toList([class$("w-full max-w-5xl mx-auto")]),
+        toList([
+          h1(
+            toList([class$("font-semibold text-2xl")]),
+            toList([text2("Page header")])
+          )
+        ])
+      )
+    ])
+  );
+}
+function side_menu() {
+  return aside(
+    toList([class$("w-64 p-4 border-r border-secondary-500")]),
+    toList([
+      h2(
+        toList([class$("font-semibold text-lg")]),
+        toList([text2("Side Menu")])
+      ),
+      ul(
+        toList([class$("mt-4")]),
+        toList([
+          li(toList([]), toList([text2("Link 1")])),
+          li(toList([]), toList([text2("Link 2")])),
+          li(toList([]), toList([text2("Link 3")]))
+        ])
+      )
+    ])
+  );
+}
+function footer2() {
+  return footer(
+    toList([
+      class$("px-4 py-4 grid border-t border-secondary-500 mt-10")
+    ]),
+    toList([
+      div(
+        toList([
+          class$("w-full max-w-5xl mx-auto flex justify-center")
+        ]),
+        toList([
+          p(
+            toList([]),
+            toList([text2("\xA9 2025 Dev-Ing. All rights reserved.")])
+          )
+        ])
+      )
+    ])
+  );
+}
+function view(_) {
+  return fragment2(
+    toList([
+      header2(),
+      div(
+        toList([class$("min-h-screen flex flex-col")]),
+        toList([
+          div(
+            toList([class$("flex flex-1 pt-20")]),
+            toList([side_menu(), content()])
+          ),
+          footer2()
+        ])
+      )
+    ])
+  );
+}
+function main2() {
+  let app = application(init, update2, view);
   let $ = start3(app, "#app", void 0);
   if (!($ instanceof Ok)) {
     throw makeError(
       "let_assert",
       FILEPATH,
       "dev_ing",
-      7,
+      16,
       "main",
       "Pattern match failed, no pattern matched the value.",
-      { value: $, start: 130, end: 179, pattern_start: 141, pattern_end: 146 }
+      { value: $, start: 292, end: 341, pattern_start: 303, pattern_end: 308 }
     );
   }
   return void 0;
 }
 
 // build/.lustre/entry.mjs
-main();
+main2();

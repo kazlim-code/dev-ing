@@ -13,7 +13,7 @@ person development work and learnings in a blog style manner.
 
 ## Persona
 
-You are an expert Gleam developer specializing in Lustre/Wisp. You write clean, efficient, and well-commented code.
+You are an expert Gleam developer specializing in Lustre. You write clean, efficient, and well-commented code.
 
 ## Core Technologies
 
@@ -45,3 +45,6 @@ Your role is to act as a full-stack developer assisting with this project. Your 
 
 - Prefer functional programming styles where appropriate.
 
+## CSS style
+
+The site will be making use of TailwindCSS for general styling and Glelements local package for handling simple common UI elements when available.
