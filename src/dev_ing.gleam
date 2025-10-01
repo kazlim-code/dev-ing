@@ -3,13 +3,17 @@ import lustre/effect.{type Effect}
 import lustre
 import lustre/element.{type Element, text}
 import lustre/element/html
-// import glelements/card.{basic}
+import lustre/event
+import glelements/button
+import glelements/theme
 
 type Model {
   Model(Nil)
 }
 
-type Msg {}
+pub type Msg {
+  UserToggledColorScheme
+}
 
 pub fn main() {
   let app = lustre.application(init:, update:, view:)
@@ -18,12 +22,20 @@ pub fn main() {
 }
 
 fn init(_: Nil) -> #(Model, Effect(Msg)) {
+  theme.initialize_color_scheme()
   #(Model(Nil), effect.none())
 }
 
-fn update(_model: Model, _msg: Msg) -> #(Model, Effect(Msg)) {
-  #(Model(Nil), effect.none())
+fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
+  case msg {
+    UserToggledColorScheme -> {
+      theme.toggle_color_scheme()
+      #(model, effect.none())
+    }
+  }
 }
+
+// VIEW ---------------------------------------------------------------------
 
 fn view(_model: Model) -> Element(Msg) {
   element.fragment([
@@ -38,15 +50,20 @@ fn view(_model: Model) -> Element(Msg) {
   ])
 }
 
-fn header() {
-  html.header([attribute.class("fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500")], [
-    html.div([attribute.class("w-full max-w-5xl mx-auto flex align-center gap-4")], [
-      // TODO: Add a logo here
-      html.div([attribute.class("font-bold text-xl")], [text("Dev-Ing")]),
-      html.ul([attribute.class("flex flex-row gap-2")], [
-        html.li([], [html.a([attribute.href("#")], [text("Blog")])]),
-        html.li([], [html.a([attribute.href("#")], [text("About")])]),
+fn header() -> Element(Msg) {
+  html.header([attribute.class("fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500 bg-white dark:text-white dark:bg-black")], [
+    html.div([attribute.class("w-full max-w-5xl mx-auto flex items-center justify-between")], [
+      html.div([attribute.class("flex items-center gap-4")], [
+        // TODO: Add a logo here
+        html.div([attribute.class("font-bold text-xl")], [text("Dev-Ing")]),
+        html.ul([attribute.class("flex flex-row gap-2")], [
+          html.li([], [html.a([attribute.href("#")], [text("Blog")])]),
+          html.li([], [html.a([attribute.href("#")], [text("About")])]),
+        ]),
       ]),
+      button.theme_toggle([
+        event.on_click(UserToggledColorScheme), 
+      ], []),
     ])
   ])
 }

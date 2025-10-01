@@ -113,6 +113,12 @@ function makeError(variant, file, module, line, fn, message, extra) {
 }
 
 // build/dev/javascript/gleam_stdlib/gleam/option.mjs
+var Some = class extends CustomType {
+  constructor($0) {
+    super();
+    this[0] = $0;
+  }
+};
 var None = class extends CustomType {
 };
 
@@ -130,6 +136,97 @@ var Eq = class extends CustomType {
 };
 var Gt = class extends CustomType {
 };
+
+// build/dev/javascript/gleam_stdlib/gleam/string.mjs
+function concat_loop(loop$strings, loop$accumulator) {
+  while (true) {
+    let strings = loop$strings;
+    let accumulator = loop$accumulator;
+    if (strings instanceof Empty) {
+      return accumulator;
+    } else {
+      let string5 = strings.head;
+      let strings$1 = strings.tail;
+      loop$strings = strings$1;
+      loop$accumulator = accumulator + string5;
+    }
+  }
+}
+function concat2(strings) {
+  return concat_loop(strings, "");
+}
+
+// build/dev/javascript/gleam_stdlib/gleam/dynamic/decode.mjs
+var Decoder = class extends CustomType {
+  constructor(function$) {
+    super();
+    this.function = function$;
+  }
+};
+function run(data, decoder) {
+  let $ = decoder.function(data);
+  let maybe_invalid_data;
+  let errors;
+  maybe_invalid_data = $[0];
+  errors = $[1];
+  if (errors instanceof Empty) {
+    return new Ok(maybe_invalid_data);
+  } else {
+    return new Error(errors);
+  }
+}
+function success(data) {
+  return new Decoder((_) => {
+    return [data, toList([])];
+  });
+}
+function map2(decoder, transformer) {
+  return new Decoder(
+    (d) => {
+      let $ = decoder.function(d);
+      let data;
+      let errors;
+      data = $[0];
+      errors = $[1];
+      return [transformer(data), errors];
+    }
+  );
+}
+
+// build/dev/javascript/gleam_stdlib/gleam_stdlib.mjs
+function to_string(term) {
+  return term.toString();
+}
+function contains_string(haystack, needle) {
+  return haystack.indexOf(needle) >= 0;
+}
+function starts_with(haystack, needle) {
+  return haystack.startsWith(needle);
+}
+var unicode_whitespaces = [
+  " ",
+  // Space
+  "	",
+  // Horizontal tab
+  "\n",
+  // Line feed
+  "\v",
+  // Vertical tab
+  "\f",
+  // Form feed
+  "\r",
+  // Carriage return
+  "\x85",
+  // Next line
+  "\u2028",
+  // Line separator
+  "\u2029"
+  // Paragraph separator
+].join("");
+var trim_start_regex = /* @__PURE__ */ new RegExp(
+  `^[${unicode_whitespaces}]*`
+);
+var trim_end_regex = /* @__PURE__ */ new RegExp(`[${unicode_whitespaces}]*$`);
 
 // build/dev/javascript/gleam_stdlib/gleam/list.mjs
 var Ascending = class extends CustomType {
@@ -167,10 +264,10 @@ function append_loop(loop$first, loop$second) {
     }
   }
 }
-function append(first, second) {
+function append2(first, second) {
   return append_loop(reverse(first), second);
 }
-function fold(loop$list, loop$initial, loop$fun) {
+function fold2(loop$list, loop$initial, loop$fun) {
   while (true) {
     let list4 = loop$list;
     let initial = loop$initial;
@@ -183,6 +280,25 @@ function fold(loop$list, loop$initial, loop$fun) {
       loop$list = rest$1;
       loop$initial = fun(initial, first$1);
       loop$fun = fun;
+    }
+  }
+}
+function any(loop$list, loop$predicate) {
+  while (true) {
+    let list4 = loop$list;
+    let predicate = loop$predicate;
+    if (list4 instanceof Empty) {
+      return false;
+    } else {
+      let first$1 = list4.head;
+      let rest$1 = list4.tail;
+      let $ = predicate(first$1);
+      if ($) {
+        return $;
+      } else {
+        loop$list = rest$1;
+        loop$predicate = predicate;
+      }
     }
   }
 }
@@ -520,105 +636,8 @@ function sort(list4, compare4) {
   }
 }
 
-// build/dev/javascript/gleam_stdlib/gleam/string.mjs
-function concat_loop(loop$strings, loop$accumulator) {
-  while (true) {
-    let strings = loop$strings;
-    let accumulator = loop$accumulator;
-    if (strings instanceof Empty) {
-      return accumulator;
-    } else {
-      let string5 = strings.head;
-      let strings$1 = strings.tail;
-      loop$strings = strings$1;
-      loop$accumulator = accumulator + string5;
-    }
-  }
-}
-function concat2(strings) {
-  return concat_loop(strings, "");
-}
-
-// build/dev/javascript/gleam_stdlib/gleam/dynamic/decode.mjs
-var Decoder = class extends CustomType {
-  constructor(function$) {
-    super();
-    this.function = function$;
-  }
-};
-function run(data, decoder) {
-  let $ = decoder.function(data);
-  let maybe_invalid_data;
-  let errors;
-  maybe_invalid_data = $[0];
-  errors = $[1];
-  if (errors instanceof Empty) {
-    return new Ok(maybe_invalid_data);
-  } else {
-    return new Error(errors);
-  }
-}
-function map2(decoder, transformer) {
-  return new Decoder(
-    (d) => {
-      let $ = decoder.function(d);
-      let data;
-      let errors;
-      data = $[0];
-      errors = $[1];
-      return [transformer(data), errors];
-    }
-  );
-}
-
-// build/dev/javascript/gleam_stdlib/gleam_stdlib.mjs
-function to_string(term) {
-  return term.toString();
-}
-function starts_with(haystack, needle) {
-  return haystack.startsWith(needle);
-}
-var unicode_whitespaces = [
-  " ",
-  // Space
-  "	",
-  // Horizontal tab
-  "\n",
-  // Line feed
-  "\v",
-  // Vertical tab
-  "\f",
-  // Form feed
-  "\r",
-  // Carriage return
-  "\x85",
-  // Next line
-  "\u2028",
-  // Line separator
-  "\u2029"
-  // Paragraph separator
-].join("");
-var trim_start_regex = /* @__PURE__ */ new RegExp(
-  `^[${unicode_whitespaces}]*`
-);
-var trim_end_regex = /* @__PURE__ */ new RegExp(`[${unicode_whitespaces}]*$`);
-
-// build/dev/javascript/gleam_stdlib/gleam/bool.mjs
-function guard(requirement, consequence, alternative) {
-  if (requirement) {
-    return consequence;
-  } else {
-    return alternative();
-  }
-}
-
-// build/dev/javascript/gleam_stdlib/gleam/function.mjs
-function identity2(x) {
-  return x;
-}
-
 // build/dev/javascript/lustre/lustre/internals/constants.ffi.mjs
-var document = () => globalThis?.document;
+var document2 = () => globalThis?.document;
 var NAMESPACE_HTML = "http://www.w3.org/1999/xhtml";
 var ELEMENT_NODE = 1;
 var TEXT_NODE = 3;
@@ -679,6 +698,12 @@ var Handler = class extends CustomType {
     this.prevent_default = prevent_default;
     this.stop_propagation = stop_propagation;
     this.message = message;
+  }
+};
+var Never = class extends CustomType {
+  constructor(kind) {
+    super();
+    this.kind = kind;
   }
 };
 function merge(loop$attributes, loop$merged) {
@@ -812,7 +837,21 @@ function attribute(name, value) {
 }
 var property_kind = 1;
 var event_kind = 2;
+function event(name, handler, include, prevent_default, stop_propagation, immediate, debounce, throttle) {
+  return new Event2(
+    event_kind,
+    name,
+    handler,
+    include,
+    prevent_default,
+    stop_propagation,
+    immediate,
+    debounce,
+    throttle
+  );
+}
 var never_kind = 0;
+var never = /* @__PURE__ */ new Never(never_kind);
 var always_kind = 2;
 
 // build/dev/javascript/lustre/lustre/attribute.mjs
@@ -825,48 +864,38 @@ function class$(name) {
 function href(url) {
   return attribute2("href", url);
 }
+function role(name) {
+  return attribute2("role", name);
+}
 
-// build/dev/javascript/lustre/lustre/effect.mjs
-var Effect = class extends CustomType {
-  constructor(synchronous, before_paint2, after_paint) {
-    super();
-    this.synchronous = synchronous;
-    this.before_paint = before_paint2;
-    this.after_paint = after_paint;
-  }
-};
-var empty = /* @__PURE__ */ new Effect(
-  /* @__PURE__ */ toList([]),
-  /* @__PURE__ */ toList([]),
-  /* @__PURE__ */ toList([])
-);
-function none() {
-  return empty;
+// build/dev/javascript/gleam_stdlib/gleam/function.mjs
+function identity3(x) {
+  return x;
 }
 
 // build/dev/javascript/lustre/lustre/internals/mutable_map.ffi.mjs
-function empty2() {
+function empty() {
   return null;
 }
-function get(map3, key) {
-  const value = map3?.get(key);
+function get(map4, key) {
+  const value = map4?.get(key);
   if (value != null) {
     return new Ok(value);
   } else {
     return new Error(void 0);
   }
 }
-function has_key2(map3, key) {
-  return map3 && map3.has(key);
+function has_key2(map4, key) {
+  return map4 && map4.has(key);
 }
-function insert2(map3, key, value) {
-  map3 ??= /* @__PURE__ */ new Map();
-  map3.set(key, value);
-  return map3;
+function insert2(map4, key, value) {
+  map4 ??= /* @__PURE__ */ new Map();
+  map4.set(key, value);
+  return map4;
 }
-function remove(map3, key) {
-  map3?.delete(key);
-  return map3;
+function remove(map4, key) {
+  map4?.delete(key);
+  return map4;
 }
 
 // build/dev/javascript/lustre/lustre/vdom/path.mjs
@@ -888,18 +917,18 @@ var Index = class extends CustomType {
 };
 function do_matches(loop$path, loop$candidates) {
   while (true) {
-    let path = loop$path;
+    let path2 = loop$path;
     let candidates = loop$candidates;
     if (candidates instanceof Empty) {
       return false;
     } else {
       let candidate = candidates.head;
       let rest = candidates.tail;
-      let $ = starts_with(path, candidate);
+      let $ = starts_with(path2, candidate);
       if ($) {
         return $;
       } else {
-        loop$path = path;
+        loop$path = path2;
         loop$candidates = rest;
       }
     }
@@ -916,23 +945,23 @@ var root2 = /* @__PURE__ */ new Root();
 var separator_element = "	";
 function do_to_string(loop$path, loop$acc) {
   while (true) {
-    let path = loop$path;
+    let path2 = loop$path;
     let acc = loop$acc;
-    if (path instanceof Root) {
+    if (path2 instanceof Root) {
       if (acc instanceof Empty) {
         return "";
       } else {
         let segments = acc.tail;
         return concat2(segments);
       }
-    } else if (path instanceof Key) {
-      let key = path.key;
-      let parent = path.parent;
+    } else if (path2 instanceof Key) {
+      let key = path2.key;
+      let parent = path2.parent;
       loop$path = parent;
       loop$acc = prepend(separator_element, prepend(key, acc));
     } else {
-      let index2 = path.index;
-      let parent = path.parent;
+      let index2 = path2.index;
+      let parent = path2.parent;
       loop$path = parent;
       loop$acc = prepend(
         separator_element,
@@ -941,19 +970,19 @@ function do_to_string(loop$path, loop$acc) {
     }
   }
 }
-function to_string2(path) {
-  return do_to_string(path, toList([]));
+function to_string2(path2) {
+  return do_to_string(path2, toList([]));
 }
-function matches(path, candidates) {
+function matches(path2, candidates) {
   if (candidates instanceof Empty) {
     return false;
   } else {
-    return do_matches(to_string2(path), candidates);
+    return do_matches(to_string2(path2), candidates);
   }
 }
 var separator_event = "\n";
-function event(path, event2) {
-  return do_to_string(path, toList([separator_event, event2]));
+function event2(path2, event4) {
+  return do_to_string(path2, toList([separator_event, event4]));
 }
 
 // build/dev/javascript/lustre/lustre/vdom/vnode.mjs
@@ -968,12 +997,12 @@ var Fragment = class extends CustomType {
   }
 };
 var Element = class extends CustomType {
-  constructor(kind, key, mapper, namespace, tag, attributes, children, keyed_children, self_closing, void$) {
+  constructor(kind, key, mapper, namespace2, tag, attributes, children, keyed_children, self_closing, void$) {
     super();
     this.kind = kind;
     this.key = key;
     this.mapper = mapper;
-    this.namespace = namespace;
+    this.namespace = namespace2;
     this.tag = tag;
     this.attributes = attributes;
     this.children = children;
@@ -992,19 +1021,19 @@ var Text = class extends CustomType {
   }
 };
 var UnsafeInnerHtml = class extends CustomType {
-  constructor(kind, key, mapper, namespace, tag, attributes, inner_html) {
+  constructor(kind, key, mapper, namespace2, tag, attributes, inner_html) {
     super();
     this.kind = kind;
     this.key = key;
     this.mapper = mapper;
-    this.namespace = namespace;
+    this.namespace = namespace2;
     this.tag = tag;
     this.attributes = attributes;
     this.inner_html = inner_html;
   }
 };
-function is_void_element(tag, namespace) {
-  if (namespace === "") {
+function is_void_element(tag, namespace2) {
+  if (namespace2 === "") {
     if (tag === "area") {
       return true;
     } else if (tag === "base") {
@@ -1081,18 +1110,18 @@ function fragment(key, mapper, children, keyed_children) {
   return new Fragment(fragment_kind, key, mapper, children, keyed_children);
 }
 var element_kind = 1;
-function element(key, mapper, namespace, tag, attributes, children, keyed_children, self_closing, void$) {
+function element(key, mapper, namespace2, tag, attributes, children, keyed_children, self_closing, void$) {
   return new Element(
     element_kind,
     key,
     mapper,
-    namespace,
+    namespace2,
     tag,
     prepare(attributes),
     children,
     keyed_children,
     self_closing,
-    void$ || is_void_element(tag, namespace)
+    void$ || is_void_element(tag, namespace2)
   );
 }
 var text_kind = 2;
@@ -1167,7 +1196,7 @@ var Events = class extends CustomType {
 };
 function new$3() {
   return new Events(
-    empty2(),
+    empty(),
     empty_list,
     empty_list
   );
@@ -1179,33 +1208,33 @@ function tick(events) {
     empty_list
   );
 }
-function do_remove_event(handlers, path, name) {
-  return remove(handlers, event(path, name));
+function do_remove_event(handlers, path2, name) {
+  return remove(handlers, event2(path2, name));
 }
-function remove_event(events, path, name) {
-  let handlers = do_remove_event(events.handlers, path, name);
+function remove_event(events, path2, name) {
+  let handlers = do_remove_event(events.handlers, path2, name);
   return new Events(
     handlers,
     events.dispatched_paths,
     events.next_dispatched_paths
   );
 }
-function remove_attributes(handlers, path, attributes) {
-  return fold(
+function remove_attributes(handlers, path2, attributes) {
+  return fold2(
     attributes,
     handlers,
     (events, attribute3) => {
       if (attribute3 instanceof Event2) {
         let name = attribute3.name;
-        return do_remove_event(events, path, name);
+        return do_remove_event(events, path2, name);
       } else {
         return events;
       }
     }
   );
 }
-function handle(events, path, name, event2) {
-  let next_dispatched_paths = prepend(path, events.next_dispatched_paths);
+function handle(events, path2, name, event4) {
+  let next_dispatched_paths = prepend(path2, events.next_dispatched_paths);
   let events$1 = new Events(
     events.handlers,
     events.dispatched_paths,
@@ -1213,51 +1242,51 @@ function handle(events, path, name, event2) {
   );
   let $ = get(
     events$1.handlers,
-    path + separator_event + name
+    path2 + separator_event + name
   );
   if ($ instanceof Ok) {
     let handler = $[0];
-    return [events$1, run(event2, handler)];
+    return [events$1, run(event4, handler)];
   } else {
     return [events$1, new Error(toList([]))];
   }
 }
-function has_dispatched_events(events, path) {
-  return matches(path, events.dispatched_paths);
+function has_dispatched_events(events, path2) {
+  return matches(path2, events.dispatched_paths);
 }
-function do_add_event(handlers, mapper, path, name, handler) {
+function do_add_event(handlers, mapper, path2, name, handler) {
   return insert2(
     handlers,
-    event(path, name),
+    event2(path2, name),
     map2(
       handler,
       (handler2) => {
         return new Handler(
           handler2.prevent_default,
           handler2.stop_propagation,
-          identity2(mapper)(handler2.message)
+          identity3(mapper)(handler2.message)
         );
       }
     )
   );
 }
-function add_event(events, mapper, path, name, handler) {
-  let handlers = do_add_event(events.handlers, mapper, path, name, handler);
+function add_event(events, mapper, path2, name, handler) {
+  let handlers = do_add_event(events.handlers, mapper, path2, name, handler);
   return new Events(
     handlers,
     events.dispatched_paths,
     events.next_dispatched_paths
   );
 }
-function add_attributes(handlers, mapper, path, attributes) {
-  return fold(
+function add_attributes(handlers, mapper, path2, attributes) {
+  return fold2(
     attributes,
     handlers,
     (events, attribute3) => {
       if (attribute3 instanceof Event2) {
         let name = attribute3.name;
         let handler = attribute3.handler;
-        return do_add_event(events, mapper, path, name, handler);
+        return do_add_event(events, mapper, path2, name, handler);
       } else {
         return events;
       }
@@ -1265,8 +1294,8 @@ function add_attributes(handlers, mapper, path, attributes) {
   );
 }
 function compose_mapper(mapper, child_mapper) {
-  let $ = isReferenceEqual(mapper, identity2);
-  let $1 = isReferenceEqual(child_mapper, identity2);
+  let $ = isReferenceEqual(mapper, identity3);
+  let $1 = isReferenceEqual(child_mapper, identity3);
   if ($1) {
     return mapper;
   } else if ($) {
@@ -1280,7 +1309,7 @@ function compose_mapper(mapper, child_mapper) {
 function do_remove_children(loop$handlers, loop$path, loop$child_index, loop$children) {
   while (true) {
     let handlers = loop$handlers;
-    let path = loop$path;
+    let path2 = loop$path;
     let child_index = loop$child_index;
     let children = loop$children;
     if (children instanceof Empty) {
@@ -1289,9 +1318,9 @@ function do_remove_children(loop$handlers, loop$path, loop$child_index, loop$chi
       let child = children.head;
       let rest = children.tail;
       let _pipe = handlers;
-      let _pipe$1 = do_remove_child(_pipe, path, child_index, child);
+      let _pipe$1 = do_remove_child(_pipe, path2, child_index, child);
       loop$handlers = _pipe$1;
-      loop$path = path;
+      loop$path = path2;
       loop$child_index = child_index + 1;
       loop$children = rest;
     }
@@ -1300,21 +1329,21 @@ function do_remove_children(loop$handlers, loop$path, loop$child_index, loop$chi
 function do_remove_child(handlers, parent, child_index, child) {
   if (child instanceof Fragment) {
     let children = child.children;
-    let path = add2(parent, child_index, child.key);
-    return do_remove_children(handlers, path, 0, children);
+    let path2 = add2(parent, child_index, child.key);
+    return do_remove_children(handlers, path2, 0, children);
   } else if (child instanceof Element) {
     let attributes = child.attributes;
     let children = child.children;
-    let path = add2(parent, child_index, child.key);
+    let path2 = add2(parent, child_index, child.key);
     let _pipe = handlers;
-    let _pipe$1 = remove_attributes(_pipe, path, attributes);
-    return do_remove_children(_pipe$1, path, 0, children);
+    let _pipe$1 = remove_attributes(_pipe, path2, attributes);
+    return do_remove_children(_pipe$1, path2, 0, children);
   } else if (child instanceof Text) {
     return handlers;
   } else {
     let attributes = child.attributes;
-    let path = add2(parent, child_index, child.key);
-    return remove_attributes(handlers, path, attributes);
+    let path2 = add2(parent, child_index, child.key);
+    return remove_attributes(handlers, path2, attributes);
   }
 }
 function remove_child(events, parent, child_index, child) {
@@ -1329,7 +1358,7 @@ function do_add_children(loop$handlers, loop$mapper, loop$path, loop$child_index
   while (true) {
     let handlers = loop$handlers;
     let mapper = loop$mapper;
-    let path = loop$path;
+    let path2 = loop$path;
     let child_index = loop$child_index;
     let children = loop$children;
     if (children instanceof Empty) {
@@ -1338,10 +1367,10 @@ function do_add_children(loop$handlers, loop$mapper, loop$path, loop$child_index
       let child = children.head;
       let rest = children.tail;
       let _pipe = handlers;
-      let _pipe$1 = do_add_child(_pipe, mapper, path, child_index, child);
+      let _pipe$1 = do_add_child(_pipe, mapper, path2, child_index, child);
       loop$handlers = _pipe$1;
       loop$mapper = mapper;
-      loop$path = path;
+      loop$path = path2;
       loop$child_index = child_index + 1;
       loop$children = rest;
     }
@@ -1350,24 +1379,24 @@ function do_add_children(loop$handlers, loop$mapper, loop$path, loop$child_index
 function do_add_child(handlers, mapper, parent, child_index, child) {
   if (child instanceof Fragment) {
     let children = child.children;
-    let path = add2(parent, child_index, child.key);
+    let path2 = add2(parent, child_index, child.key);
     let composed_mapper = compose_mapper(mapper, child.mapper);
-    return do_add_children(handlers, composed_mapper, path, 0, children);
+    return do_add_children(handlers, composed_mapper, path2, 0, children);
   } else if (child instanceof Element) {
     let attributes = child.attributes;
     let children = child.children;
-    let path = add2(parent, child_index, child.key);
+    let path2 = add2(parent, child_index, child.key);
     let composed_mapper = compose_mapper(mapper, child.mapper);
     let _pipe = handlers;
-    let _pipe$1 = add_attributes(_pipe, composed_mapper, path, attributes);
-    return do_add_children(_pipe$1, composed_mapper, path, 0, children);
+    let _pipe$1 = add_attributes(_pipe, composed_mapper, path2, attributes);
+    return do_add_children(_pipe$1, composed_mapper, path2, 0, children);
   } else if (child instanceof Text) {
     return handlers;
   } else {
     let attributes = child.attributes;
-    let path = add2(parent, child_index, child.key);
+    let path2 = add2(parent, child_index, child.key);
     let composed_mapper = compose_mapper(mapper, child.mapper);
-    return add_attributes(handlers, composed_mapper, path, attributes);
+    return add_attributes(handlers, composed_mapper, path2, attributes);
   }
 }
 function add_child(events, mapper, parent, index2, child) {
@@ -1378,11 +1407,11 @@ function add_child(events, mapper, parent, index2, child) {
     events.next_dispatched_paths
   );
 }
-function add_children(events, mapper, path, child_index, children) {
+function add_children(events, mapper, path2, child_index, children) {
   let handlers = do_add_children(
     events.handlers,
     mapper,
-    path,
+    path2,
     child_index,
     children
   );
@@ -1397,24 +1426,37 @@ function add_children(events, mapper, path, child_index, children) {
 function element2(tag, attributes, children) {
   return element(
     "",
-    identity2,
+    identity3,
     "",
     tag,
     attributes,
     children,
-    empty2(),
+    empty(),
+    false,
+    false
+  );
+}
+function namespaced(namespace2, tag, attributes, children) {
+  return element(
+    "",
+    identity3,
+    namespace2,
+    tag,
+    attributes,
+    children,
+    empty(),
     false,
     false
   );
 }
 function text2(content2) {
-  return text("", identity2, content2);
+  return text("", identity3, content2);
 }
-function none2() {
-  return text("", identity2, "");
+function none() {
+  return text("", identity3, "");
 }
 function fragment2(children) {
-  return fragment("", identity2, children, empty2());
+  return fragment("", identity3, children, empty());
 }
 
 // build/dev/javascript/lustre/lustre/element/html.mjs
@@ -1450,6 +1492,1980 @@ function ul(attrs, children) {
 }
 function a(attrs, children) {
   return element2("a", attrs, children);
+}
+function span(attrs, children) {
+  return element2("span", attrs, children);
+}
+function svg(attrs, children) {
+  return namespaced("http://www.w3.org/2000/svg", "svg", attrs, children);
+}
+function button(attrs, children) {
+  return element2("button", attrs, children);
+}
+
+// build/dev/javascript/glelements/glelements/color.mjs
+var Primary = class extends CustomType {
+};
+var Secondary = class extends CustomType {
+};
+var Success = class extends CustomType {
+};
+var Warn = class extends CustomType {
+};
+var Err = class extends CustomType {
+};
+var Info = class extends CustomType {
+};
+var Surface = class extends CustomType {
+};
+var Background = class extends CustomType {
+};
+var Border = class extends CustomType {
+};
+var Outline = class extends CustomType {
+};
+var W50 = class extends CustomType {
+};
+var W100 = class extends CustomType {
+};
+var W200 = class extends CustomType {
+};
+var W300 = class extends CustomType {
+};
+var W400 = class extends CustomType {
+};
+var W500 = class extends CustomType {
+};
+var W600 = class extends CustomType {
+};
+var W700 = class extends CustomType {
+};
+var W800 = class extends CustomType {
+};
+var W900 = class extends CustomType {
+};
+var W950 = class extends CustomType {
+};
+var Preferred = class extends CustomType {
+};
+var Light = class extends CustomType {
+};
+function invert_weight(weight) {
+  if (weight instanceof W50) {
+    return new W950();
+  } else if (weight instanceof W100) {
+    return new W900();
+  } else if (weight instanceof W200) {
+    return new W800();
+  } else if (weight instanceof W300) {
+    return new W700();
+  } else if (weight instanceof W400) {
+    return new W600();
+  } else if (weight instanceof W500) {
+    return weight;
+  } else if (weight instanceof W600) {
+    return new W400();
+  } else if (weight instanceof W700) {
+    return new W300();
+  } else if (weight instanceof W800) {
+    return new W200();
+  } else if (weight instanceof W900) {
+    return new W100();
+  } else {
+    return new W50();
+  }
+}
+
+// build/dev/javascript/lustre/lustre/element/svg.mjs
+var namespace = "http://www.w3.org/2000/svg";
+function path(attrs) {
+  return namespaced(namespace, "path", attrs, empty_list);
+}
+
+// build/dev/javascript/glelements/glelements/icon.mjs
+function icon(attrs, path2) {
+  return svg(
+    prepend(
+      attribute2("viewBox", "0 0 15 15"),
+      prepend(
+        attribute2("fill", "none"),
+        prepend(class$("h-4 w-4"), attrs)
+      )
+    ),
+    toList([
+      path(
+        toList([
+          attribute2("d", path2),
+          attribute2("fill", "currentColor"),
+          attribute2("fill-rule", "evenodd"),
+          attribute2("clip-rule", "evenodd")
+        ])
+      )
+    ])
+  );
+}
+function sun(attrs) {
+  return icon(
+    attrs,
+    "M7.5 0C7.77614 0 8 0.223858 8 0.5V2.5C8 2.77614 7.77614 3 7.5 3C7.22386 3 7 2.77614 7 2.5V0.5C7 0.223858 7.22386 0 7.5 0ZM2.1967 2.1967C2.39196 2.00144 2.70854 2.00144 2.90381 2.1967L4.31802 3.61091C4.51328 3.80617 4.51328 4.12276 4.31802 4.31802C4.12276 4.51328 3.80617 4.51328 3.61091 4.31802L2.1967 2.90381C2.00144 2.70854 2.00144 2.39196 2.1967 2.1967ZM0.5 7C0.223858 7 0 7.22386 0 7.5C0 7.77614 0.223858 8 0.5 8H2.5C2.77614 8 3 7.77614 3 7.5C3 7.22386 2.77614 7 2.5 7H0.5ZM2.1967 12.8033C2.00144 12.608 2.00144 12.2915 2.1967 12.0962L3.61091 10.682C3.80617 10.4867 4.12276 10.4867 4.31802 10.682C4.51328 10.8772 4.51328 11.1938 4.31802 11.3891L2.90381 12.8033C2.70854 12.9986 2.39196 12.9986 2.1967 12.8033ZM12.5 7C12.2239 7 12 7.22386 12 7.5C12 7.77614 12.2239 8 12.5 8H14.5C14.7761 8 15 7.77614 15 7.5C15 7.22386 14.7761 7 14.5 7H12.5ZM10.682 4.31802C10.4867 4.12276 10.4867 3.80617 10.682 3.61091L12.0962 2.1967C12.2915 2.00144 12.608 2.00144 12.8033 2.1967C12.9986 2.39196 12.9986 2.70854 12.8033 2.90381L11.3891 4.31802C11.1938 4.51328 10.8772 4.51328 10.682 4.31802ZM8 12.5C8 12.2239 7.77614 12 7.5 12C7.22386 12 7 12.2239 7 12.5V14.5C7 14.7761 7.22386 15 7.5 15C7.77614 15 8 14.7761 8 14.5V12.5ZM10.682 10.682C10.8772 10.4867 11.1938 10.4867 11.3891 10.682L12.8033 12.0962C12.9986 12.2915 12.9986 12.608 12.8033 12.8033C12.608 12.9986 12.2915 12.9986 12.0962 12.8033L10.682 11.3891C10.4867 11.1938 10.4867 10.8772 10.682 10.682ZM5.5 7.5C5.5 6.39543 6.39543 5.5 7.5 5.5C8.60457 5.5 9.5 6.39543 9.5 7.5C9.5 8.60457 8.60457 9.5 7.5 9.5C6.39543 9.5 5.5 8.60457 5.5 7.5ZM7.5 4.5C5.84315 4.5 4.5 5.84315 4.5 7.5C4.5 9.15685 5.84315 10.5 7.5 10.5C9.15685 10.5 10.5 9.15685 10.5 7.5C10.5 5.84315 9.15685 4.5 7.5 4.5Z"
+  );
+}
+function moon(attrs) {
+  return icon(
+    attrs,
+    "M2.89998 0.499976C2.89998 0.279062 2.72089 0.0999756 2.49998 0.0999756C2.27906 0.0999756 2.09998 0.279062 2.09998 0.499976V1.09998H1.49998C1.27906 1.09998 1.09998 1.27906 1.09998 1.49998C1.09998 1.72089 1.27906 1.89998 1.49998 1.89998H2.09998V2.49998C2.09998 2.72089 2.27906 2.89998 2.49998 2.89998C2.72089 2.89998 2.89998 2.72089 2.89998 2.49998V1.89998H3.49998C3.72089 1.89998 3.89998 1.72089 3.89998 1.49998C3.89998 1.27906 3.72089 1.09998 3.49998 1.09998H2.89998V0.499976ZM5.89998 3.49998C5.89998 3.27906 5.72089 3.09998 5.49998 3.09998C5.27906 3.09998 5.09998 3.27906 5.09998 3.49998V4.09998H4.49998C4.27906 4.09998 4.09998 4.27906 4.09998 4.49998C4.09998 4.72089 4.27906 4.89998 4.49998 4.89998H5.09998V5.49998C5.09998 5.72089 5.27906 5.89998 5.49998 5.89998C5.72089 5.89998 5.89998 5.72089 5.89998 5.49998V4.89998H6.49998C6.72089 4.89998 6.89998 4.72089 6.89998 4.49998C6.89998 4.27906 6.72089 4.09998 6.49998 4.09998H5.89998V3.49998ZM1.89998 6.49998C1.89998 6.27906 1.72089 6.09998 1.49998 6.09998C1.27906 6.09998 1.09998 6.27906 1.09998 6.49998V7.09998H0.499976C0.279062 7.09998 0.0999756 7.27906 0.0999756 7.49998C0.0999756 7.72089 0.279062 7.89998 0.499976 7.89998H1.09998V8.49998C1.09998 8.72089 1.27906 8.89997 1.49998 8.89997C1.72089 8.89997 1.89998 8.72089 1.89998 8.49998V7.89998H2.49998C2.72089 7.89998 2.89998 7.72089 2.89998 7.49998C2.89998 7.27906 2.72089 7.09998 2.49998 7.09998H1.89998V6.49998ZM8.54406 0.98184L8.24618 0.941586C8.03275 0.917676 7.90692 1.1655 8.02936 1.34194C8.17013 1.54479 8.29981 1.75592 8.41754 1.97445C8.91878 2.90485 9.20322 3.96932 9.20322 5.10022C9.20322 8.37201 6.82247 11.0878 3.69887 11.6097C3.45736 11.65 3.20988 11.6772 2.96008 11.6906C2.74563 11.702 2.62729 11.9535 2.77721 12.1072C2.84551 12.1773 2.91535 12.2458 2.98667 12.3128L3.05883 12.3795L3.31883 12.6045L3.50684 12.7532L3.62796 12.8433L3.81491 12.9742L3.99079 13.089C4.11175 13.1651 4.23536 13.2375 4.36157 13.3059L4.62496 13.4412L4.88553 13.5607L5.18837 13.6828L5.43169 13.7686C5.56564 13.8128 5.70149 13.8529 5.83857 13.8885C5.94262 13.9155 6.04767 13.9401 6.15405 13.9622C6.27993 13.9883 6.40713 14.0109 6.53544 14.0298L6.85241 14.0685L7.11934 14.0892C7.24637 14.0965 7.37436 14.1002 7.50322 14.1002C11.1483 14.1002 14.1032 11.1453 14.1032 7.50023C14.1032 7.25044 14.0893 7.00389 14.0623 6.76131L14.0255 6.48407C13.991 6.26083 13.9453 6.04129 13.8891 5.82642C13.8213 5.56709 13.7382 5.31398 13.6409 5.06881L13.5279 4.80132L13.4507 4.63542L13.3766 4.48666C13.2178 4.17773 13.0353 3.88295 12.8312 3.60423L12.6782 3.40352L12.4793 3.16432L12.3157 2.98361L12.1961 2.85951L12.0355 2.70246L11.8134 2.50184L11.4925 2.24191L11.2483 2.06498L10.9562 1.87446L10.6346 1.68894L10.3073 1.52378L10.1938 1.47176L9.95488 1.3706L9.67791 1.2669L9.42566 1.1846L9.10075 1.09489L8.83599 1.03486L8.54406 0.98184ZM10.4032 5.30023C10.4032 4.27588 10.2002 3.29829 9.83244 2.40604C11.7623 3.28995 13.1032 5.23862 13.1032 7.50023C13.1032 10.593 10.596 13.1002 7.50322 13.1002C6.63646 13.1002 5.81597 12.9036 5.08355 12.5522C6.5419 12.0941 7.81081 11.2082 8.74322 10.0416C8.87963 10.2284 9.10028 10.3497 9.34928 10.3497C9.76349 10.3497 10.0993 10.0139 10.0993 9.59971C10.0993 9.24256 9.84965 8.94373 9.51535 8.86816C9.57741 8.75165 9.63653 8.63334 9.6926 8.51332C9.88358 8.63163 10.1088 8.69993 10.35 8.69993C11.0403 8.69993 11.6 8.14028 11.6 7.44993C11.6 6.75976 11.0406 6.20024 10.3505 6.19993C10.3853 5.90487 10.4032 5.60464 10.4032 5.30023Z"
+  );
+}
+
+// build/dev/javascript/glelements/glelements/internal/tailwind_maps.mjs
+function background_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "bg-primary-50";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-50";
+    } else if (color instanceof Success) {
+      return "bg-success-50";
+    } else if (color instanceof Warn) {
+      return "bg-warn-50";
+    } else if (color instanceof Err) {
+      return "bg-error-50";
+    } else if (color instanceof Info) {
+      return "bg-info-50";
+    } else if (color instanceof Surface) {
+      return "bg-surface-50";
+    } else {
+      return "bg-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "bg-primary-100";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-100";
+    } else if (color instanceof Success) {
+      return "bg-success-100";
+    } else if (color instanceof Warn) {
+      return "bg-warn-100";
+    } else if (color instanceof Err) {
+      return "bg-error-100";
+    } else if (color instanceof Info) {
+      return "bg-info-100";
+    } else if (color instanceof Surface) {
+      return "bg-surface-100";
+    } else {
+      return "bg-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "bg-primary-200";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-200";
+    } else if (color instanceof Success) {
+      return "bg-success-200";
+    } else if (color instanceof Warn) {
+      return "bg-warn-200";
+    } else if (color instanceof Err) {
+      return "bg-error-200";
+    } else if (color instanceof Info) {
+      return "bg-info-200";
+    } else if (color instanceof Surface) {
+      return "bg-surface-200";
+    } else {
+      return "bg-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "bg-primary-300";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-300";
+    } else if (color instanceof Success) {
+      return "bg-success-300";
+    } else if (color instanceof Warn) {
+      return "bg-warn-300";
+    } else if (color instanceof Err) {
+      return "bg-error-300";
+    } else if (color instanceof Info) {
+      return "bg-info-300";
+    } else if (color instanceof Surface) {
+      return "bg-surface-300";
+    } else {
+      return "bg-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "bg-primary-400";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-400";
+    } else if (color instanceof Success) {
+      return "bg-success-400";
+    } else if (color instanceof Warn) {
+      return "bg-warn-400";
+    } else if (color instanceof Err) {
+      return "bg-error-400";
+    } else if (color instanceof Info) {
+      return "bg-info-400";
+    } else if (color instanceof Surface) {
+      return "bg-surface-400";
+    } else {
+      return "bg-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "bg-primary-500";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-500";
+    } else if (color instanceof Success) {
+      return "bg-success-500";
+    } else if (color instanceof Warn) {
+      return "bg-warn-500";
+    } else if (color instanceof Err) {
+      return "bg-error-500";
+    } else if (color instanceof Info) {
+      return "bg-info-500";
+    } else if (color instanceof Surface) {
+      return "bg-surface-500";
+    } else {
+      return "bg-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "bg-primary-600";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-600";
+    } else if (color instanceof Success) {
+      return "bg-success-600";
+    } else if (color instanceof Warn) {
+      return "bg-warn-600";
+    } else if (color instanceof Err) {
+      return "bg-error-600";
+    } else if (color instanceof Info) {
+      return "bg-info-600";
+    } else if (color instanceof Surface) {
+      return "bg-surface-600";
+    } else {
+      return "bg-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "bg-primary-700";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-700";
+    } else if (color instanceof Success) {
+      return "bg-success-700";
+    } else if (color instanceof Warn) {
+      return "bg-warn-700";
+    } else if (color instanceof Err) {
+      return "bg-error-700";
+    } else if (color instanceof Info) {
+      return "bg-info-700";
+    } else if (color instanceof Surface) {
+      return "bg-surface-700";
+    } else {
+      return "bg-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "bg-primary-800";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-800";
+    } else if (color instanceof Success) {
+      return "bg-success-800";
+    } else if (color instanceof Warn) {
+      return "bg-warn-800";
+    } else if (color instanceof Err) {
+      return "bg-error-800";
+    } else if (color instanceof Info) {
+      return "bg-info-800";
+    } else if (color instanceof Surface) {
+      return "bg-surface-800";
+    } else {
+      return "bg-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "bg-primary-900";
+    } else if (color instanceof Secondary) {
+      return "bg-secondary-900";
+    } else if (color instanceof Success) {
+      return "bg-success-900";
+    } else if (color instanceof Warn) {
+      return "bg-warn-900";
+    } else if (color instanceof Err) {
+      return "bg-error-900";
+    } else if (color instanceof Info) {
+      return "bg-info-900";
+    } else if (color instanceof Surface) {
+      return "bg-surface-900";
+    } else {
+      return "bg-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "bg-primary-950";
+  } else if (color instanceof Secondary) {
+    return "bg-secondary-950";
+  } else if (color instanceof Success) {
+    return "bg-success-950";
+  } else if (color instanceof Warn) {
+    return "bg-warn-950";
+  } else if (color instanceof Err) {
+    return "bg-error-950";
+  } else if (color instanceof Info) {
+    return "bg-info-950";
+  } else if (color instanceof Surface) {
+    return "bg-surface-950";
+  } else {
+    return "bg-on-surface-950";
+  }
+}
+function dark_background_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-50";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-50";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-50";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-50";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-50";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-50";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-50";
+    } else {
+      return "dark:bg-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-100";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-100";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-100";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-100";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-100";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-100";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-100";
+    } else {
+      return "dark:bg-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-200";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-200";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-200";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-200";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-200";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-200";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-200";
+    } else {
+      return "dark:bg-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-300";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-300";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-300";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-300";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-300";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-300";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-300";
+    } else {
+      return "dark:bg-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-400";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-400";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-400";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-400";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-400";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-400";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-400";
+    } else {
+      return "dark:bg-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-500";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-500";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-500";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-500";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-500";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-500";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-500";
+    } else {
+      return "dark:bg-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-600";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-600";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-600";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-600";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-600";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-600";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-600";
+    } else {
+      return "dark:bg-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-700";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-700";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-700";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-700";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-700";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-700";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-700";
+    } else {
+      return "dark:bg-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-800";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-800";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-800";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-800";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-800";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-800";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-800";
+    } else {
+      return "dark:bg-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "dark:bg-primary-900";
+    } else if (color instanceof Secondary) {
+      return "dark:bg-secondary-900";
+    } else if (color instanceof Success) {
+      return "dark:bg-success-900";
+    } else if (color instanceof Warn) {
+      return "dark:bg-warn-900";
+    } else if (color instanceof Err) {
+      return "dark:bg-error-900";
+    } else if (color instanceof Info) {
+      return "dark:bg-info-900";
+    } else if (color instanceof Surface) {
+      return "dark:bg-surface-900";
+    } else {
+      return "dark:bg-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "dark:bg-primary-950";
+  } else if (color instanceof Secondary) {
+    return "dark:bg-secondary-950";
+  } else if (color instanceof Success) {
+    return "dark:bg-success-950";
+  } else if (color instanceof Warn) {
+    return "dark:bg-warn-950";
+  } else if (color instanceof Err) {
+    return "dark:bg-error-950";
+  } else if (color instanceof Info) {
+    return "dark:bg-info-950";
+  } else if (color instanceof Surface) {
+    return "dark:bg-surface-950";
+  } else {
+    return "dark:bg-on-surface-950";
+  }
+}
+function text_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "text-primary-50";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-50";
+    } else if (color instanceof Success) {
+      return "text-success-50";
+    } else if (color instanceof Warn) {
+      return "text-warn-50";
+    } else if (color instanceof Err) {
+      return "text-error-50";
+    } else if (color instanceof Info) {
+      return "text-info-50";
+    } else if (color instanceof Surface) {
+      return "text-surface-50";
+    } else {
+      return "text-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "text-primary-100";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-100";
+    } else if (color instanceof Success) {
+      return "text-success-100";
+    } else if (color instanceof Warn) {
+      return "text-warn-100";
+    } else if (color instanceof Err) {
+      return "text-error-100";
+    } else if (color instanceof Info) {
+      return "text-info-100";
+    } else if (color instanceof Surface) {
+      return "text-surface-100";
+    } else {
+      return "text-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "text-primary-200";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-200";
+    } else if (color instanceof Success) {
+      return "text-success-200";
+    } else if (color instanceof Warn) {
+      return "text-warn-200";
+    } else if (color instanceof Err) {
+      return "text-error-200";
+    } else if (color instanceof Info) {
+      return "text-info-200";
+    } else if (color instanceof Surface) {
+      return "text-surface-200";
+    } else {
+      return "text-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "text-primary-300";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-300";
+    } else if (color instanceof Success) {
+      return "text-success-300";
+    } else if (color instanceof Warn) {
+      return "text-warn-300";
+    } else if (color instanceof Err) {
+      return "text-error-300";
+    } else if (color instanceof Info) {
+      return "text-info-300";
+    } else if (color instanceof Surface) {
+      return "text-surface-300";
+    } else {
+      return "text-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "text-primary-400";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-400";
+    } else if (color instanceof Success) {
+      return "text-success-400";
+    } else if (color instanceof Warn) {
+      return "text-warn-400";
+    } else if (color instanceof Err) {
+      return "text-error-400";
+    } else if (color instanceof Info) {
+      return "text-info-400";
+    } else if (color instanceof Surface) {
+      return "text-surface-400";
+    } else {
+      return "text-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "text-primary-500";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-500";
+    } else if (color instanceof Success) {
+      return "text-success-500";
+    } else if (color instanceof Warn) {
+      return "text-warn-500";
+    } else if (color instanceof Err) {
+      return "text-error-500";
+    } else if (color instanceof Info) {
+      return "text-info-500";
+    } else if (color instanceof Surface) {
+      return "text-surface-500";
+    } else {
+      return "text-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "text-primary-600";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-600";
+    } else if (color instanceof Success) {
+      return "text-success-600";
+    } else if (color instanceof Warn) {
+      return "text-warn-600";
+    } else if (color instanceof Err) {
+      return "text-error-600";
+    } else if (color instanceof Info) {
+      return "text-info-600";
+    } else if (color instanceof Surface) {
+      return "text-surface-600";
+    } else {
+      return "text-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "text-primary-700";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-700";
+    } else if (color instanceof Success) {
+      return "text-success-700";
+    } else if (color instanceof Warn) {
+      return "text-warn-700";
+    } else if (color instanceof Err) {
+      return "text-error-700";
+    } else if (color instanceof Info) {
+      return "text-info-700";
+    } else if (color instanceof Surface) {
+      return "text-surface-700";
+    } else {
+      return "text-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "text-primary-800";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-800";
+    } else if (color instanceof Success) {
+      return "text-success-800";
+    } else if (color instanceof Warn) {
+      return "text-warn-800";
+    } else if (color instanceof Err) {
+      return "text-error-800";
+    } else if (color instanceof Info) {
+      return "text-info-800";
+    } else if (color instanceof Surface) {
+      return "text-surface-800";
+    } else {
+      return "text-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "text-primary-900";
+    } else if (color instanceof Secondary) {
+      return "text-secondary-900";
+    } else if (color instanceof Success) {
+      return "text-success-900";
+    } else if (color instanceof Warn) {
+      return "text-warn-900";
+    } else if (color instanceof Err) {
+      return "text-error-900";
+    } else if (color instanceof Info) {
+      return "text-info-900";
+    } else if (color instanceof Surface) {
+      return "text-surface-900";
+    } else {
+      return "text-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "text-primary-950";
+  } else if (color instanceof Secondary) {
+    return "text-secondary-950";
+  } else if (color instanceof Success) {
+    return "text-success-950";
+  } else if (color instanceof Warn) {
+    return "text-warn-950";
+  } else if (color instanceof Err) {
+    return "text-error-950";
+  } else if (color instanceof Info) {
+    return "text-info-950";
+  } else if (color instanceof Surface) {
+    return "text-surface-950";
+  } else {
+    return "text-on-surface-950";
+  }
+}
+function dark_text_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-50";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-50";
+    } else if (color instanceof Success) {
+      return "dark:text-success-50";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-50";
+    } else if (color instanceof Err) {
+      return "dark:text-error-50";
+    } else if (color instanceof Info) {
+      return "dark:text-info-50";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-50";
+    } else {
+      return "dark:text-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-100";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-100";
+    } else if (color instanceof Success) {
+      return "dark:text-success-100";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-100";
+    } else if (color instanceof Err) {
+      return "dark:text-error-100";
+    } else if (color instanceof Info) {
+      return "dark:text-info-100";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-100";
+    } else {
+      return "dark:text-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-200";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-200";
+    } else if (color instanceof Success) {
+      return "dark:text-success-200";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-200";
+    } else if (color instanceof Err) {
+      return "dark:text-error-200";
+    } else if (color instanceof Info) {
+      return "dark:text-info-200";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-200";
+    } else {
+      return "dark:text-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-300";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-300";
+    } else if (color instanceof Success) {
+      return "dark:text-success-300";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-300";
+    } else if (color instanceof Err) {
+      return "dark:text-error-300";
+    } else if (color instanceof Info) {
+      return "dark:text-info-300";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-300";
+    } else {
+      return "dark:text-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-400";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-400";
+    } else if (color instanceof Success) {
+      return "dark:text-success-400";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-400";
+    } else if (color instanceof Err) {
+      return "dark:text-error-400";
+    } else if (color instanceof Info) {
+      return "dark:text-info-400";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-400";
+    } else {
+      return "dark:text-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-500";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-500";
+    } else if (color instanceof Success) {
+      return "dark:text-success-500";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-500";
+    } else if (color instanceof Err) {
+      return "dark:text-error-500";
+    } else if (color instanceof Info) {
+      return "dark:text-info-500";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-500";
+    } else {
+      return "dark:text-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-600";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-600";
+    } else if (color instanceof Success) {
+      return "dark:text-success-600";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-600";
+    } else if (color instanceof Err) {
+      return "dark:text-error-600";
+    } else if (color instanceof Info) {
+      return "dark:text-info-600";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-600";
+    } else {
+      return "dark:text-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-700";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-700";
+    } else if (color instanceof Success) {
+      return "dark:text-success-700";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-700";
+    } else if (color instanceof Err) {
+      return "dark:text-error-700";
+    } else if (color instanceof Info) {
+      return "dark:text-info-700";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-700";
+    } else {
+      return "dark:text-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-800";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-800";
+    } else if (color instanceof Success) {
+      return "dark:text-success-800";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-800";
+    } else if (color instanceof Err) {
+      return "dark:text-error-800";
+    } else if (color instanceof Info) {
+      return "dark:text-info-800";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-800";
+    } else {
+      return "dark:text-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "dark:text-primary-900";
+    } else if (color instanceof Secondary) {
+      return "dark:text-secondary-900";
+    } else if (color instanceof Success) {
+      return "dark:text-success-900";
+    } else if (color instanceof Warn) {
+      return "dark:text-warn-900";
+    } else if (color instanceof Err) {
+      return "dark:text-error-900";
+    } else if (color instanceof Info) {
+      return "dark:text-info-900";
+    } else if (color instanceof Surface) {
+      return "dark:text-surface-900";
+    } else {
+      return "dark:text-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "dark:text-primary-950";
+  } else if (color instanceof Secondary) {
+    return "dark:text-secondary-950";
+  } else if (color instanceof Success) {
+    return "dark:text-success-950";
+  } else if (color instanceof Warn) {
+    return "dark:text-warn-950";
+  } else if (color instanceof Err) {
+    return "dark:text-error-950";
+  } else if (color instanceof Info) {
+    return "dark:text-info-950";
+  } else if (color instanceof Surface) {
+    return "dark:text-surface-950";
+  } else {
+    return "dark:text-on-surface-950";
+  }
+}
+function border_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "border-primary-50";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-50";
+    } else if (color instanceof Success) {
+      return "border-success-50";
+    } else if (color instanceof Warn) {
+      return "border-warn-50";
+    } else if (color instanceof Err) {
+      return "border-error-50";
+    } else if (color instanceof Info) {
+      return "border-info-50";
+    } else if (color instanceof Surface) {
+      return "border-surface-50";
+    } else {
+      return "border-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "border-primary-100";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-100";
+    } else if (color instanceof Success) {
+      return "border-success-100";
+    } else if (color instanceof Warn) {
+      return "border-warn-100";
+    } else if (color instanceof Err) {
+      return "border-error-100";
+    } else if (color instanceof Info) {
+      return "border-info-100";
+    } else if (color instanceof Surface) {
+      return "border-surface-100";
+    } else {
+      return "border-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "border-primary-200";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-200";
+    } else if (color instanceof Success) {
+      return "border-success-200";
+    } else if (color instanceof Warn) {
+      return "border-warn-200";
+    } else if (color instanceof Err) {
+      return "border-error-200";
+    } else if (color instanceof Info) {
+      return "border-info-200";
+    } else if (color instanceof Surface) {
+      return "border-surface-200";
+    } else {
+      return "border-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "border-primary-300";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-300";
+    } else if (color instanceof Success) {
+      return "border-success-300";
+    } else if (color instanceof Warn) {
+      return "border-warn-300";
+    } else if (color instanceof Err) {
+      return "border-error-300";
+    } else if (color instanceof Info) {
+      return "border-info-300";
+    } else if (color instanceof Surface) {
+      return "border-surface-300";
+    } else {
+      return "border-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "border-primary-400";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-400";
+    } else if (color instanceof Success) {
+      return "border-success-400";
+    } else if (color instanceof Warn) {
+      return "border-warn-400";
+    } else if (color instanceof Err) {
+      return "border-error-400";
+    } else if (color instanceof Info) {
+      return "border-info-400";
+    } else if (color instanceof Surface) {
+      return "border-surface-400";
+    } else {
+      return "border-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "border-primary-500";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-500";
+    } else if (color instanceof Success) {
+      return "border-success-500";
+    } else if (color instanceof Warn) {
+      return "border-warn-500";
+    } else if (color instanceof Err) {
+      return "border-error-500";
+    } else if (color instanceof Info) {
+      return "border-info-500";
+    } else if (color instanceof Surface) {
+      return "border-surface-500";
+    } else {
+      return "border-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "border-primary-600";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-600";
+    } else if (color instanceof Success) {
+      return "border-success-600";
+    } else if (color instanceof Warn) {
+      return "border-warn-600";
+    } else if (color instanceof Err) {
+      return "border-error-600";
+    } else if (color instanceof Info) {
+      return "border-info-600";
+    } else if (color instanceof Surface) {
+      return "border-surface-600";
+    } else {
+      return "border-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "border-primary-700";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-700";
+    } else if (color instanceof Success) {
+      return "border-success-700";
+    } else if (color instanceof Warn) {
+      return "border-warn-700";
+    } else if (color instanceof Err) {
+      return "border-error-700";
+    } else if (color instanceof Info) {
+      return "border-info-700";
+    } else if (color instanceof Surface) {
+      return "border-surface-700";
+    } else {
+      return "border-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "border-primary-800";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-800";
+    } else if (color instanceof Success) {
+      return "border-success-800";
+    } else if (color instanceof Warn) {
+      return "border-warn-800";
+    } else if (color instanceof Err) {
+      return "border-error-800";
+    } else if (color instanceof Info) {
+      return "border-info-800";
+    } else if (color instanceof Surface) {
+      return "border-surface-800";
+    } else {
+      return "border-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "border-primary-900";
+    } else if (color instanceof Secondary) {
+      return "border-secondary-900";
+    } else if (color instanceof Success) {
+      return "border-success-900";
+    } else if (color instanceof Warn) {
+      return "border-warn-900";
+    } else if (color instanceof Err) {
+      return "border-error-900";
+    } else if (color instanceof Info) {
+      return "border-info-900";
+    } else if (color instanceof Surface) {
+      return "border-surface-900";
+    } else {
+      return "border-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "border-primary-950";
+  } else if (color instanceof Secondary) {
+    return "border-secondary-950";
+  } else if (color instanceof Success) {
+    return "border-success-950";
+  } else if (color instanceof Warn) {
+    return "border-warn-950";
+  } else if (color instanceof Err) {
+    return "border-error-950";
+  } else if (color instanceof Info) {
+    return "border-info-950";
+  } else if (color instanceof Surface) {
+    return "border-surface-950";
+  } else {
+    return "border-on-surface-950";
+  }
+}
+function dark_border_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-50";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-50";
+    } else if (color instanceof Success) {
+      return "dark:border-success-50";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-50";
+    } else if (color instanceof Err) {
+      return "dark:border-error-50";
+    } else if (color instanceof Info) {
+      return "dark:border-info-50";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-50";
+    } else {
+      return "dark:border-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-100";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-100";
+    } else if (color instanceof Success) {
+      return "dark:border-success-100";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-100";
+    } else if (color instanceof Err) {
+      return "dark:border-error-100";
+    } else if (color instanceof Info) {
+      return "dark:border-info-100";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-100";
+    } else {
+      return "dark:border-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-200";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-200";
+    } else if (color instanceof Success) {
+      return "dark:border-success-200";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-200";
+    } else if (color instanceof Err) {
+      return "dark:border-error-200";
+    } else if (color instanceof Info) {
+      return "dark:border-info-200";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-200";
+    } else {
+      return "dark:border-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-300";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-300";
+    } else if (color instanceof Success) {
+      return "dark:border-success-300";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-300";
+    } else if (color instanceof Err) {
+      return "dark:border-error-300";
+    } else if (color instanceof Info) {
+      return "dark:border-info-300";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-300";
+    } else {
+      return "dark:border-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-400";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-400";
+    } else if (color instanceof Success) {
+      return "dark:border-success-400";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-400";
+    } else if (color instanceof Err) {
+      return "dark:border-error-400";
+    } else if (color instanceof Info) {
+      return "dark:border-info-400";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-400";
+    } else {
+      return "dark:border-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-500";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-500";
+    } else if (color instanceof Success) {
+      return "dark:border-success-500";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-500";
+    } else if (color instanceof Err) {
+      return "dark:border-error-500";
+    } else if (color instanceof Info) {
+      return "dark:border-info-500";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-500";
+    } else {
+      return "dark:border-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-600";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-600";
+    } else if (color instanceof Success) {
+      return "dark:border-success-600";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-600";
+    } else if (color instanceof Err) {
+      return "dark:border-error-600";
+    } else if (color instanceof Info) {
+      return "dark:border-info-600";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-600";
+    } else {
+      return "dark:border-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-700";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-700";
+    } else if (color instanceof Success) {
+      return "dark:border-success-700";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-700";
+    } else if (color instanceof Err) {
+      return "dark:border-error-700";
+    } else if (color instanceof Info) {
+      return "dark:border-info-700";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-700";
+    } else {
+      return "dark:border-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-800";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-800";
+    } else if (color instanceof Success) {
+      return "dark:border-success-800";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-800";
+    } else if (color instanceof Err) {
+      return "dark:border-error-800";
+    } else if (color instanceof Info) {
+      return "dark:border-info-800";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-800";
+    } else {
+      return "dark:border-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "dark:border-primary-900";
+    } else if (color instanceof Secondary) {
+      return "dark:border-secondary-900";
+    } else if (color instanceof Success) {
+      return "dark:border-success-900";
+    } else if (color instanceof Warn) {
+      return "dark:border-warn-900";
+    } else if (color instanceof Err) {
+      return "dark:border-error-900";
+    } else if (color instanceof Info) {
+      return "dark:border-info-900";
+    } else if (color instanceof Surface) {
+      return "dark:border-surface-900";
+    } else {
+      return "dark:border-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "dark:border-primary-950";
+  } else if (color instanceof Secondary) {
+    return "dark:border-secondary-950";
+  } else if (color instanceof Success) {
+    return "dark:border-success-950";
+  } else if (color instanceof Warn) {
+    return "dark:border-warn-950";
+  } else if (color instanceof Err) {
+    return "dark:border-error-950";
+  } else if (color instanceof Info) {
+    return "dark:border-info-950";
+  } else if (color instanceof Surface) {
+    return "dark:border-surface-950";
+  } else {
+    return "dark:border-on-surface-950";
+  }
+}
+function outline_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "outline-primary-50";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-50";
+    } else if (color instanceof Success) {
+      return "outline-success-50";
+    } else if (color instanceof Warn) {
+      return "outline-warn-50";
+    } else if (color instanceof Err) {
+      return "outline-error-50";
+    } else if (color instanceof Info) {
+      return "outline-info-50";
+    } else if (color instanceof Surface) {
+      return "outline-surface-50";
+    } else {
+      return "outline-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "outline-primary-100";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-100";
+    } else if (color instanceof Success) {
+      return "outline-success-100";
+    } else if (color instanceof Warn) {
+      return "outline-warn-100";
+    } else if (color instanceof Err) {
+      return "outline-error-100";
+    } else if (color instanceof Info) {
+      return "outline-info-100";
+    } else if (color instanceof Surface) {
+      return "outline-surface-100";
+    } else {
+      return "outline-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "outline-primary-200";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-200";
+    } else if (color instanceof Success) {
+      return "outline-success-200";
+    } else if (color instanceof Warn) {
+      return "outline-warn-200";
+    } else if (color instanceof Err) {
+      return "outline-error-200";
+    } else if (color instanceof Info) {
+      return "outline-info-200";
+    } else if (color instanceof Surface) {
+      return "outline-surface-200";
+    } else {
+      return "outline-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "outline-primary-300";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-300";
+    } else if (color instanceof Success) {
+      return "outline-success-300";
+    } else if (color instanceof Warn) {
+      return "outline-warn-300";
+    } else if (color instanceof Err) {
+      return "outline-error-300";
+    } else if (color instanceof Info) {
+      return "outline-info-300";
+    } else if (color instanceof Surface) {
+      return "outline-surface-300";
+    } else {
+      return "outline-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "outline-primary-400";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-400";
+    } else if (color instanceof Success) {
+      return "outline-success-400";
+    } else if (color instanceof Warn) {
+      return "outline-warn-400";
+    } else if (color instanceof Err) {
+      return "outline-error-400";
+    } else if (color instanceof Info) {
+      return "outline-info-400";
+    } else if (color instanceof Surface) {
+      return "outline-surface-400";
+    } else {
+      return "outline-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "outline-primary-500";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-500";
+    } else if (color instanceof Success) {
+      return "outline-success-500";
+    } else if (color instanceof Warn) {
+      return "outline-warn-500";
+    } else if (color instanceof Err) {
+      return "outline-error-500";
+    } else if (color instanceof Info) {
+      return "outline-info-500";
+    } else if (color instanceof Surface) {
+      return "outline-surface-500";
+    } else {
+      return "outline-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "outline-primary-600";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-600";
+    } else if (color instanceof Success) {
+      return "outline-success-600";
+    } else if (color instanceof Warn) {
+      return "outline-warn-600";
+    } else if (color instanceof Err) {
+      return "outline-error-600";
+    } else if (color instanceof Info) {
+      return "outline-info-600";
+    } else if (color instanceof Surface) {
+      return "outline-surface-600";
+    } else {
+      return "outline-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "outline-primary-700";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-700";
+    } else if (color instanceof Success) {
+      return "outline-success-700";
+    } else if (color instanceof Warn) {
+      return "outline-warn-700";
+    } else if (color instanceof Err) {
+      return "outline-error-700";
+    } else if (color instanceof Info) {
+      return "outline-info-700";
+    } else if (color instanceof Surface) {
+      return "outline-surface-700";
+    } else {
+      return "outline-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "outline-primary-800";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-800";
+    } else if (color instanceof Success) {
+      return "outline-success-800";
+    } else if (color instanceof Warn) {
+      return "outline-warn-800";
+    } else if (color instanceof Err) {
+      return "outline-error-800";
+    } else if (color instanceof Info) {
+      return "outline-info-800";
+    } else if (color instanceof Surface) {
+      return "outline-surface-800";
+    } else {
+      return "outline-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "outline-primary-900";
+    } else if (color instanceof Secondary) {
+      return "outline-secondary-900";
+    } else if (color instanceof Success) {
+      return "outline-success-900";
+    } else if (color instanceof Warn) {
+      return "outline-warn-900";
+    } else if (color instanceof Err) {
+      return "outline-error-900";
+    } else if (color instanceof Info) {
+      return "outline-info-900";
+    } else if (color instanceof Surface) {
+      return "outline-surface-900";
+    } else {
+      return "outline-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "outline-primary-950";
+  } else if (color instanceof Secondary) {
+    return "outline-secondary-950";
+  } else if (color instanceof Success) {
+    return "outline-success-950";
+  } else if (color instanceof Warn) {
+    return "outline-warn-950";
+  } else if (color instanceof Err) {
+    return "outline-error-950";
+  } else if (color instanceof Info) {
+    return "outline-info-950";
+  } else if (color instanceof Surface) {
+    return "outline-surface-950";
+  } else {
+    return "outline-on-surface-950";
+  }
+}
+function dark_outline_class(color, weight) {
+  if (weight instanceof W50) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-50";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-50";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-50";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-50";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-50";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-50";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-50";
+    } else {
+      return "dark:outline-on-surface-50";
+    }
+  } else if (weight instanceof W100) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-100";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-100";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-100";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-100";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-100";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-100";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-100";
+    } else {
+      return "dark:outline-on-surface-100";
+    }
+  } else if (weight instanceof W200) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-200";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-200";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-200";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-200";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-200";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-200";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-200";
+    } else {
+      return "dark:outline-on-surface-200";
+    }
+  } else if (weight instanceof W300) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-300";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-300";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-300";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-300";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-300";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-300";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-300";
+    } else {
+      return "dark:outline-on-surface-300";
+    }
+  } else if (weight instanceof W400) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-400";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-400";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-400";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-400";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-400";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-400";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-400";
+    } else {
+      return "dark:outline-on-surface-400";
+    }
+  } else if (weight instanceof W500) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-500";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-500";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-500";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-500";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-500";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-500";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-500";
+    } else {
+      return "dark:outline-on-surface-500";
+    }
+  } else if (weight instanceof W600) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-600";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-600";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-600";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-600";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-600";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-600";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-600";
+    } else {
+      return "dark:outline-on-surface-600";
+    }
+  } else if (weight instanceof W700) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-700";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-700";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-700";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-700";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-700";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-700";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-700";
+    } else {
+      return "dark:outline-on-surface-700";
+    }
+  } else if (weight instanceof W800) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-800";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-800";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-800";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-800";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-800";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-800";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-800";
+    } else {
+      return "dark:outline-on-surface-800";
+    }
+  } else if (weight instanceof W900) {
+    if (color instanceof Primary) {
+      return "dark:outline-primary-900";
+    } else if (color instanceof Secondary) {
+      return "dark:outline-secondary-900";
+    } else if (color instanceof Success) {
+      return "dark:outline-success-900";
+    } else if (color instanceof Warn) {
+      return "dark:outline-warn-900";
+    } else if (color instanceof Err) {
+      return "dark:outline-error-900";
+    } else if (color instanceof Info) {
+      return "dark:outline-info-900";
+    } else if (color instanceof Surface) {
+      return "dark:outline-surface-900";
+    } else {
+      return "dark:outline-on-surface-900";
+    }
+  } else if (color instanceof Primary) {
+    return "dark:outline-primary-950";
+  } else if (color instanceof Secondary) {
+    return "dark:outline-secondary-950";
+  } else if (color instanceof Success) {
+    return "dark:outline-success-950";
+  } else if (color instanceof Warn) {
+    return "dark:outline-warn-950";
+  } else if (color instanceof Err) {
+    return "dark:outline-error-950";
+  } else if (color instanceof Info) {
+    return "dark:outline-info-950";
+  } else if (color instanceof Surface) {
+    return "dark:outline-surface-950";
+  } else {
+    return "dark:outline-on-surface-950";
+  }
+}
+
+// build/dev/javascript/glelements/glelements/tailwind.mjs
+function color_class(property3, color, weight, theme) {
+  if (theme instanceof Some) {
+    let $ = theme[0];
+    if ($ instanceof Preferred) {
+      let _block;
+      if (property3 instanceof Background) {
+        _block = background_class(color, weight);
+      } else if (property3 instanceof Border) {
+        _block = border_class(color, weight);
+      } else if (property3 instanceof Outline) {
+        _block = outline_class(color, weight);
+      } else {
+        _block = text_class(color, weight);
+      }
+      let light_class = _block;
+      let dark_weight = invert_weight(weight);
+      let _block$1;
+      if (property3 instanceof Background) {
+        _block$1 = dark_background_class(color, dark_weight);
+      } else if (property3 instanceof Border) {
+        _block$1 = dark_border_class(color, dark_weight);
+      } else if (property3 instanceof Outline) {
+        _block$1 = dark_outline_class(color, dark_weight);
+      } else {
+        _block$1 = dark_text_class(color, dark_weight);
+      }
+      let dark_class = _block$1;
+      return light_class + " " + dark_class;
+    } else if ($ instanceof Light) {
+      if (property3 instanceof Background) {
+        return background_class(color, weight);
+      } else if (property3 instanceof Border) {
+        return border_class(color, weight);
+      } else if (property3 instanceof Outline) {
+        return outline_class(color, weight);
+      } else {
+        return text_class(color, weight);
+      }
+    } else {
+      let _block;
+      if (property3 instanceof Background) {
+        _block = background_class(color, weight);
+      } else if (property3 instanceof Border) {
+        _block = border_class(color, weight);
+      } else if (property3 instanceof Outline) {
+        _block = outline_class(color, weight);
+      } else {
+        _block = text_class(color, weight);
+      }
+      let light_class = _block;
+      let dark_weight = invert_weight(weight);
+      let _block$1;
+      if (property3 instanceof Background) {
+        _block$1 = dark_background_class(color, dark_weight);
+      } else if (property3 instanceof Border) {
+        _block$1 = dark_border_class(color, dark_weight);
+      } else if (property3 instanceof Outline) {
+        _block$1 = dark_outline_class(color, dark_weight);
+      } else {
+        _block$1 = dark_text_class(color, dark_weight);
+      }
+      let dark_class = _block$1;
+      return light_class + " " + dark_class;
+    }
+  } else {
+    if (property3 instanceof Background) {
+      return background_class(color, weight);
+    } else if (property3 instanceof Border) {
+      return border_class(color, weight);
+    } else if (property3 instanceof Outline) {
+      return outline_class(color, weight);
+    } else {
+      return text_class(color, weight);
+    }
+  }
+}
+function color_attr(property3, color, weight, theme) {
+  return class$(color_class(property3, color, weight, theme));
+}
+function background(color, weight, theme) {
+  return color_attr(new Background(), color, weight, theme);
+}
+
+// build/dev/javascript/glelements/glelements/button.mjs
+var Outline2 = class extends CustomType {
+};
+var BgLight = class extends CustomType {
+};
+function of(element4, attributes, children) {
+  return element4(prepend(role("button"), attributes), children);
+}
+function rounded() {
+  return class$("rounded-md");
+}
+function padding(value) {
+  if (value === "sm") {
+    return class$("px-2 py-1");
+  } else if (value === "md") {
+    return class$("px-4 py-2");
+  } else if (value === "lg") {
+    return class$("px-8 py-4");
+  } else {
+    return class$("p-0");
+  }
+}
+function hover(value) {
+  if (value instanceof Outline2) {
+    return class$(
+      "outline outline-transparent outline-2 hover:outline-on-surface-500 dark:hover:outline-on-surface-200"
+    );
+  } else if (value instanceof BgLight) {
+    return background(
+      new Primary(),
+      new W400(),
+      new Some(new Preferred())
+    );
+  } else {
+    return background(
+      new Primary(),
+      new W600(),
+      new Some(new Preferred())
+    );
+  }
+}
+function transition() {
+  return class$("transition ease-in-out");
+}
+function ensure_default_background(attributes) {
+  let _block;
+  let _pipe = attributes;
+  _block = any(
+    _pipe,
+    (attr) => {
+      if (attr instanceof Attribute) {
+        let value = attr.value;
+        return attr.name === "class" && contains_string(value, "bg-");
+      } else {
+        return false;
+      }
+    }
+  );
+  let has_bg_attr = _block;
+  if (has_bg_attr) {
+    return toList([]);
+  } else {
+    return toList([
+      background(
+        new Primary(),
+        new W400(),
+        new Some(new Preferred())
+      )
+    ]);
+  }
+}
+function basic(attributes, children) {
+  let basic_attributes = toList([
+    hover(new Outline2()),
+    padding("md"),
+    rounded(),
+    transition()
+  ]);
+  let _block;
+  let _pipe = attributes;
+  let _pipe$1 = ensure_default_background(_pipe);
+  let _pipe$2 = append2(_pipe$1, basic_attributes);
+  _block = append2(_pipe$2, attributes);
+  let attr = _block;
+  return of(button, attr, children);
+}
+function theme_toggle(attributes, children) {
+  let children$1 = prepend(
+    span(
+      toList([
+        class$("grid grid-cols-1 grid-rows-1 place-items-center")
+      ]),
+      toList([
+        sun(
+          toList([
+            class$(
+              "col-start-1 row-start-1 dark:opacity-0 duration-300"
+            ),
+            transition()
+          ])
+        ),
+        moon(
+          toList([
+            class$(
+              "col-start-1 row-start-1 opacity-0 dark:opacity-100 duration-300"
+            ),
+            transition()
+          ])
+        )
+      ])
+    ),
+    children
+  );
+  return basic(attributes, children$1);
+}
+
+// build/dev/javascript/glelements/theme.ffi.mjs
+function toggleColorScheme() {
+  const toColorScheme = localStorage.theme === "light" ? "dark" : "light";
+  setLocalStorageColorScheme(toColorScheme);
+  toggleDarkClass();
+}
+function initializeColorScheme() {
+  if (!("theme" in localStorage)) {
+    localStorage.theme = "light";
+  }
+  toggleDarkClass();
+}
+function toggleDarkClass() {
+  document.documentElement.classList.toggle(
+    "dark",
+    localStorage.theme === "dark"
+  );
+}
+function setLocalStorageColorScheme(scheme) {
+  localStorage.theme = scheme === "dark" ? "dark" : "light";
+}
+
+// build/dev/javascript/glelements/glelements/theme.mjs
+function toggle_color_scheme() {
+  return toggleColorScheme();
+}
+function initialize_color_scheme() {
+  return initializeColorScheme();
+}
+
+// build/dev/javascript/gleam_stdlib/gleam/bool.mjs
+function guard(requirement, consequence, alternative) {
+  if (requirement) {
+    return consequence;
+  } else {
+    return alternative();
+  }
+}
+
+// build/dev/javascript/lustre/lustre/effect.mjs
+var Effect = class extends CustomType {
+  constructor(synchronous, before_paint2, after_paint) {
+    super();
+    this.synchronous = synchronous;
+    this.before_paint = before_paint2;
+    this.after_paint = after_paint;
+  }
+};
+var empty2 = /* @__PURE__ */ new Effect(
+  /* @__PURE__ */ toList([]),
+  /* @__PURE__ */ toList([]),
+  /* @__PURE__ */ toList([])
+);
+function none2() {
+  return empty2;
 }
 
 // build/dev/javascript/lustre/lustre/vdom/patch.mjs
@@ -1563,13 +3579,13 @@ var AttributeChange = class extends CustomType {
     this.events = events;
   }
 };
-function is_controlled(events, namespace, tag, path) {
-  if (tag === "input" && namespace === "") {
-    return has_dispatched_events(events, path);
-  } else if (tag === "select" && namespace === "") {
-    return has_dispatched_events(events, path);
-  } else if (tag === "textarea" && namespace === "") {
-    return has_dispatched_events(events, path);
+function is_controlled(events, namespace2, tag, path2) {
+  if (tag === "input" && namespace2 === "") {
+    return has_dispatched_events(events, path2);
+  } else if (tag === "select" && namespace2 === "") {
+    return has_dispatched_events(events, path2);
+  } else if (tag === "textarea" && namespace2 === "") {
+    return has_dispatched_events(events, path2);
   } else {
     return false;
   }
@@ -1577,14 +3593,14 @@ function is_controlled(events, namespace, tag, path) {
 function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, loop$old, loop$new, loop$added, loop$removed) {
   while (true) {
     let controlled = loop$controlled;
-    let path = loop$path;
+    let path2 = loop$path;
     let mapper = loop$mapper;
     let events = loop$events;
     let old = loop$old;
-    let new$7 = loop$new;
+    let new$8 = loop$new;
     let added = loop$added;
     let removed = loop$removed;
-    if (new$7 instanceof Empty) {
+    if (new$8 instanceof Empty) {
       if (old instanceof Empty) {
         return new AttributeChange(added, removed, events);
       } else {
@@ -1594,13 +3610,13 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
           let old$1 = old.tail;
           let name = $.name;
           let removed$1 = prepend(prev, removed);
-          let events$1 = remove_event(events, path, name);
+          let events$1 = remove_event(events, path2, name);
           loop$controlled = controlled;
-          loop$path = path;
+          loop$path = path2;
           loop$mapper = mapper;
           loop$events = events$1;
           loop$old = old$1;
-          loop$new = new$7;
+          loop$new = new$8;
           loop$added = added;
           loop$removed = removed$1;
         } else {
@@ -1608,26 +3624,26 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
           let old$1 = old.tail;
           let removed$1 = prepend(prev, removed);
           loop$controlled = controlled;
-          loop$path = path;
+          loop$path = path2;
           loop$mapper = mapper;
           loop$events = events;
           loop$old = old$1;
-          loop$new = new$7;
+          loop$new = new$8;
           loop$added = added;
           loop$removed = removed$1;
         }
       }
     } else if (old instanceof Empty) {
-      let $ = new$7.head;
+      let $ = new$8.head;
       if ($ instanceof Event2) {
         let next = $;
-        let new$1 = new$7.tail;
+        let new$1 = new$8.tail;
         let name = $.name;
         let handler = $.handler;
         let added$1 = prepend(next, added);
-        let events$1 = add_event(events, mapper, path, name, handler);
+        let events$1 = add_event(events, mapper, path2, name, handler);
         loop$controlled = controlled;
-        loop$path = path;
+        loop$path = path2;
         loop$mapper = mapper;
         loop$events = events$1;
         loop$old = old;
@@ -1636,10 +3652,10 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
         loop$removed = removed;
       } else {
         let next = $;
-        let new$1 = new$7.tail;
+        let new$1 = new$8.tail;
         let added$1 = prepend(next, added);
         loop$controlled = controlled;
-        loop$path = path;
+        loop$path = path2;
         loop$mapper = mapper;
         loop$events = events;
         loop$old = old;
@@ -1648,8 +3664,8 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
         loop$removed = removed;
       }
     } else {
-      let next = new$7.head;
-      let remaining_new = new$7.tail;
+      let next = new$8.head;
+      let remaining_new = new$8.tail;
       let prev = old.head;
       let remaining_old = old.tail;
       let $ = compare3(prev, next);
@@ -1657,23 +3673,23 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
         if (prev instanceof Event2) {
           let name = prev.name;
           let removed$1 = prepend(prev, removed);
-          let events$1 = remove_event(events, path, name);
+          let events$1 = remove_event(events, path2, name);
           loop$controlled = controlled;
-          loop$path = path;
+          loop$path = path2;
           loop$mapper = mapper;
           loop$events = events$1;
           loop$old = remaining_old;
-          loop$new = new$7;
+          loop$new = new$8;
           loop$added = added;
           loop$removed = removed$1;
         } else {
           let removed$1 = prepend(prev, removed);
           loop$controlled = controlled;
-          loop$path = path;
+          loop$path = path2;
           loop$mapper = mapper;
           loop$events = events;
           loop$old = remaining_old;
-          loop$new = new$7;
+          loop$new = new$8;
           loop$added = added;
           loop$removed = removed$1;
         }
@@ -1700,7 +3716,7 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             }
             let added$1 = _block$1;
             loop$controlled = controlled;
-            loop$path = path;
+            loop$path = path2;
             loop$mapper = mapper;
             loop$events = events;
             loop$old = remaining_old;
@@ -1711,9 +3727,9 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             let name = prev.name;
             let added$1 = prepend(next, added);
             let removed$1 = prepend(prev, removed);
-            let events$1 = remove_event(events, path, name);
+            let events$1 = remove_event(events, path2, name);
             loop$controlled = controlled;
-            loop$path = path;
+            loop$path = path2;
             loop$mapper = mapper;
             loop$events = events$1;
             loop$old = remaining_old;
@@ -1724,7 +3740,7 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             let added$1 = prepend(next, added);
             let removed$1 = prepend(prev, removed);
             loop$controlled = controlled;
-            loop$path = path;
+            loop$path = path2;
             loop$mapper = mapper;
             loop$events = events;
             loop$old = remaining_old;
@@ -1767,7 +3783,7 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             }
             let added$1 = _block$1;
             loop$controlled = controlled;
-            loop$path = path;
+            loop$path = path2;
             loop$mapper = mapper;
             loop$events = events;
             loop$old = remaining_old;
@@ -1778,9 +3794,9 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             let name = prev.name;
             let added$1 = prepend(next, added);
             let removed$1 = prepend(prev, removed);
-            let events$1 = remove_event(events, path, name);
+            let events$1 = remove_event(events, path2, name);
             loop$controlled = controlled;
-            loop$path = path;
+            loop$path = path2;
             loop$mapper = mapper;
             loop$events = events$1;
             loop$old = remaining_old;
@@ -1791,7 +3807,7 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             let added$1 = prepend(next, added);
             let removed$1 = prepend(prev, removed);
             loop$controlled = controlled;
-            loop$path = path;
+            loop$path = path2;
             loop$mapper = mapper;
             loop$events = events;
             loop$old = remaining_old;
@@ -1810,9 +3826,9 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
             _block = added;
           }
           let added$1 = _block;
-          let events$1 = add_event(events, mapper, path, name, handler);
+          let events$1 = add_event(events, mapper, path2, name, handler);
           loop$controlled = controlled;
-          loop$path = path;
+          loop$path = path2;
           loop$mapper = mapper;
           loop$events = events$1;
           loop$old = remaining_old;
@@ -1824,9 +3840,9 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
           let handler = next.handler;
           let added$1 = prepend(next, added);
           let removed$1 = prepend(prev, removed);
-          let events$1 = add_event(events, mapper, path, name, handler);
+          let events$1 = add_event(events, mapper, path2, name, handler);
           loop$controlled = controlled;
-          loop$path = path;
+          loop$path = path2;
           loop$mapper = mapper;
           loop$events = events$1;
           loop$old = remaining_old;
@@ -1838,9 +3854,9 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
         let name = next.name;
         let handler = next.handler;
         let added$1 = prepend(next, added);
-        let events$1 = add_event(events, mapper, path, name, handler);
+        let events$1 = add_event(events, mapper, path2, name, handler);
         loop$controlled = controlled;
-        loop$path = path;
+        loop$path = path2;
         loop$mapper = mapper;
         loop$events = events$1;
         loop$old = old;
@@ -1850,7 +3866,7 @@ function diff_attributes(loop$controlled, loop$path, loop$mapper, loop$events, l
       } else {
         let added$1 = prepend(next, added);
         loop$controlled = controlled;
-        loop$path = path;
+        loop$path = path2;
         loop$mapper = mapper;
         loop$events = events;
         loop$old = old;
@@ -1865,19 +3881,19 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
   while (true) {
     let old = loop$old;
     let old_keyed = loop$old_keyed;
-    let new$7 = loop$new;
+    let new$8 = loop$new;
     let new_keyed = loop$new_keyed;
     let moved = loop$moved;
     let moved_offset = loop$moved_offset;
     let removed = loop$removed;
     let node_index = loop$node_index;
     let patch_index = loop$patch_index;
-    let path = loop$path;
+    let path2 = loop$path;
     let changes = loop$changes;
     let children = loop$children;
     let mapper = loop$mapper;
     let events = loop$events;
-    if (new$7 instanceof Empty) {
+    if (new$8 instanceof Empty) {
       if (old instanceof Empty) {
         return new Diff(
           new Patch(patch_index, removed, changes, children),
@@ -1894,17 +3910,17 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
           _block = removed;
         }
         let removed$1 = _block;
-        let events$1 = remove_child(events, path, node_index, prev);
+        let events$1 = remove_child(events, path2, node_index, prev);
         loop$old = old$1;
         loop$old_keyed = old_keyed;
-        loop$new = new$7;
+        loop$new = new$8;
         loop$new_keyed = new_keyed;
         loop$moved = moved;
         loop$moved_offset = moved_offset;
         loop$removed = removed$1;
         loop$node_index = node_index;
         loop$patch_index = patch_index;
-        loop$path = path;
+        loop$path = path2;
         loop$changes = changes;
         loop$children = children;
         loop$mapper = mapper;
@@ -1914,21 +3930,21 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
       let events$1 = add_children(
         events,
         mapper,
-        path,
+        path2,
         node_index,
-        new$7
+        new$8
       );
-      let insert4 = insert3(new$7, node_index - moved_offset);
+      let insert4 = insert3(new$8, node_index - moved_offset);
       let changes$1 = prepend(insert4, changes);
       return new Diff(
         new Patch(patch_index, removed, changes$1, children),
         events$1
       );
     } else {
-      let next = new$7.head;
+      let next = new$8.head;
       let prev = old.head;
       if (prev.key !== next.key) {
-        let new_remaining = new$7.tail;
+        let new_remaining = new$8.tail;
         let old_remaining = old.tail;
         let next_did_exist = get(old_keyed, next.key);
         let prev_does_exist = has_key2(new_keyed, prev.key);
@@ -1939,14 +3955,14 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             if ($) {
               loop$old = old_remaining;
               loop$old_keyed = old_keyed;
-              loop$new = new$7;
+              loop$new = new$8;
               loop$new_keyed = new_keyed;
               loop$moved = moved;
               loop$moved_offset = moved_offset - 1;
               loop$removed = removed;
               loop$node_index = node_index;
               loop$patch_index = patch_index;
-              loop$path = path;
+              loop$path = path2;
               loop$changes = changes;
               loop$children = children;
               loop$mapper = mapper;
@@ -1961,14 +3977,14 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
               let moved_offset$1 = moved_offset + 1;
               loop$old = prepend(match, old);
               loop$old_keyed = old_keyed;
-              loop$new = new$7;
+              loop$new = new$8;
               loop$new_keyed = new_keyed;
               loop$moved = moved$1;
               loop$moved_offset = moved_offset$1;
               loop$removed = removed;
               loop$node_index = node_index;
               loop$patch_index = patch_index;
-              loop$path = path;
+              loop$path = path2;
               loop$changes = changes$1;
               loop$children = children;
               loop$mapper = mapper;
@@ -1977,18 +3993,18 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
           } else {
             let index2 = node_index - moved_offset;
             let changes$1 = prepend(remove2(index2), changes);
-            let events$1 = remove_child(events, path, node_index, prev);
+            let events$1 = remove_child(events, path2, node_index, prev);
             let moved_offset$1 = moved_offset - 1;
             loop$old = old_remaining;
             loop$old_keyed = old_keyed;
-            loop$new = new$7;
+            loop$new = new$8;
             loop$new_keyed = new_keyed;
             loop$moved = moved;
             loop$moved_offset = moved_offset$1;
             loop$removed = removed;
             loop$node_index = node_index;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = changes$1;
             loop$children = children;
             loop$mapper = mapper;
@@ -1999,7 +4015,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
           let events$1 = add_child(
             events,
             mapper,
-            path,
+            path2,
             node_index,
             next
           );
@@ -2014,7 +4030,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
           loop$removed = removed;
           loop$node_index = node_index + 1;
           loop$patch_index = patch_index;
-          loop$path = path;
+          loop$path = path2;
           loop$changes = changes$1;
           loop$children = children;
           loop$mapper = mapper;
@@ -2023,8 +4039,8 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
           let change = replace2(node_index - moved_offset, next);
           let _block;
           let _pipe = events;
-          let _pipe$1 = remove_child(_pipe, path, node_index, prev);
-          _block = add_child(_pipe$1, mapper, path, node_index, next);
+          let _pipe$1 = remove_child(_pipe, path2, node_index, prev);
+          _block = add_child(_pipe$1, mapper, path2, node_index, next);
           let events$1 = _block;
           loop$old = old_remaining;
           loop$old_keyed = old_keyed;
@@ -2035,7 +4051,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
           loop$removed = removed;
           loop$node_index = node_index + 1;
           loop$patch_index = patch_index;
-          loop$path = path;
+          loop$path = path2;
           loop$changes = prepend(change, changes);
           loop$children = children;
           loop$mapper = mapper;
@@ -2044,20 +4060,20 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
       } else {
         let $ = old.head;
         if ($ instanceof Fragment) {
-          let $1 = new$7.head;
+          let $1 = new$8.head;
           if ($1 instanceof Fragment) {
             let next$1 = $1;
-            let new$1 = new$7.tail;
+            let new$1 = new$8.tail;
             let prev$1 = $;
             let old$1 = old.tail;
             let composed_mapper = compose_mapper(mapper, next$1.mapper);
-            let child_path = add2(path, node_index, next$1.key);
+            let child_path = add2(path2, node_index, next$1.key);
             let child = do_diff(
               prev$1.children,
               prev$1.keyed_children,
               next$1.children,
               next$1.keyed_children,
-              empty2(),
+              empty(),
               0,
               0,
               0,
@@ -2096,24 +4112,24 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             loop$removed = removed;
             loop$node_index = node_index + 1;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = changes;
             loop$children = children$1;
             loop$mapper = mapper;
             loop$events = child.events;
           } else {
             let next$1 = $1;
-            let new_remaining = new$7.tail;
+            let new_remaining = new$8.tail;
             let prev$1 = $;
             let old_remaining = old.tail;
             let change = replace2(node_index - moved_offset, next$1);
             let _block;
             let _pipe = events;
-            let _pipe$1 = remove_child(_pipe, path, node_index, prev$1);
+            let _pipe$1 = remove_child(_pipe, path2, node_index, prev$1);
             _block = add_child(
               _pipe$1,
               mapper,
-              path,
+              path2,
               node_index,
               next$1
             );
@@ -2127,25 +4143,25 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             loop$removed = removed;
             loop$node_index = node_index + 1;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = prepend(change, changes);
             loop$children = children;
             loop$mapper = mapper;
             loop$events = events$1;
           }
         } else if ($ instanceof Element) {
-          let $1 = new$7.head;
+          let $1 = new$8.head;
           if ($1 instanceof Element) {
             let next$1 = $1;
             let prev$1 = $;
             if (prev$1.namespace === next$1.namespace && prev$1.tag === next$1.tag) {
-              let new$1 = new$7.tail;
+              let new$1 = new$8.tail;
               let old$1 = old.tail;
               let composed_mapper = compose_mapper(
                 mapper,
                 next$1.mapper
               );
-              let child_path = add2(path, node_index, next$1.key);
+              let child_path = add2(path2, node_index, next$1.key);
               let controlled = is_controlled(
                 events,
                 next$1.namespace,
@@ -2180,7 +4196,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
                 prev$1.keyed_children,
                 next$1.children,
                 next$1.keyed_children,
-                empty2(),
+                empty(),
                 0,
                 0,
                 0,
@@ -2219,14 +4235,14 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
               loop$removed = removed;
               loop$node_index = node_index + 1;
               loop$patch_index = patch_index;
-              loop$path = path;
+              loop$path = path2;
               loop$changes = changes;
               loop$children = children$1;
               loop$mapper = mapper;
               loop$events = child.events;
             } else {
               let next$2 = $1;
-              let new_remaining = new$7.tail;
+              let new_remaining = new$8.tail;
               let prev$2 = $;
               let old_remaining = old.tail;
               let change = replace2(node_index - moved_offset, next$2);
@@ -2234,14 +4250,14 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
               let _pipe = events;
               let _pipe$1 = remove_child(
                 _pipe,
-                path,
+                path2,
                 node_index,
                 prev$2
               );
               _block = add_child(
                 _pipe$1,
                 mapper,
-                path,
+                path2,
                 node_index,
                 next$2
               );
@@ -2255,7 +4271,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
               loop$removed = removed;
               loop$node_index = node_index + 1;
               loop$patch_index = patch_index;
-              loop$path = path;
+              loop$path = path2;
               loop$changes = prepend(change, changes);
               loop$children = children;
               loop$mapper = mapper;
@@ -2263,17 +4279,17 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             }
           } else {
             let next$1 = $1;
-            let new_remaining = new$7.tail;
+            let new_remaining = new$8.tail;
             let prev$1 = $;
             let old_remaining = old.tail;
             let change = replace2(node_index - moved_offset, next$1);
             let _block;
             let _pipe = events;
-            let _pipe$1 = remove_child(_pipe, path, node_index, prev$1);
+            let _pipe$1 = remove_child(_pipe, path2, node_index, prev$1);
             _block = add_child(
               _pipe$1,
               mapper,
-              path,
+              path2,
               node_index,
               next$1
             );
@@ -2287,19 +4303,19 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             loop$removed = removed;
             loop$node_index = node_index + 1;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = prepend(change, changes);
             loop$children = children;
             loop$mapper = mapper;
             loop$events = events$1;
           }
         } else if ($ instanceof Text) {
-          let $1 = new$7.head;
+          let $1 = new$8.head;
           if ($1 instanceof Text) {
             let next$1 = $1;
             let prev$1 = $;
             if (prev$1.content === next$1.content) {
-              let new$1 = new$7.tail;
+              let new$1 = new$8.tail;
               let old$1 = old.tail;
               loop$old = old$1;
               loop$old_keyed = old_keyed;
@@ -2310,14 +4326,14 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
               loop$removed = removed;
               loop$node_index = node_index + 1;
               loop$patch_index = patch_index;
-              loop$path = path;
+              loop$path = path2;
               loop$changes = changes;
               loop$children = children;
               loop$mapper = mapper;
               loop$events = events;
             } else {
               let next$2 = $1;
-              let new$1 = new$7.tail;
+              let new$1 = new$8.tail;
               let old$1 = old.tail;
               let child = new$5(
                 node_index,
@@ -2334,7 +4350,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
               loop$removed = removed;
               loop$node_index = node_index + 1;
               loop$patch_index = patch_index;
-              loop$path = path;
+              loop$path = path2;
               loop$changes = changes;
               loop$children = prepend(child, children);
               loop$mapper = mapper;
@@ -2342,17 +4358,17 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             }
           } else {
             let next$1 = $1;
-            let new_remaining = new$7.tail;
+            let new_remaining = new$8.tail;
             let prev$1 = $;
             let old_remaining = old.tail;
             let change = replace2(node_index - moved_offset, next$1);
             let _block;
             let _pipe = events;
-            let _pipe$1 = remove_child(_pipe, path, node_index, prev$1);
+            let _pipe$1 = remove_child(_pipe, path2, node_index, prev$1);
             _block = add_child(
               _pipe$1,
               mapper,
-              path,
+              path2,
               node_index,
               next$1
             );
@@ -2366,21 +4382,21 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             loop$removed = removed;
             loop$node_index = node_index + 1;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = prepend(change, changes);
             loop$children = children;
             loop$mapper = mapper;
             loop$events = events$1;
           }
         } else {
-          let $1 = new$7.head;
+          let $1 = new$8.head;
           if ($1 instanceof UnsafeInnerHtml) {
             let next$1 = $1;
-            let new$1 = new$7.tail;
+            let new$1 = new$8.tail;
             let prev$1 = $;
             let old$1 = old.tail;
             let composed_mapper = compose_mapper(mapper, next$1.mapper);
-            let child_path = add2(path, node_index, next$1.key);
+            let child_path = add2(path2, node_index, next$1.key);
             let $2 = diff_attributes(
               false,
               child_path,
@@ -2434,24 +4450,24 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             loop$removed = removed;
             loop$node_index = node_index + 1;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = changes;
             loop$children = children$1;
             loop$mapper = mapper;
             loop$events = events$1;
           } else {
             let next$1 = $1;
-            let new_remaining = new$7.tail;
+            let new_remaining = new$8.tail;
             let prev$1 = $;
             let old_remaining = old.tail;
             let change = replace2(node_index - moved_offset, next$1);
             let _block;
             let _pipe = events;
-            let _pipe$1 = remove_child(_pipe, path, node_index, prev$1);
+            let _pipe$1 = remove_child(_pipe, path2, node_index, prev$1);
             _block = add_child(
               _pipe$1,
               mapper,
-              path,
+              path2,
               node_index,
               next$1
             );
@@ -2465,7 +4481,7 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
             loop$removed = removed;
             loop$node_index = node_index + 1;
             loop$patch_index = patch_index;
-            loop$path = path;
+            loop$path = path2;
             loop$changes = prepend(change, changes);
             loop$children = children;
             loop$mapper = mapper;
@@ -2476,13 +4492,13 @@ function do_diff(loop$old, loop$old_keyed, loop$new, loop$new_keyed, loop$moved,
     }
   }
 }
-function diff(events, old, new$7) {
+function diff(events, old, new$8) {
   return do_diff(
     toList([old]),
-    empty2(),
-    toList([new$7]),
-    empty2(),
-    empty2(),
+    empty(),
+    toList([new$8]),
+    empty(),
+    empty(),
     0,
     0,
     0,
@@ -2490,7 +4506,7 @@ function diff(events, old, new$7) {
     root2,
     empty_list,
     empty_list,
-    identity2,
+    identity3,
     tick(events)
   );
 }
@@ -2498,9 +4514,9 @@ function diff(events, old, new$7) {
 // build/dev/javascript/lustre/lustre/vdom/reconciler.ffi.mjs
 var setTimeout = globalThis.setTimeout;
 var clearTimeout = globalThis.clearTimeout;
-var createElementNS = (ns, name) => document().createElementNS(ns, name);
-var createTextNode = (data) => document().createTextNode(data);
-var createDocumentFragment = () => document().createDocumentFragment();
+var createElementNS = (ns, name) => document2().createElementNS(ns, name);
+var createTextNode = (data) => document2().createTextNode(data);
+var createDocumentFragment = () => document2().createDocumentFragment();
 var insertBefore = (parent, node, reference) => parent.insertBefore(node, reference);
 var moveBefore = SUPPORTS_MOVE_BEFORE ? (parent, node, reference) => parent.moveBefore(node, reference) : insertBefore;
 var removeChild = (parent, child) => parent.removeChild(child);
@@ -2534,16 +4550,16 @@ var insertMetadataChild = (kind, parent, node, index2, key) => {
   return child;
 };
 var getPath = (node) => {
-  let path = "";
+  let path2 = "";
   for (let current = node[meta]; current.parent; current = current.parent) {
     if (current.key) {
-      path = `${separator_element}${current.key}${path}`;
+      path2 = `${separator_element}${current.key}${path2}`;
     } else {
       const index2 = current.parent.children.indexOf(current);
-      path = `${separator_element}${index2}${path}`;
+      path2 = `${separator_element}${index2}${path2}`;
     }
   }
-  return path.slice(1);
+  return path2.slice(1);
 };
 var Reconciler = class {
   #root = null;
@@ -2748,8 +4764,8 @@ var Reconciler = class {
       }
     }
   }
-  #createElement(parent, index2, { kind, key, tag, namespace, attributes }) {
-    const node = createElementNS(namespace || NAMESPACE_HTML, tag);
+  #createElement(parent, index2, { kind, key, tag, namespace: namespace2, attributes }) {
+    const node = createElementNS(namespace2 || NAMESPACE_HTML, tag);
     insertMetadataChild(kind, parent, node, index2, key);
     if (this.#exposeKeys && key) {
       setAttribute(node, "data-lustre-key", key);
@@ -2796,66 +4812,66 @@ var Reconciler = class {
         addEventListener(node, name, handleEvent, { passive });
         this.#updateDebounceThrottle(throttles, name, throttleDelay);
         this.#updateDebounceThrottle(debouncers, name, debounceDelay);
-        handlers.set(name, (event2) => this.#handleEvent(attribute3, event2));
+        handlers.set(name, (event4) => this.#handleEvent(attribute3, event4));
         break;
       }
     }
   }
-  #updateDebounceThrottle(map3, name, delay) {
-    const debounceOrThrottle = map3.get(name);
+  #updateDebounceThrottle(map4, name, delay) {
+    const debounceOrThrottle = map4.get(name);
     if (delay > 0) {
       if (debounceOrThrottle) {
         debounceOrThrottle.delay = delay;
       } else {
-        map3.set(name, { delay });
+        map4.set(name, { delay });
       }
     } else if (debounceOrThrottle) {
       const { timeout } = debounceOrThrottle;
       if (timeout) {
         clearTimeout(timeout);
       }
-      map3.delete(name);
+      map4.delete(name);
     }
   }
-  #handleEvent(attribute3, event2) {
-    const { currentTarget, type } = event2;
+  #handleEvent(attribute3, event4) {
+    const { currentTarget, type } = event4;
     const { debouncers, throttles } = currentTarget[meta];
-    const path = getPath(currentTarget);
+    const path2 = getPath(currentTarget);
     const {
       prevent_default: prevent,
       stop_propagation: stop,
       include,
       immediate
     } = attribute3;
-    if (prevent.kind === always_kind) event2.preventDefault();
-    if (stop.kind === always_kind) event2.stopPropagation();
+    if (prevent.kind === always_kind) event4.preventDefault();
+    if (stop.kind === always_kind) event4.stopPropagation();
     if (type === "submit") {
-      event2.detail ??= {};
-      event2.detail.formData = [
-        ...new FormData(event2.target, event2.submitter).entries()
+      event4.detail ??= {};
+      event4.detail.formData = [
+        ...new FormData(event4.target, event4.submitter).entries()
       ];
     }
-    const data = this.#useServerEvents ? createServerEvent(event2, include ?? []) : event2;
+    const data = this.#useServerEvents ? createServerEvent(event4, include ?? []) : event4;
     const throttle = throttles.get(type);
     if (throttle) {
       const now = Date.now();
       const last = throttle.last || 0;
       if (now > last + throttle.delay) {
         throttle.last = now;
-        throttle.lastEvent = event2;
-        this.#dispatch(data, path, type, immediate);
+        throttle.lastEvent = event4;
+        this.#dispatch(data, path2, type, immediate);
       }
     }
     const debounce = debouncers.get(type);
     if (debounce) {
       clearTimeout(debounce.timeout);
       debounce.timeout = setTimeout(() => {
-        if (event2 === throttles.get(type)?.lastEvent) return;
-        this.#dispatch(data, path, type, immediate);
+        if (event4 === throttles.get(type)?.lastEvent) return;
+        this.#dispatch(data, path2, type, immediate);
       }, debounce.delay);
     }
     if (!throttle && !debounce) {
-      this.#dispatch(data, path, type, immediate);
+      this.#dispatch(data, path2, type, immediate);
     }
   }
 };
@@ -2870,28 +4886,28 @@ var iterate = (list4, callback) => {
     }
   }
 };
-var handleEvent = (event2) => {
-  const { currentTarget, type } = event2;
+var handleEvent = (event4) => {
+  const { currentTarget, type } = event4;
   const handler = currentTarget[meta].handlers.get(type);
-  handler(event2);
+  handler(event4);
 };
-var createServerEvent = (event2, include = []) => {
+var createServerEvent = (event4, include = []) => {
   const data = {};
-  if (event2.type === "input" || event2.type === "change") {
+  if (event4.type === "input" || event4.type === "change") {
     include.push("target.value");
   }
-  if (event2.type === "submit") {
+  if (event4.type === "submit") {
     include.push("detail.formData");
   }
   for (const property3 of include) {
-    const path = property3.split(".");
-    for (let i = 0, input = event2, output = data; i < path.length; i++) {
-      if (i === path.length - 1) {
-        output[path[i]] = input[path[i]];
+    const path2 = property3.split(".");
+    for (let i = 0, input = event4, output = data; i < path2.length; i++) {
+      if (i === path2.length - 1) {
+        output[path2[i]] = input[path2[i]];
         break;
       }
-      output = output[path[i]] ??= {};
-      input = input[path[i]];
+      output = output[path2[i]] ??= {};
+      input = input[path2[i]];
     }
   }
   return data;
@@ -2965,7 +4981,7 @@ function do_extract_keyed_children(loop$key_children_pairs, loop$keyed_children,
 function extract_keyed_children(children) {
   return do_extract_keyed_children(
     children,
-    empty2(),
+    empty(),
     empty_list
   );
 }
@@ -2977,7 +4993,7 @@ function element3(tag, attributes, children) {
   children$1 = $[1];
   return element(
     "",
-    identity2,
+    identity3,
     "",
     tag,
     attributes,
@@ -2987,7 +5003,7 @@ function element3(tag, attributes, children) {
     false
   );
 }
-function namespaced2(namespace, tag, attributes, children) {
+function namespaced2(namespace2, tag, attributes, children) {
   let $ = extract_keyed_children(children);
   let keyed_children;
   let children$1;
@@ -2995,8 +5011,8 @@ function namespaced2(namespace, tag, attributes, children) {
   children$1 = $[1];
   return element(
     "",
-    identity2,
-    namespace,
+    identity3,
+    namespace2,
     tag,
     attributes,
     children$1,
@@ -3011,7 +5027,7 @@ function fragment3(children) {
   let children$1;
   keyed_children = $[0];
   children$1 = $[1];
-  return fragment("", identity2, children$1, keyed_children);
+  return fragment("", identity3, children$1, keyed_children);
 }
 
 // build/dev/javascript/lustre/lustre/vdom/virtualise.ffi.mjs
@@ -3022,16 +5038,16 @@ var virtualise = (root3) => {
     if (canVirtualiseNode(child)) virtualisableRootChildren += 1;
   }
   if (virtualisableRootChildren === 0) {
-    const placeholder = document().createTextNode("");
+    const placeholder = document2().createTextNode("");
     insertMetadataChild(text_kind, rootMeta, placeholder, 0, null);
     root3.replaceChildren(placeholder);
-    return none2();
+    return none();
   }
   if (virtualisableRootChildren === 1) {
     const children2 = virtualiseChildNodes(rootMeta, root3);
     return children2.head[1];
   }
-  const fragmentHead = document().createTextNode("");
+  const fragmentHead = document2().createTextNode("");
   const fragmentMeta = insertMetadataChild(fragment_kind, rootMeta, fragmentHead, 0, null);
   const children = virtualiseChildNodes(fragmentMeta, root3);
   root3.insertBefore(fragmentHead, root3.firstChild);
@@ -3055,14 +5071,14 @@ var virtualiseNode = (meta2, node, key, index2) => {
     case ELEMENT_NODE: {
       const childMeta = insertMetadataChild(element_kind, meta2, node, index2, key);
       const tag = node.localName;
-      const namespace = node.namespaceURI;
-      const isHtmlElement = !namespace || namespace === NAMESPACE_HTML;
+      const namespace2 = node.namespaceURI;
+      const isHtmlElement = !namespace2 || namespace2 === NAMESPACE_HTML;
       if (isHtmlElement && INPUT_ELEMENTS.includes(tag)) {
         virtualiseInputEvents(tag, node);
       }
       const attributes = virtualiseAttributes(node);
       const children = virtualiseChildNodes(childMeta, node);
-      const vnode = isHtmlElement ? element3(tag, attributes, children) : namespaced2(namespace, tag, attributes, children);
+      const vnode = isHtmlElement ? element3(tag, attributes, children) : namespaced2(namespace2, tag, attributes, children);
       return vnode;
     }
     case TEXT_NODE:
@@ -3084,7 +5100,7 @@ var virtualiseInputEvents = (tag, node) => {
     node.checked = checked;
     node.dispatchEvent(new Event("input", { bubbles: true }));
     node.dispatchEvent(new Event("change", { bubbles: true }));
-    if (document().activeElement !== node) {
+    if (document2().activeElement !== node) {
       node.dispatchEvent(new Event("blur", { bubbles: true }));
     }
   });
@@ -3137,37 +5153,37 @@ var virtualiseAttribute = (attr) => {
 };
 
 // build/dev/javascript/lustre/lustre/runtime/client/runtime.ffi.mjs
-var is_browser = () => !!document();
+var is_browser = () => !!document2();
 var Runtime = class {
   constructor(root3, [model, effects], view2, update3) {
     this.root = root3;
     this.#model = model;
     this.#view = view2;
     this.#update = update3;
-    this.root.addEventListener("context-request", (event2) => {
-      if (!(event2.context && event2.callback)) return;
-      if (!this.#contexts.has(event2.context)) return;
-      event2.stopImmediatePropagation();
-      const context = this.#contexts.get(event2.context);
-      if (event2.subscribe) {
+    this.root.addEventListener("context-request", (event4) => {
+      if (!(event4.context && event4.callback)) return;
+      if (!this.#contexts.has(event4.context)) return;
+      event4.stopImmediatePropagation();
+      const context = this.#contexts.get(event4.context);
+      if (event4.subscribe) {
         const unsubscribe = () => {
           context.subscribers = context.subscribers.filter(
-            (subscriber) => subscriber !== event2.callback
+            (subscriber) => subscriber !== event4.callback
           );
         };
-        context.subscribers.push([event2.callback, unsubscribe]);
-        event2.callback(context.value, unsubscribe);
+        context.subscribers.push([event4.callback, unsubscribe]);
+        event4.callback(context.value, unsubscribe);
       } else {
-        event2.callback(context.value);
+        event4.callback(context.value);
       }
     });
-    this.#reconciler = new Reconciler(this.root, (event2, path, name) => {
-      const [events, result] = handle(this.#events, path, name, event2);
+    this.#reconciler = new Reconciler(this.root, (event4, path2, name) => {
+      const [events, result] = handle(this.#events, path2, name, event4);
       this.#events = events;
       if (result.isOk()) {
         const handler = result[0];
-        if (handler.stop_propagation) event2.stopPropagation();
-        if (handler.prevent_default) event2.preventDefault();
+        if (handler.stop_propagation) event4.stopPropagation();
+        if (handler.prevent_default) event4.preventDefault();
         this.dispatch(handler.message, false);
       }
     });
@@ -3188,10 +5204,10 @@ var Runtime = class {
       this.#tick(effects);
     }
   }
-  emit(event2, data) {
+  emit(event4, data) {
     const target = this.root.host ?? this.root;
     target.dispatchEvent(
-      new CustomEvent(event2, {
+      new CustomEvent(event4, {
         detail: data,
         bubbles: true,
         composed: true
@@ -3234,7 +5250,7 @@ var Runtime = class {
   #shouldFlush = false;
   #actions = {
     dispatch: (msg, immediate) => this.dispatch(msg, immediate),
-    emit: (event2, data) => this.emit(event2, data),
+    emit: (event4, data) => this.emit(event4, data),
     select: () => {
     },
     root: () => this.root,
@@ -3303,7 +5319,7 @@ function listAppend(a2, b) {
   } else if (b instanceof Empty) {
     return a2;
   } else {
-    return append(a2, b);
+    return append2(a2, b);
   }
 }
 
@@ -3353,7 +5369,7 @@ function new$6(options) {
     option_none,
     option_none
   );
-  return fold(
+  return fold2(
     options,
     init2,
     (config, option) => {
@@ -3385,13 +5401,13 @@ var Spa = class {
   dispatch(msg, immediate) {
     this.#runtime.dispatch(msg, immediate);
   }
-  emit(event2, data) {
-    this.#runtime.emit(event2, data);
+  emit(event4, data) {
+    this.#runtime.emit(event4, data);
   }
 };
 var start = ({ init: init2, update: update3, view: view2 }, selector, flags) => {
   if (!is_browser()) return new Error(new NotABrowser());
-  const root3 = selector instanceof HTMLElement ? selector : document().querySelector(selector);
+  const root3 = selector instanceof HTMLElement ? selector : document2().querySelector(selector);
   if (!root3) return new Error(new ElementNotFound(selector));
   return new Ok(new Spa(root3, init2(flags), update3, view2));
 };
@@ -3427,6 +5443,44 @@ function start3(app, selector, start_args) {
   );
 }
 
+// build/dev/javascript/lustre/lustre/event.mjs
+function is_immediate_event(name) {
+  if (name === "input") {
+    return true;
+  } else if (name === "change") {
+    return true;
+  } else if (name === "focus") {
+    return true;
+  } else if (name === "focusin") {
+    return true;
+  } else if (name === "focusout") {
+    return true;
+  } else if (name === "blur") {
+    return true;
+  } else if (name === "select") {
+    return true;
+  } else {
+    return false;
+  }
+}
+function on(name, handler) {
+  return event(
+    name,
+    map2(handler, (msg) => {
+      return new Handler(false, false, msg);
+    }),
+    empty_list,
+    never,
+    never,
+    is_immediate_event(name),
+    0,
+    0
+  );
+}
+function on_click(msg) {
+  return on("click", success(msg));
+}
+
 // build/dev/javascript/dev_ing/dev_ing.mjs
 var FILEPATH = "src/dev_ing.gleam";
 var Model = class extends CustomType {
@@ -3435,51 +5489,66 @@ var Model = class extends CustomType {
     this[0] = $0;
   }
 };
+var UserToggledColorScheme = class extends CustomType {
+};
 function init(_) {
-  return [new Model(void 0), none()];
+  initialize_color_scheme();
+  return [new Model(void 0), none2()];
 }
-function update2(_, _1) {
-  return [new Model(void 0), none()];
+function update2(model, msg) {
+  toggle_color_scheme();
+  return [model, none2()];
 }
 function header2() {
   return header(
     toList([
       class$(
-        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500"
+        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500 bg-white dark:text-white dark:bg-black"
       )
     ]),
     toList([
       div(
         toList([
-          class$("w-full max-w-5xl mx-auto flex align-center gap-4")
+          class$(
+            "w-full max-w-5xl mx-auto flex items-center justify-between"
+          )
         ]),
         toList([
           div(
-            toList([class$("font-bold text-xl")]),
-            toList([text2("Dev-Ing")])
-          ),
-          ul(
-            toList([class$("flex flex-row gap-2")]),
+            toList([class$("flex items-center gap-4")]),
             toList([
-              li(
-                toList([]),
-                toList([
-                  a(
-                    toList([href("#")]),
-                    toList([text2("Blog")])
-                  )
-                ])
+              div(
+                toList([class$("font-bold text-xl")]),
+                toList([text2("Dev-Ing")])
               ),
-              li(
-                toList([]),
+              ul(
+                toList([class$("flex flex-row gap-2")]),
                 toList([
-                  a(
-                    toList([href("#")]),
-                    toList([text2("About")])
+                  li(
+                    toList([]),
+                    toList([
+                      a(
+                        toList([href("#")]),
+                        toList([text2("Blog")])
+                      )
+                    ])
+                  ),
+                  li(
+                    toList([]),
+                    toList([
+                      a(
+                        toList([href("#")]),
+                        toList([text2("About")])
+                      )
+                    ])
                   )
                 ])
               )
             ])
+          ),
+          theme_toggle(
+            toList([on_click(new UserToggledColorScheme())]),
+            toList([])
           )
         ])
       )
@@ -3566,10 +5635,10 @@ function main2() {
       "let_assert",
       FILEPATH,
       "dev_ing",
-      16,
+      20,
       "main",
       "Pattern match failed, no pattern matched the value.",
-      { value: $, start: 292, end: 341, pattern_start: 303, pattern_end: 308 }
+      { value: $, start: 357, end: 406, pattern_start: 368, pattern_end: 373 }
     );
   }
   return void 0;
