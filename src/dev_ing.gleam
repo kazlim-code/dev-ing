@@ -44,8 +44,8 @@ fn header() {
       // TODO: Add a logo here
       html.div([attribute.class("font-bold text-xl")], [text("Dev-Ing")]),
       html.ul([attribute.class("flex flex-row gap-2")], [
-        html.li([], [text("Blog")]),
-        html.li([], [text("About")]),
+        html.li([], [html.a([attribute.href("#")], [text("Blog")])]),
+        html.li([], [html.a([attribute.href("#")], [text("About")])]),
       ]),
     ])
   ])

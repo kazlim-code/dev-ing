@@ -632,10 +632,10 @@ var option_none = /* @__PURE__ */ new None();
 var GT = /* @__PURE__ */ new Gt();
 var LT = /* @__PURE__ */ new Lt();
 var EQ = /* @__PURE__ */ new Eq();
-function compare3(a, b) {
-  if (a.name === b.name) {
+function compare3(a2, b) {
+  if (a2.name === b.name) {
     return EQ;
-  } else if (a.name < b.name) {
+  } else if (a2.name < b.name) {
     return LT;
   } else {
     return GT;
@@ -799,8 +799,8 @@ function prepare(attributes) {
       return attributes;
     } else {
       let _pipe = attributes;
-      let _pipe$1 = sort(_pipe, (a, b) => {
-        return compare3(b, a);
+      let _pipe$1 = sort(_pipe, (a2, b) => {
+        return compare3(b, a2);
       });
       return merge(_pipe$1, empty_list);
     }
@@ -821,6 +821,9 @@ function attribute2(name, value) {
 }
 function class$(name) {
   return attribute2("class", name);
+}
+function href(url) {
+  return attribute2("href", url);
 }
 
 // build/dev/javascript/lustre/lustre/effect.mjs
@@ -1099,44 +1102,44 @@ function text(key, mapper, content2) {
 var unsafe_inner_html_kind = 3;
 
 // build/dev/javascript/lustre/lustre/internals/equals.ffi.mjs
-var isReferenceEqual = (a, b) => a === b;
-var isEqual2 = (a, b) => {
-  if (a === b) {
+var isReferenceEqual = (a2, b) => a2 === b;
+var isEqual2 = (a2, b) => {
+  if (a2 === b) {
     return true;
   }
-  if (a == null || b == null) {
+  if (a2 == null || b == null) {
     return false;
   }
-  const type = typeof a;
+  const type = typeof a2;
   if (type !== typeof b) {
     return false;
   }
   if (type !== "object") {
     return false;
   }
-  const ctor = a.constructor;
+  const ctor = a2.constructor;
   if (ctor !== b.constructor) {
     return false;
   }
-  if (Array.isArray(a)) {
-    return areArraysEqual(a, b);
+  if (Array.isArray(a2)) {
+    return areArraysEqual(a2, b);
   }
-  return areObjectsEqual(a, b);
+  return areObjectsEqual(a2, b);
 };
-var areArraysEqual = (a, b) => {
-  let index2 = a.length;
+var areArraysEqual = (a2, b) => {
+  let index2 = a2.length;
   if (index2 !== b.length) {
     return false;
   }
   while (index2--) {
-    if (!isEqual2(a[index2], b[index2])) {
+    if (!isEqual2(a2[index2], b[index2])) {
       return false;
     }
   }
   return true;
 };
-var areObjectsEqual = (a, b) => {
-  const properties = Object.keys(a);
+var areObjectsEqual = (a2, b) => {
+  const properties = Object.keys(a2);
   let index2 = properties.length;
   if (Object.keys(b).length !== index2) {
     return false;
@@ -1146,7 +1149,7 @@ var areObjectsEqual = (a, b) => {
     if (!Object.hasOwn(b, property3)) {
       return false;
     }
-    if (!isEqual2(a[property3], b[property3])) {
+    if (!isEqual2(a2[property3], b[property3])) {
       return false;
     }
   }
@@ -1444,6 +1447,9 @@ function p(attrs, children) {
 }
 function ul(attrs, children) {
   return element2("ul", attrs, children);
+}
+function a(attrs, children) {
+  return element2("a", attrs, children);
 }
 
 // build/dev/javascript/lustre/lustre/vdom/patch.mjs
@@ -3291,13 +3297,13 @@ function makeEffect(synchronous) {
     before_paint: empty_list
   };
 }
-function listAppend(a, b) {
-  if (a instanceof Empty) {
+function listAppend(a2, b) {
+  if (a2 instanceof Empty) {
     return b;
   } else if (b instanceof Empty) {
-    return a;
+    return a2;
   } else {
-    return append(a, b);
+    return append(a2, b);
   }
 }
 
@@ -3455,8 +3461,24 @@ function header2() {
           ul(
             toList([class$("flex flex-row gap-2")]),
             toList([
-              li(toList([]), toList([text2("Blog")])),
-              li(toList([]), toList([text2("About")]))
+              li(
+                toList([]),
+                toList([
+                  a(
+                    toList([href("#")]),
+                    toList([text2("Blog")])
+                  )
+                ])
+              ),
+              li(
+                toList([]),
+                toList([
+                  a(
+                    toList([href("#")]),
+                    toList([text2("About")])
+                  )
+                ])
+              )
             ])
           )
         ])
