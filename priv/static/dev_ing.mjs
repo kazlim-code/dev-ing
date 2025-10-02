@@ -5503,14 +5503,14 @@ function header2() {
   return header(
     toList([
       class$(
-        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-on-surface-900 dark:border-on-surface-500 bg-surface-100 dark:text-white dark:bg-surface-900"
+        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-on-surface-900 dark:border-on-surface-500 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm"
       )
     ]),
     toList([
       div(
         toList([
           class$(
-            "w-full max-w-5xl mx-auto flex items-center justify-between"
+            "w-full max-w-5xl mx-auto flex items-center justify-between h-200vh"
           )
         ]),
         toList([
