@@ -5503,7 +5503,7 @@ function header2() {
   return header(
     toList([
       class$(
-        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500 bg-white dark:text-white dark:bg-black"
+        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-on-surface-900 dark:border-on-surface-500 bg-surface-100 dark:text-white dark:bg-surface-900"
       )
     ]),
     toList([
@@ -5557,13 +5557,13 @@ function header2() {
 }
 function content() {
   return main(
-    toList([class$("px-4")]),
+    toList([class$("p-4")]),
     toList([
       div(
         toList([class$("w-full max-w-5xl mx-auto")]),
         toList([
           h1(
-            toList([class$("font-semibold text-2xl")]),
+            toList([class$("font-semibold text-2xl dark:text-white")]),
             toList([text2("Page header")])
           )
         ])
@@ -5573,14 +5573,18 @@ function content() {
 }
 function side_menu() {
   return aside(
-    toList([class$("w-64 p-4 border-r border-secondary-500")]),
+    toList([
+      class$(
+        "w-64 p-4 border-r border-on-surface-900 dark:border-on-surface-500"
+      )
+    ]),
     toList([
       h2(
-        toList([class$("font-semibold text-lg")]),
+        toList([class$("font-semibold text-lg dark:text-white")]),
         toList([text2("Side Menu")])
       ),
       ul(
-        toList([class$("mt-4")]),
+        toList([class$("mt-4 dark:text-white")]),
         toList([
           li(toList([]), toList([text2("Link 1")])),
           li(toList([]), toList([text2("Link 2")])),
@@ -5593,7 +5597,9 @@ function side_menu() {
 function footer2() {
   return footer(
     toList([
-      class$("px-4 py-4 grid border-t border-secondary-500 mt-10")
+      class$(
+        "px-4 py-4 grid border-t border-on-surface-900 dark:border-on-surface-500 dark:text-white"
+      )
     ]),
     toList([
       div(
@@ -5618,7 +5624,7 @@ function view(_) {
         toList([class$("min-h-screen flex flex-col")]),
         toList([
           div(
-            toList([class$("flex flex-1 pt-20")]),
+            toList([class$("flex flex-1 pt-16")]),
             toList([side_menu(), content()])
           ),
           footer2()

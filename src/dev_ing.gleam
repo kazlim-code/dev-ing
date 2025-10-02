@@ -41,7 +41,7 @@ fn view(_model: Model) -> Element(Msg) {
   element.fragment([
     header(),
     html.div([attribute.class("min-h-screen flex flex-col")], [
-      html.div([attribute.class("flex flex-1 pt-20")], [
+      html.div([attribute.class("flex flex-1 pt-16")], [
         side_menu(),
         content(),
       ]),
@@ -51,10 +51,9 @@ fn view(_model: Model) -> Element(Msg) {
 }
 
 fn header() -> Element(Msg) {
-  html.header([attribute.class("fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-secondary-500 bg-white dark:text-white dark:bg-black")], [
+  html.header([attribute.class("fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-on-surface-900 dark:border-on-surface-500 bg-surface-100 dark:text-white dark:bg-surface-900")], [
     html.div([attribute.class("w-full max-w-5xl mx-auto flex items-center justify-between")], [
       html.div([attribute.class("flex items-center gap-4")], [
-        // TODO: Add a logo here
         html.div([attribute.class("font-bold text-xl")], [text("Dev-Ing")]),
         html.ul([attribute.class("flex flex-row gap-2")], [
           html.li([], [html.a([attribute.href("#")], [text("Blog")])]),
@@ -69,17 +68,17 @@ fn header() -> Element(Msg) {
 }
 
 fn content() {
-  html.main([attribute.class("px-4")], [
+  html.main([attribute.class("p-4")], [
     html.div([attribute.class("w-full max-w-5xl mx-auto")], [
-      html.h1([attribute.class("font-semibold text-2xl")], [text("Page header")]),
+      html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [text("Page header")]),
     ]),
   ])
 }
 
 fn side_menu() {
-  html.aside([attribute.class("w-64 p-4 border-r border-secondary-500")], [
-    html.h2([attribute.class("font-semibold text-lg")], [text("Side Menu")]),
-    html.ul([attribute.class("mt-4")], [
+  html.aside([attribute.class("w-64 p-4 border-r border-on-surface-900 dark:border-on-surface-500")], [
+    html.h2([attribute.class("font-semibold text-lg dark:text-white")], [text("Side Menu")]),
+    html.ul([attribute.class("mt-4 dark:text-white")], [
       html.li([], [text("Link 1")]),
       html.li([], [text("Link 2")]),
       html.li([], [text("Link 3")]),
@@ -89,7 +88,7 @@ fn side_menu() {
 
 fn footer() {
   html.footer(
-    [attribute.class("px-4 py-4 grid border-t border-secondary-500 mt-10")],
+    [attribute.class("px-4 py-4 grid border-t border-on-surface-900 dark:border-on-surface-500 dark:text-white")],
     [
       html.div(
         [attribute.class("w-full max-w-5xl mx-auto flex justify-center")],
