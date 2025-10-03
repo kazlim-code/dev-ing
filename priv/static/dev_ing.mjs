@@ -5586,9 +5586,24 @@ function side_menu() {
       ul(
         toList([class$("mt-4 dark:text-white")]),
         toList([
-          li(toList([]), toList([text2("Link 1")])),
-          li(toList([]), toList([text2("Link 2")])),
-          li(toList([]), toList([text2("Link 3")]))
+          li(
+            toList([]),
+            toList([
+              a(toList([href("#")]), toList([text2("Link 1")]))
+            ])
+          ),
+          li(
+            toList([]),
+            toList([
+              a(toList([href("#")]), toList([text2("Link 2")]))
+            ])
+          ),
+          li(
+            toList([]),
+            toList([
+              a(toList([href("#")]), toList([text2("Link 3")]))
+            ])
+          )
         ])
       )
     ])

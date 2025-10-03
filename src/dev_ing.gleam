@@ -79,9 +79,9 @@ fn side_menu() {
   html.aside([attribute.class("w-64 p-4 border-r border-on-surface-900 dark:border-on-surface-500")], [
     html.h2([attribute.class("font-semibold text-lg dark:text-white")], [text("Side Menu")]),
     html.ul([attribute.class("mt-4 dark:text-white")], [
-      html.li([], [text("Link 1")]),
-      html.li([], [text("Link 2")]),
-      html.li([], [text("Link 3")]),
+      html.li([], [html.a([attribute.href("#")], [text("Link 1")])]),
+      html.li([], [html.a([attribute.href("#")], [text("Link 2")])]),
+      html.li([], [html.a([attribute.href("#")], [text("Link 3")])]),
     ]),
   ])
 }
