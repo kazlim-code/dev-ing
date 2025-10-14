@@ -46,6 +46,12 @@ To run the tests, use:
 gleam test
 ```
 
+## Build
+
+```sh
+gleam run -m lustre/dev build app --minify
+```
+
 ## TODO
 What I will need to create to even get started displaying my work and blog posts:
 - A simple website and server
