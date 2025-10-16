@@ -1,0 +1,5 @@
+---
+version: 1.4.0
+title: [card] Without header, content or footer
+---
+<article class="bg-surface-200 dark:bg-surface-800 text-on-surface-900 dark:text-on-surface-100 px-4 py-2 rounded-md shadow-lg"></article>
