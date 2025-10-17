@@ -5,15 +5,18 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
-    name: Build and deploy to GitHub Pages
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      deployments: write
-      pages: write
-      id-token: write
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -38,16 +41,28 @@ jobs:
           otp-version: "28.0"
           gleam-version: "1.12.0"
           rebar3-version: "3"
+
       - name: Install dependencies
         run: gleam deps download
-      - name: Build app
-        run: gleam run -m lustre/dev build app --minify --outdir=dist
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+
+      - name: Build application
+        run: |
+          gleam run -m lustre/dev build app --minify --outdir=dist/static
+          cp priv/index.html dist/
+          sed -i "s|{{ GITHUB_PAGES_BASE }}|/dev-ing|g" dist/index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "dist"
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
