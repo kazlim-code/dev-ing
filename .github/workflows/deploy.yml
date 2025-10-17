@@ -5,14 +5,15 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
   build-and-deploy:
+    name: Build and deploy to GitHub Pages
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      deployments: write
+      pages: write
+      id-token: write
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
@@ -31,18 +32,22 @@ jobs:
       - name: Initialize Submodules
         run: git submodule update --init --recursive
 
-      - name: Setup Gleam
-        uses: erlang/setup-erlang@v1
+      - name: Set up Gleam
+        uses: erlef/setup-beam@v1
         with:
-          otp-version: "26"
-      - uses: gleam-lang/setup-gleam@v1
+          otp-version: "28.0"
+          gleam-version: "1.12.0"
+          rebar3-version: "3"
+      - name: Install dependencies
+        run: gleam deps download
+      - name: Build app
+        run: gleam run -m lustre/dev build app --minify --outdir=dist
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          gleam-version: "1.3.2"
-
-      - name: Build project
-        run: gleam build --target javascript
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: build/dev/javascript/dev_ing
+          path: "dist"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
