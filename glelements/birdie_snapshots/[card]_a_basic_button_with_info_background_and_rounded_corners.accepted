@@ -1,0 +1,7 @@
+---
+version: 1.4.0
+title: [card] A basic button with info background and rounded corners
+---
+<button class="outline outline-transparent outline-2 hover:outline-on-surface-500 dark:hover:outline-on-surface-200 px-4 py-2 rounded-md transition ease-in-out bg-info-400 dark:bg-info-600" role="button">
+  Button label
+</button>

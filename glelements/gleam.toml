@@ -1,14 +1,18 @@
-name = "dev_ing"
-version = "0.1.0"
+name = "glelements"
+version = "1.0.0"
 target = "javascript"
+
+internal_modules = [
+  "glelements/demo/*",
+]
 
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
-gleam_javascript = ">= 1.0.0 and < 2.0.0"
 lustre = ">= 5.3.5 and < 6.0.0"
-glelements = { path = "glelements" }
+simplifile = ">= 2.3.0 and < 3.0.0"
+tom = ">= 1.1.1 and < 2.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
 lustre_dev_tools = ">= 1.9.2 and < 2.0.0"
-birdie = ">= 1.4.1 and < 2.0.0"
+birdie = ">= 1.4.0 and < 2.0.0"
