@@ -10,5 +10,21 @@ glelements = { path = "glelements" }
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
-lustre_dev_tools = ">= 1.9.2 and < 2.0.0"
+lustre_dev_tools = "~> 2.0"
 birdie = ">= 1.4.1 and < 2.0.0"
+
+[tools.lustre]
+
+[tools.lustre.build]
+# We are deploying as a SPA to GitHub Pages
+spa = true
+base = "/dev-ing/"
+
+
+[tools.lustre.html]
+title = "dev_ing"
+stylesheets = [
+  { href = "/dev_ing.css" },
+  { href = "/glelements.css" },
+]
+

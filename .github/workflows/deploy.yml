@@ -42,14 +42,14 @@ jobs:
           gleam-version: "1.12.0"
           rebar3-version: "3"
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+
       - name: Install dependencies
         run: gleam deps download
 
       - name: Build application
-        run: |
-          gleam run -m lustre/dev build app --minify --outdir=dist/static
-          cp priv/index.html dist/
-          sed -i "s|{{ GITHUB_PAGES_BASE }}|/dev-ing|g" dist/index.html
+        run: gleam run -m lustre/dev/bundle
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
