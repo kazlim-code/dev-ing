@@ -104,4 +104,3 @@ pub fn invert_weight(weight: Weight) -> Weight {
     W950 -> W50
   }
 }
-

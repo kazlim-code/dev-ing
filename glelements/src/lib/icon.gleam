@@ -23,6 +23,7 @@ fn icon(attrs: List(Attribute(msg)), path: String) -> Element(msg) {
     ],
   )
 }
+
 pub fn sun(attrs: List(Attribute(msg))) -> Element(msg) {
   icon(
     attrs,

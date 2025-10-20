@@ -1,5 +1,5 @@
 import birdie
-import glelements/card
+import lib/card
 import lustre/element.{type Element, text}
 
 pub fn basic_card_test() {
@@ -12,27 +12,21 @@ pub fn basic_card_test() {
 pub fn header_card_test() {
   let title = "With only a header"
 
-  card.basic([], [
-    card.header([], [text("This is the card header")])
-  ])
+  card.basic([], [card.header([], [text("This is the card header")])])
   |> snapshot(title)
 }
 
 pub fn content_card_test() {
   let title = "With only body content"
 
-  card.basic([], [
-    card.content([], [text("This is the card content")])
-  ])
+  card.basic([], [card.content([], [text("This is the card content")])])
   |> snapshot(title)
 }
 
 pub fn footer_card_test() {
   let title = "With only a footer"
 
-  card.basic([], [
-    card.footer([], [text("This is the card footer")])
-  ])
+  card.basic([], [card.footer([], [text("This is the card footer")])])
   |> snapshot(title)
 }
 

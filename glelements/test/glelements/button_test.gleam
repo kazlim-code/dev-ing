@@ -1,5 +1,5 @@
 import birdie
-import glelements/button
+import lib/button
 import lustre/element.{type Element}
 import lustre/element/html.{text}
 

@@ -1,8 +1,9 @@
+import gleam/option.{type Option, None, Some}
+import lib/color
+import lib/internal/tailwind_maps
 import lustre/attribute.{type Attribute}
-import gleam/option.{type Option, Some, None}
-import glelements/color
-import glelements/internal/tailwind_maps
 
+/// Updated import path
 /// Creates a css attribute for tailwind background css string based on the
 /// color and weight.
 ///
@@ -13,7 +14,6 @@ pub fn background(
 ) -> Attribute(msg) {
   color_attr(property: color.Background, color:, weight:, theme:)
 }
-
 
 /// Creates a css attribute for tailwind text css string based on the
 /// color and weight.

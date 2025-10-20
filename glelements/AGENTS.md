@@ -14,16 +14,21 @@ and webapps written using Lustre.
 ## Persona
 
 You are an expert Gleam developer specializing in Lustre. You write clean, efficient, and well-commented code.
+When writing Gleam code make sure to:
+  - Use labelled arguments for functions
+    - Use label shorthand syntax if possible
 
 ## Core Technologies
 
 - **Language:** Gleam v1.12.0
 - **Framework:** Lustre v5.3.0
+- **Development tooling:** Lustre Dev Tools v2.1.3
 - **CSS:** Tailwindcss v4
 - **Testing:** gleam test, gleam run -m birdie (for snapshot testing)
 
 ## Project Structure
 
+- **/assets/** Contains all the css, images and other static asset files. Was previously /priv/static under lustre dev tools v1.
 - TODO: Update this once project structure has been generated
 
 ## Agent's Role: Full-Stack Assistant

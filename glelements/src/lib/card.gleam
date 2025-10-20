@@ -1,9 +1,9 @@
+import gleam/option.{Some}
+import lib/color
+import lib/tailwind
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element}
 import lustre/element/html
-import gleam/option.{Some}
-import glelements/color
-import glelements/tailwind
 
 // ELEMENTS --------------------------------------------------------------------
 
@@ -19,12 +19,20 @@ pub fn basic(
   children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Surface, weight: color.W200, theme: Some(color.Preferred)),
-      tailwind.text(color: color.OnSurface, weight: color.W900, theme: Some(color.Preferred)),
-      padding("md"),
-      rounded(),
-      shadow(),
-      ..attributes,
+    tailwind.background(
+      color: color.Surface,
+      weight: color.W200,
+      theme: Some(color.Preferred),
+    ),
+    tailwind.text(
+      color: color.OnSurface,
+      weight: color.W900,
+      theme: Some(color.Preferred),
+    ),
+    padding("md"),
+    rounded(),
+    shadow(),
+    ..attributes
   ]
   of(html.article, attributes, children)
 }
@@ -34,14 +42,26 @@ pub fn bordered(
   children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Surface, weight: color.W200, theme: Some(color.Preferred)),
-      tailwind.text(color: color.OnSurface, weight: color.W900, theme: Some(color.Preferred)),
-      tailwind.border(color: color.Surface, weight: color.W600, theme: Some(color.Preferred)),
-      tailwind.border_size("1"),
-      padding("md"),
-      rounded(),
-      shadow(),
-      ..attributes,
+    tailwind.background(
+      color: color.Surface,
+      weight: color.W200,
+      theme: Some(color.Preferred),
+    ),
+    tailwind.text(
+      color: color.OnSurface,
+      weight: color.W900,
+      theme: Some(color.Preferred),
+    ),
+    tailwind.border(
+      color: color.Surface,
+      weight: color.W600,
+      theme: Some(color.Preferred),
+    ),
+    tailwind.border_size("1"),
+    padding("md"),
+    rounded(),
+    shadow(),
+    ..attributes
   ]
   of(html.article, attributes, children)
 }

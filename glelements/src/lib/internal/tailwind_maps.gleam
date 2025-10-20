@@ -1,4 +1,4 @@
-import glelements/color
+import lib/color
 
 // This file is for tailwindcss class generation.
 // Due to the nature of how tailwindcss scans for classes, each class needs
@@ -7,10 +7,7 @@ import glelements/color
 // This file will contain all the mappings for the different color properties.
 
 // region Background
-pub fn background_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn background_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "bg-primary-50"
     color.Primary, color.W100 -> "bg-primary-100"
@@ -103,10 +100,7 @@ pub fn background_class(
   }
 }
 
-pub fn dark_background_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn dark_background_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "dark:bg-primary-50"
     color.Primary, color.W100 -> "dark:bg-primary-100"
@@ -198,13 +192,11 @@ pub fn dark_background_class(
     color.OnSurface, color.W950 -> "dark:bg-on-surface-950"
   }
 }
+
 // endregion
 
 // region Text
-pub fn text_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn text_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "text-primary-50"
     color.Primary, color.W100 -> "text-primary-100"
@@ -297,10 +289,7 @@ pub fn text_class(
   }
 }
 
-pub fn dark_text_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn dark_text_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "dark:text-primary-50"
     color.Primary, color.W100 -> "dark:text-primary-100"
@@ -392,13 +381,11 @@ pub fn dark_text_class(
     color.OnSurface, color.W950 -> "dark:text-on-surface-950"
   }
 }
+
 // endregion
 
 // region Border
-pub fn border_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn border_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "border-primary-50"
     color.Primary, color.W100 -> "border-primary-100"
@@ -491,10 +478,7 @@ pub fn border_class(
   }
 }
 
-pub fn dark_border_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn dark_border_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "dark:border-primary-50"
     color.Primary, color.W100 -> "dark:border-primary-100"
@@ -586,13 +570,11 @@ pub fn dark_border_class(
     color.OnSurface, color.W950 -> "dark:border-on-surface-950"
   }
 }
+
 // endregion
 
 // region Outline
-pub fn outline_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn outline_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "outline-primary-50"
     color.Primary, color.W100 -> "outline-primary-100"
@@ -685,10 +667,7 @@ pub fn outline_class(
   }
 }
 
-pub fn dark_outline_class(
-  color: color.Color,
-  weight: color.Weight,
-) -> String {
+pub fn dark_outline_class(color: color.Color, weight: color.Weight) -> String {
   case color, weight {
     color.Primary, color.W50 -> "dark:outline-primary-50"
     color.Primary, color.W100 -> "dark:outline-primary-100"

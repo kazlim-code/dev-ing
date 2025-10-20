@@ -26,5 +26,4 @@ meta = [{ description = "Simple showcase my own personal development work and le
 body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
 stylesheets = [
   { href = "./dev_ing.css" },
-  { href = "./glelements.css" },
 ]

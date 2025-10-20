@@ -4,8 +4,8 @@ import lustre
 import lustre/element.{type Element, text}
 import lustre/element/html
 import lustre/event
-import glelements/button
-import glelements/theme
+import lib/button
+import lib/theme
 
 type Model {
   Model(Nil)

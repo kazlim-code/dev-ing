@@ -2,17 +2,24 @@ name = "glelements"
 version = "1.0.0"
 target = "javascript"
 
-internal_modules = [
-  "glelements/demo/*",
-]
-
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
 lustre = ">= 5.3.5 and < 6.0.0"
 simplifile = ">= 2.3.0 and < 3.0.0"
-tom = ">= 1.1.1 and < 2.0.0"
+argv = ">= 1.0.2 and < 2.0.0"
+tom = ">= 2.0.0 and < 3.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
-lustre_dev_tools = ">= 1.9.2 and < 2.0.0"
 birdie = ">= 1.4.0 and < 2.0.0"
+lustre_dev_tools = ">= 2.1.3 and < 3.0.0"
+
+[tools.lustre]
+
+[tools.lustre.build]
+spa = true
+
+[tools.lustre.html]
+title = "🚧 Glelements - Demo"
+meta = [{ description = "A simple showcase of the component library." }]
+body = "<div id=\"app\" class=\"min-h-svh dark:bg-neutral-900 dark:text-white\"></div>"

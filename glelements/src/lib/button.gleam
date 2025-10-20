@@ -14,16 +14,16 @@
 //// ```
 ////
 
-import glelements/icon
-import gleam/string
 import gleam/list
 import gleam/option.{Some}
-import glelements/color
-import glelements/tailwind
+import gleam/string
+import lib/color
+import lib/icon
+import lib/tailwind
 import lustre/attribute.{type Attribute}
-import lustre/vdom/vattr
 import lustre/element.{type Element}
 import lustre/element/html
+import lustre/vdom/vattr
 
 pub type Hover {
   Outline
@@ -52,10 +52,11 @@ pub fn basic(
     rounded(),
     transition(),
   ]
-  let attr = attributes
-  |> ensure_default_background
-  |> list.append(basic_attributes)
-  |> list.append(attributes)
+  let attr =
+    attributes
+    |> ensure_default_background
+    |> list.append(basic_attributes)
+    |> list.append(attributes)
 
   of(el: html.button, attr:, children:)
 }
@@ -67,8 +68,12 @@ pub fn basic_secondary(
   children children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Secondary, weight: color.W400, theme: Some(color.Preferred)),
-    ..attributes,
+    tailwind.background(
+      color: color.Secondary,
+      weight: color.W400,
+      theme: Some(color.Preferred),
+    ),
+    ..attributes
   ]
   basic(attr: attributes, children:)
 }
@@ -80,8 +85,12 @@ pub fn basic_success(
   children children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Success, weight: color.W400, theme: Some(color.Preferred)),
-    ..attributes,
+    tailwind.background(
+      color: color.Success,
+      weight: color.W400,
+      theme: Some(color.Preferred),
+    ),
+    ..attributes
   ]
   basic(attr: attributes, children:)
 }
@@ -93,8 +102,12 @@ pub fn basic_warn(
   children children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Warn, weight: color.W400, theme: Some(color.Preferred)),
-    ..attributes,
+    tailwind.background(
+      color: color.Warn,
+      weight: color.W400,
+      theme: Some(color.Preferred),
+    ),
+    ..attributes
   ]
   basic(attr: attributes, children:)
 }
@@ -106,8 +119,12 @@ pub fn basic_error(
   children children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Err, weight: color.W500, theme: Some(color.Preferred)),
-    ..attributes,
+    tailwind.background(
+      color: color.Err,
+      weight: color.W500,
+      theme: Some(color.Preferred),
+    ),
+    ..attributes
   ]
   basic(attr: attributes, children:)
 }
@@ -119,8 +136,12 @@ pub fn basic_info(
   children children: List(Element(msg)),
 ) -> Element(msg) {
   let attributes = [
-      tailwind.background(color: color.Info, weight: color.W400, theme: Some(color.Preferred)),
-    ..attributes,
+    tailwind.background(
+      color: color.Info,
+      weight: color.W400,
+      theme: Some(color.Preferred),
+    ),
+    ..attributes
   ]
   basic(attr: attributes, children:)
 }
@@ -133,11 +154,22 @@ pub fn theme_toggle(
   children children: List(Element(msg)),
 ) -> Element(msg) {
   let children = [
-    html.span([attribute.class("grid grid-cols-1 grid-rows-1 place-items-center")] ,[
-      icon.sun([attribute.class("col-start-1 row-start-1 dark:opacity-0 duration-300"), transition()]),
-      icon.moon([attribute.class("col-start-1 row-start-1 opacity-0 dark:opacity-100 duration-300"), transition()]),
-    ]),
-    ..children,
+    html.span(
+      [attribute.class("grid grid-cols-1 grid-rows-1 place-items-center")],
+      [
+        icon.sun([
+          attribute.class("col-start-1 row-start-1 dark:opacity-0 duration-300"),
+          transition(),
+        ]),
+        icon.moon([
+          attribute.class(
+            "col-start-1 row-start-1 opacity-0 dark:opacity-100 duration-300",
+          ),
+          transition(),
+        ]),
+      ],
+    ),
+    ..children
   ]
   basic(attr: attributes, children:)
 }
@@ -179,9 +211,22 @@ pub fn padding(size value: String) -> Attribute(msg) {
 ///
 pub fn hover(effect value: Hover) -> Attribute(msg) {
   case value {
-    Outline -> attribute.class("outline outline-transparent outline-2 hover:outline-on-surface-500 dark:hover:outline-on-surface-200")
-    BgLight -> tailwind.background(color: color.Primary, weight: color.W400, theme: Some(color.Preferred))
-    BgDark ->tailwind.background(color: color.Primary, weight: color.W600, theme: Some(color.Preferred)) 
+    Outline ->
+      attribute.class(
+        "outline outline-transparent outline-2 hover:outline-on-surface-500 dark:hover:outline-on-surface-200",
+      )
+    BgLight ->
+      tailwind.background(
+        color: color.Primary,
+        weight: color.W400,
+        theme: Some(color.Preferred),
+      )
+    BgDark ->
+      tailwind.background(
+        color: color.Primary,
+        weight: color.W600,
+        theme: Some(color.Preferred),
+      )
   }
 }
 
@@ -196,19 +241,26 @@ pub fn transition() -> Attribute(msg) {
 /// Checks to see if any tailwindcss background class is already being
 /// supplied. If not, it returns a default background class for the button.
 ///
-fn ensure_default_background(attr attributes: List(Attribute(msg))) -> List(Attribute(msg)) {
-  let has_bg_attr = attributes |> list.any(fn (attr: Attribute(msg)) {
-    case attr {
-      vattr.Attribute(_name, _kind, value) -> attr.name == "class" && string.contains(does: value, contain: "bg-") 
-      _ -> False
-    }
-  })
+fn ensure_default_background(
+  attr attributes: List(Attribute(msg)),
+) -> List(Attribute(msg)) {
+  let has_bg_attr =
+    attributes
+    |> list.any(fn(attr: Attribute(msg)) {
+      case attr {
+        vattr.Attribute(_name, _kind, value) ->
+          attr.name == "class" && string.contains(does: value, contain: "bg-")
+        _ -> False
+      }
+    })
   case has_bg_attr {
     True -> []
-    False -> [tailwind.background(
-      color: color.Primary,
-      weight: color.W400,
-      theme: Some(color.Preferred),
-    )]
+    False -> [
+      tailwind.background(
+        color: color.Primary,
+        weight: color.W400,
+        theme: Some(color.Preferred),
+      ),
+    ]
   }
 }
