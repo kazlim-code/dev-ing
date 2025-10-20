@@ -49,7 +49,7 @@ jobs:
         run: gleam deps download
 
       - name: Build application
-        run: gleam run -m lustre/dev/bundle
+        run: gleam run -m lustre/dev build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

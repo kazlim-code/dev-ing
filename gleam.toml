@@ -16,15 +16,15 @@ birdie = ">= 1.4.1 and < 2.0.0"
 [tools.lustre]
 
 [tools.lustre.build]
-# We are deploying as a SPA to GitHub Pages
 spa = true
 base = "/dev-ing/"
-
+minify = true
 
 [tools.lustre.html]
-title = "dev_ing"
+title = "🚧 dev_ing - Under construction"
+meta = [{ description = "Simple showcase my own personal development work and learnings." }]
+body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
 stylesheets = [
-  { href = "/dev_ing.css" },
-  { href = "/glelements.css" },
+  { href = "./dev_ing.css" },
+  { href = "./glelements.css" },
 ]
-
