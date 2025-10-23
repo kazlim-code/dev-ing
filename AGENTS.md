@@ -37,9 +37,11 @@ Your role is to act as a full-stack developer assisting with this project. Your 
 
 ## Important Rules
 
-<!-- - **Do Not Change the Schema:** Never suggest changes to the database schema without being explicitly asked. -->
 - **Maintain Consistency:** New code should match the style and patterns of the existing code in the project.
 - **Security First:** Always consider security best practices, such as input validation and preventing SQL injection, when writing new code.
+- **Documentation:** Ensure all new functions and features are well documented for better maintainability.
+- **Testing Best Practices:** Ensure comprehensive test coverage for all new features following `gleam test` standards.
+- **TODO list** Ensure that if work/features are being completed from a TODO list that they are checked off once the user has verified that it is complete.
 
 ## Coding Style
 

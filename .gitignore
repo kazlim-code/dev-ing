@@ -1,6 +1,9 @@
 build/
-# glelements/
+# Ensure private Glelements repo isn't exposed
+glelements/
 
-#Added automatically by Lustre Dev Tools
+TODO.md
+
+# Added automatically by Lustre Dev Tools
 /.lustre
 /dist
