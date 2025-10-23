@@ -18,7 +18,8 @@ birdie = ">= 1.4.1 and < 2.0.0"
 [tools.lustre.build]
 spa = true
 base = "/dev-ing/"
-minify = true
+# See if I can get local and build working with this option
+# minify = true
 
 [tools.lustre.html]
 title = "🚧 dev_ing - Under construction"
