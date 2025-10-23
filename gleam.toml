@@ -17,15 +17,10 @@ birdie = ">= 1.4.1 and < 2.0.0"
 
 [tools.lustre.build]
 spa = true
-# base = "/dev-ing/"
-# See if I can get local and build working with this option
-# minify = true
+base = "/dev-ing/"
+minify = true
 
 [tools.lustre.html]
 title = "🚧 dev_ing - Under construction"
 meta = [{ description = "Simple showcase my own personal development work and learnings." }]
 body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
-stylesheets = [
-  { href = "./dev_ing.css" },
-  { href = "./glelements.css" },
-]

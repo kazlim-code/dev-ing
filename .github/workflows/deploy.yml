@@ -51,6 +51,11 @@ jobs:
       - name: Build application
         run: gleam run -m lustre/dev build
 
+      - name: Correct asset paths
+        run: |
+          sed -i 's/src="\/dev_ing.js"/src="dev_ing.js"/' dist/index.html
+          sed -i 's/<link href="\/dev_ing.css" rel="stylesheet">//' dist/index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
