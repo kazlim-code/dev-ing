@@ -17,7 +17,7 @@ birdie = ">= 1.4.1 and < 2.0.0"
 
 [tools.lustre.build]
 spa = true
-base = "/dev-ing/"
+# base = "/dev-ing/"
 # See if I can get local and build working with this option
 # minify = true
 
