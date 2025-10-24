@@ -31,8 +31,19 @@ pub fn init_route() -> Route {
 ///
 pub fn base_path() -> String {
   case envoy.get("GLEAM_ENV") {
-    Ok("production") -> dev_ing_base_url
-    _ -> ""
+    Ok("production") -> {
+      echo "base_path: production"
+      dev_ing_base_url
+    }
+    Ok(env) -> {
+      echo "base_path: env"
+      echo env
+      ""
+    }
+    _ -> {
+      echo "base_path: no env"
+      ""
+    }
   }
 }
 
