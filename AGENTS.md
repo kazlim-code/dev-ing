@@ -40,8 +40,11 @@ Your role is to act as a full-stack developer assisting with this project. Your 
 - **Maintain Consistency:** New code should match the style and patterns of the existing code in the project.
 - **Security First:** Always consider security best practices, such as input validation and preventing SQL injection, when writing new code.
 - **Documentation:** Ensure all new functions and features are well documented for better maintainability.
+  - Each module should be documented with a summary and examples if useful at the top of the file (before any imports). This section should use the //// comments and should have an empty line after the last //// line. The last //// line should not have any text beside it.
+  - Each function should be documented with a summary and examples if useful before the function. This should use /// style comments and should have an empty line after the last /// line. The last /// line should not have any text beside it.
+  - When in doubt, follow the documentation practices that already exist in the project.
 - **Testing Best Practices:** Ensure comprehensive test coverage for all new features following `gleam test` standards.
-- **TODO list** Ensure that if work/features are being completed from a TODO list that they are checked off once the user has verified that it is complete.
+- **TODO list:** Ensure that if work/features are being completed from a TODO list, they are checked off once the user has verified that it is complete.
 
 ## Coding Style
 
