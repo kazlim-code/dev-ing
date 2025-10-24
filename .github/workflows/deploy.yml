@@ -49,6 +49,8 @@ jobs:
         run: gleam deps download
 
       - name: Build application
+        env:
+          GLEAM_ENV: production
         run: gleam run -m lustre/dev build
 
       - name: Correct asset paths

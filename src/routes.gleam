@@ -2,6 +2,7 @@
 //// functions for parsing the URL and determining the current route.
 ////
 
+import envoy
 import modem
 import gleam/uri.{type Uri}
 
@@ -14,6 +15,8 @@ pub type Route {
   NotFound
 }
 
+const dev_ing_base_url = "/dev-ing"
+
 /// Returns the initial route of the application based on the current URL.
 /// Useful for Lustres init() function.
 ///
@@ -24,13 +27,22 @@ pub fn init_route() -> Route {
   }
 }
 
+/// Gets the base path for the url based on the environment.
+///
+pub fn base_path() -> String {
+  case envoy.get("GLEAM_ENV") {
+    Ok("production") -> dev_ing_base_url
+    _ -> ""
+  }
+}
+
 /// Takes a `Uri` and returns the corresponding page `Route`.
 ///
 pub fn on_url_change(uri: Uri) -> Route {
   case uri.path_segments(uri.path) {
-    ["blog"] -> Blog
-    ["about"] -> About
-    [] -> Home
+    ["blog"] | ["dev-ing", "blog"] -> Blog
+    ["about"] | ["dev-ing", "about"] -> About
+    [] | ["dev-ing"] -> Home
     _ -> NotFound
   }
 }
