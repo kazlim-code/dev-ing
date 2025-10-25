@@ -56,15 +56,11 @@ jobs:
       - name: List dist directory
         run: ls -R dist
 
-      - name: Correct asset paths
+      - name: Prepend base path to the remaining asset URLs
         run: |
-          # Remove the relative path for dev_ing.css
-          sed -i '/href="\.\/dev_ing.css"/d' dist/index.html
-
-          # Prepend base path to the remaining asset URLs
-          sed -i 's|href="\./glelements.css"|href="/dev-ing/glelements.css"|' dist/index.html
-          sed -i 's|href="/dev_ing.css"|href="/dev-ing/dev_ing.css"|' dist/index.html
-          sed -i 's|src="/dev_ing.js"|src="/dev-ing/dev_ing.js"|' dist/index.html
+          sed -i 's|href="dev_ing.css"|href="/dev-ing/dev_ing.css"|g' dist/index.html
+          sed -i 's|href="glelements.css"|href="/dev-ing/glelements.css"|g' dist/index.html
+          sed -i 's|src="dev_ing.js"|src="/dev-ing/dev_ing.js"|g' dist/index.html
 
       - name: Handle SPA routing for GitHub Pages
         env:
