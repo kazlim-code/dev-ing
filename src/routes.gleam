@@ -50,6 +50,12 @@ pub fn base_path() -> String {
 /// Takes a `Uri` and returns the corresponding page `Route`.
 ///
 pub fn on_url_change(uri: Uri) -> Route {
+  echo "uri"
+  echo uri
+  echo "uri.host"
+  echo uri.host
+  echo "uri.path"
+  echo uri.path
   case uri.path_segments(uri.path) {
     ["blog"] | ["dev-ing", "blog"] -> Blog
     ["about"] | ["dev-ing", "about"] -> About

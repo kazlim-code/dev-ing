@@ -8,7 +8,6 @@
 
 // IMPORTS ---------------------------------------------------------------------
 
-import envoy
 import gleam/uri
 import lustre/attribute.{type Attribute}
 import lustre/effect.{type Effect}
@@ -22,13 +21,6 @@ import modem
 import routes.{type Route}
 
 // APPLICATION -----------------------------------------------------------------
-
-fn base_path() -> String {
-  case envoy.get("GLEAM_ENV") {
-    Ok("production") -> "/dev-ing"
-    _ -> ""
-  }
-}
 
 type Model {
   Model(route: Route)
@@ -127,10 +119,10 @@ fn header() -> Element(Msg) {
   html.header([attribute.class("fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-on-surface-900 dark:border-on-surface-500 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm")], [
     html.div([attribute.class("w-full max-w-5xl mx-auto flex items-center justify-between h-200vh")], [
       html.div([attribute.class("flex items-center gap-4")], [
-        html.a([attribute.href(base_path() <> "/"), attribute.class("font-bold text-xl")], [text("Dev-Ing")]),
+        html.a([attribute.href(routes.base_path() <> "/"), attribute.class("font-bold text-xl")], [text("Dev-Ing")]),
         html.ul([attribute.class("flex flex-row gap-2")], [
-          html.li([], [html.a([attribute.href(base_path() <> "/blog")], [text("Blog")])]),
-          html.li([], [html.a([attribute.href(base_path() <> "/about")], [text("About")])]),
+          html.li([], [html.a([attribute.href(routes.base_path() <> "/blog")], [text("Blog")])]),
+          html.li([], [html.a([attribute.href(routes.base_path() <> "/about")], [text("About")])]),
         ]),
       ]),
       button.theme_toggle([
