@@ -2,8 +2,8 @@
 //// functions for parsing the URL and determining the current route.
 ////
 
-import envoy
 import modem
+import gleam/option.{Some}
 import gleam/uri.{type Uri}
 
 /// Routes/pages of the application.
@@ -27,39 +27,50 @@ pub fn init_route() -> Route {
   }
 }
 
-/// Gets the base path for the url based on the environment.
+/// Gets the base path for the url based on whether the uri host is
+/// `localhost`. Production paths being hosted on GitHub Pages requires the
+/// base url.
 ///
 pub fn base_path() -> String {
-  case envoy.get("GLEAM_ENV") {
-    Ok("production") -> {
-      echo "base_path: production"
-      dev_ing_base_url
+  let uri = modem.initial_uri()
+  case uri {
+    Ok(uri) -> {
+      case uri.host {
+        Some("localhost") -> ""
+        _ -> dev_ing_base_url
+      }
     }
-    Ok(env) -> {
-      echo "base_path: env"
-      echo env
-      ""
-    }
-    _ -> {
-      echo "base_path: no env"
-      ""
-    }
+    Error(_) -> ""
   }
 }
 
 /// Takes a `Uri` and returns the corresponding page `Route`.
 ///
 pub fn on_url_change(uri: Uri) -> Route {
-  echo "uri"
-  echo uri
-  echo "uri.host"
-  echo uri.host
-  echo "uri.path"
-  echo uri.path
-  case uri.path_segments(uri.path) {
-    ["blog"] | ["dev-ing", "blog"] -> Blog
-    ["about"] | ["dev-ing", "about"] -> About
-    [] | ["dev-ing"] -> Home
+  case uri.host {
+    Some("localhost") -> on_local_url_change(uri.path)
+    _ -> on_production_url_change(uri.path)
+  }
+}
+
+/// Returns the Route for a path for local development.
+///
+fn on_local_url_change(path: String) -> Route {
+  case uri.path_segments(path) {
+    ["blog"] -> Blog
+    ["about"] -> About
+    [] -> Home
+    _ -> NotFound
+  }
+}
+
+/// Returns the Route for a path for production environment.
+///
+fn on_production_url_change(path: String) -> Route {
+  case uri.path_segments(path) {
+    ["dev-ing", "blog"] -> Blog
+    ["dev-ing", "about"] -> About
+    ["dev-ing"] -> Home
     _ -> NotFound
   }
 }
