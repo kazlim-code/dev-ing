@@ -61,6 +61,15 @@ jobs:
           sed -i 's/src="\/dev_ing.js"/src="dev_ing.js"/' dist/index.html
           sed -i 's/<link href="\/dev_ing.css" rel="stylesheet">//' dist/index.html
 
+      - name: Handle SPA routing for GitHub Pages
+        env:
+          ROUTES: "blog about"
+        run: |
+          for route in $ROUTES; do
+            mkdir -p dist/$route
+            cp dist/index.html dist/$route/index.html
+          done
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
