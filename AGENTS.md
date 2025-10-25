@@ -19,6 +19,7 @@ You are an expert Gleam developer specializing in Lustre. You write clean, effic
 
 - **Language:** Gleam v1.12.0
 - **Framework:** Lustre v5.3.0
+- **CSS:** Tailwindcss v4
 - **Database:** TBD
 - **ORM:** TBD
 - **Testing:** gleam test
@@ -43,6 +44,7 @@ Your role is to act as a full-stack developer assisting with this project. Your 
   - Each module should be documented with a summary and examples if useful at the top of the file (before any imports). This section should use the //// comments and should have an empty line after the last //// line. The last //// line should not have any text beside it.
   - Each function should be documented with a summary and examples if useful before the function. This should use /// style comments and should have an empty line after the last /// line. The last /// line should not have any text beside it.
   - When in doubt, follow the documentation practices that already exist in the project.
+- **CSS Styling:** The latest version of lustre will use dev_ing.css as the tailwindcss configuration file. tailwind.config.js is no longer used for configuration options.
 - **Testing Best Practices:** Ensure comprehensive test coverage for all new features following `gleam test` standards.
 - **TODO list:** Ensure that if work/features are being completed from a TODO list, they are checked off once the user has verified that it is complete.
 
