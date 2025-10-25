@@ -24,6 +24,7 @@ title = "🚧 dev_ing - Under construction"
 meta = [{ description = "Simple showcase my own personal development work and learnings." }]
 body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
 stylesheets = [
-  { href = "dev_ing.css" },
+  # TEST: Uncomment next line
+  # { href = "dev_ing.css" },
   { href = "glelements.css" },
 ]
