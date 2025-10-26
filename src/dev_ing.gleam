@@ -127,26 +127,26 @@ fn header() -> Element(Msg) {
   html.header(
     [
       attribute.class(
-        "fixed left-0 right-0 top-0 px-4 py-4 grid border-b border-on-surface-900 dark:border-on-surface-500 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        "fixed left-0 right-0 top-0 px-4 py-4 flex align-center gap-6 border-b border-on-surface-900 dark:border-on-surface-500 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
       ),
     ],
     [
+      html.a(
+        [
+          attribute.href(routes.base_path() <> "/"),
+          attribute.class("font-bold text-xl whitespace-nowrap"),
+        ],
+        [text("Dev-Ing")],
+      ),
       html.div(
         [
           attribute.class(
-            "w-full max-w-5xl mx-auto flex items-center justify-between h-200vh",
+            "w-full max-w-5xl mx-auto flex items-center justify-between",
           ),
         ],
         [
           html.div([attribute.class("flex items-center gap-4")], [
-            html.a(
-              [
-                attribute.href(routes.base_path() <> "/"),
-                attribute.class("font-bold text-xl"),
-              ],
-              [text("Dev-Ing")],
-            ),
-            html.ul([attribute.class("flex flex-row gap-2")], [
+            html.ul([attribute.class("flex flex-row gap-4")], [
               html.li([], [
                 html.a([attribute.href(routes.base_path() <> "/blog")], [
                   text("Blog"),
