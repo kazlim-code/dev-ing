@@ -80,34 +80,59 @@ fn view(model: Model) -> Element(Msg) {
   ])
 }
 
+/// The page content for a page that is under construction.
+///
+fn under_construction_content(page_name: String) -> Element(Msg) {
+  main_content([], [
+    html.div(
+      [
+        attribute.class(
+          "flex flex-col items-center justify-center gap-4 text-center w-full",
+        ),
+      ],
+      [
+        html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [
+          text(page_name),
+        ]),
+        html.img([
+          attribute.src("https://i.giphy.com/media/aEZgmm8e0I31S/giphy.gif"),
+          attribute.alt("Under Construction"),
+          attribute.class("w-1/2 mx-auto mt-8 clip-cool"),
+        ]),
+        html.div([attribute.class("grid gap-1 mt-2 max-w-lg")], [
+          html.p([attribute.class("dark:text-white")], [
+            text(
+              "🚧 This page is under construction 👷‍♂️",
+            ),
+          ]),
+          html.p([attribute.class("dark:text-white mt-2")], [
+            text("Our developers are currently powered by coffee and dreams."),
+          ]),
+          html.p([attribute.class("dark:text-white mt-2")], [
+            text("Please check back later for updates."),
+          ]),
+        ]),
+      ],
+    ),
+  ])
+}
+
 /// The page content for the home page (Home route: "/").
 ///
 fn home_content() -> Element(Msg) {
-  main_content([], [
-    html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [
-      text("Home"),
-    ]),
-  ])
+  under_construction_content("Home")
 }
 
 /// The page content for the blog page (Blog route: "/blog").
 ///
 fn blog_content() -> Element(Msg) {
-  main_content([], [
-    html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [
-      text("Blog"),
-    ]),
-  ])
+  under_construction_content("Blog")
 }
 
 /// The page content for the about page (About route: "/about").
 ///
 fn about_content() -> Element(Msg) {
-  main_content([], [
-    html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [
-      text("About"),
-    ]),
-  ])
+  under_construction_content("About")
 }
 
 /// The page content representing the 404 Not Found route.
@@ -174,7 +199,7 @@ fn header() -> Element(Msg) {
 /// The default main content container for the application.
 ///
 fn main_content(attributes: List(Attribute(msg)), children: List(Element(msg))) {
-  html.main([attribute.class("p-4")], [
+  html.main([attribute.class("flex-1 p-4")], [
     html.div(
       [attribute.class("w-full max-w-5xl mx-auto"), ..attributes],
       children,
