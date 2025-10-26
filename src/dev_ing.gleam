@@ -67,7 +67,6 @@ fn view(model: Model) -> Element(Msg) {
     header(),
     html.div([attribute.class("min-h-screen flex flex-col")], [
       html.div([attribute.class("flex flex-1 pt-16")], [
-        side_menu(),
         case model.route {
           routes.Blog -> blog_content()
           routes.About -> about_content()
@@ -101,9 +100,7 @@ fn under_construction_content(page_name: String) -> Element(Msg) {
         ]),
         html.div([attribute.class("grid gap-1 mt-2 max-w-lg")], [
           html.p([attribute.class("dark:text-white")], [
-            text(
-              "🚧 This page is under construction 👷‍♂️",
-            ),
+            text("🚧 This page is under construction 👷‍♂️"),
           ]),
           html.p([attribute.class("dark:text-white mt-2")], [
             text("Our developers are currently powered by coffee and dreams."),
@@ -152,7 +149,8 @@ fn header() -> Element(Msg) {
   html.header(
     [
       attribute.class(
-        "fixed left-0 right-0 top-0 px-4 py-4 flex align-center gap-6 border-b border-on-surface-900 dark:border-on-surface-500 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        // "fixed left-0 right-0 top-0 px-4 py-4 flex align-center gap-6 border-b border-on-surface-900 dark:border-on-surface-500 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        "fixed left-0 right-0 top-0 px-4 py-4 flex align-center gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
       ),
     ],
     [
@@ -207,35 +205,14 @@ fn main_content(attributes: List(Attribute(msg)), children: List(Element(msg))) 
   ])
 }
 
-/// The side menu for the application.
-///
-fn side_menu() {
-  html.aside(
-    [
-      attribute.class(
-        "w-64 p-4 border-r border-on-surface-900 dark:border-on-surface-500",
-      ),
-    ],
-    [
-      html.h2([attribute.class("font-semibold text-lg dark:text-white")], [
-        text("Side Menu"),
-      ]),
-      html.ul([attribute.class("mt-4 dark:text-white")], [
-        html.li([], [html.a([attribute.href("#")], [text("Link 1")])]),
-        html.li([], [html.a([attribute.href("#")], [text("Link 2")])]),
-        html.li([], [html.a([attribute.href("#")], [text("Link 3")])]),
-      ]),
-    ],
-  )
-}
-
 /// The footer for the application.
 ///
 fn footer() {
   html.footer(
     [
       attribute.class(
-        "px-4 py-4 grid border-t border-on-surface-900 dark:border-on-surface-500 dark:text-white",
+        // "px-4 py-4 grid border-t border-on-surface-900 dark:border-on-surface-500 dark:text-white",
+        "px-4 py-4 grid dark:border-on-surface-500 dark:text-white",
       ),
     ],
     [
