@@ -1,7 +1,0 @@
----
-version: 1.4.0
-title: [card] A basic button with primary background and rounded corners
----
-<button class="bg-primary-400 dark:bg-primary-600 outline outline-transparent outline-2 hover:outline-on-surface-500 dark:hover:outline-on-surface-200 px-4 py-2 rounded-md transition ease-in-out" role="button">
-  Button label
-</button>

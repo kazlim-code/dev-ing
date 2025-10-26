@@ -1,9 +1,0 @@
-*.beam
-*.ez
-/build
-erl_crash.dump
-TODO.md
-
-#Added automatically by Lustre Dev Tools
-/.lustre
-/dist
