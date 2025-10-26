@@ -1,10 +1,5 @@
 # dev_ing - Developer Ingley
 
-[![Package Version](https://img.shields.io/hexpm/v/dev_ing)](https://hex.pm/packages/dev_ing)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/dev_ing/)
-
-Further documentation can be found at <https://hexdocs.pm/dev_ing>.
-
 ## Description
 This project is most likely going to end up being a front facing web
 application where I can showcase my own person development work and learnings.
@@ -29,6 +24,10 @@ improve my knowledge in this area.
     - What Gleam libraries can I use here?
 - Hosting
   - Will GitHub pages suffice for now?
+    - Using GitHub pages has a few limitations
+      - SPA/static
+      - No server/database/backend
+      - Issues with trying to use environment variables
 
 ## Development
 
@@ -38,7 +37,8 @@ To start the development server, run:
 gleam run -m lustre/dev start
 ```
 
-This will start a server at `http://localhost:8000` and automatically reload the browser when you make changes to the code.
+This will start a server at `http://localhost:1234` and automatically reload
+the browser when you make changes to the code.
 
 To run the tests, use:
 
@@ -49,10 +49,32 @@ gleam test
 ## Build
 
 ```sh
-gleam run -m lustre/dev build app --minify
+gleam run -m lustre/dev build --minify=true
+```
+
+## Troubleshooting
+
+If you need to remove the glelements submodule:
+
+1. Deinit the submodule
+```sh
+git submodule deinit glelements
+```
+2. Remove the submodule directory from your project:
+```sh
+rm -rf glelements
+```
+3. Remove the cached directory from git cache.
+```sh
+git rm -r --cached glelements
+```
+4. Check the .git/modules and remove glelements from there if it still exists.
+5. It's also usually a good idea to remove glelements package from `gleam.toml` and running:
+```sh
+gleam clean
 ```
 
 ## TODO
 What I will need to create to even get started displaying my work and blog posts:
-- A simple website and server
+- A simple website, server can come later after moving from GitHub pages to a different host.
 - Some form of CMS
