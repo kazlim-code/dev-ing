@@ -2,9 +2,9 @@
 //// functions for parsing the URL and determining the current route.
 ////
 
-import modem
 import gleam/option.{Some}
 import gleam/uri.{type Uri}
+import modem
 
 /// Routes/pages of the application.
 ///
