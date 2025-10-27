@@ -149,7 +149,7 @@ fn header() -> Element(Msg) {
   html.header(
     [
       attribute.class(
-        "fixed left-0 right-0 top-0 px-4 py-4 flex align-center gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        "fixed left-0 right-0 top-0 px-4 py-4 flex align-center justify-between gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
       ),
     ],
     [
@@ -181,13 +181,13 @@ fn header() -> Element(Msg) {
               ]),
             ]),
           ]),
-          button.theme_toggle(
-            [
-              event.on_click(UserToggledColorScheme),
-            ],
-            [],
-          ),
         ],
+      ),
+      button.theme_toggle(
+        [
+          event.on_click(UserToggledColorScheme),
+        ],
+        [],
       ),
     ],
   )
