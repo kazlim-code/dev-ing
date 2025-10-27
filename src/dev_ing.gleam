@@ -96,7 +96,7 @@ fn under_construction_content(page_name: String) -> Element(Msg) {
         html.img([
           attribute.src("https://i.giphy.com/media/aEZgmm8e0I31S/giphy.gif"),
           attribute.alt("Under Construction"),
-          attribute.class("w-1/2 mx-auto mt-8 clip-cool"),
+          attribute.class("w-1/2 mx-auto mt-8 clip-hex"),
         ]),
         html.div([attribute.class("grid gap-1 mt-2 max-w-lg")], [
           html.p([attribute.class("dark:text-white")], [
