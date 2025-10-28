@@ -19,6 +19,7 @@ import lustre/element/html
 import lustre/element/svg
 import lustre/event
 import modem
+import pages/about
 import routes.{type Route}
 
 // APPLICATION -----------------------------------------------------------------
@@ -130,7 +131,7 @@ fn blog_content() -> Element(Msg) {
 /// The page content for the about page (About route: "/about").
 ///
 fn about_content() -> Element(Msg) {
-  under_construction_content("About")
+  main_content([], [about.content_fragment()])
 }
 
 /// The page content representing the 404 Not Found route.
@@ -225,7 +226,7 @@ fn header() -> Element(Msg) {
 /// The default main content container for the application.
 ///
 fn main_content(attributes: List(Attribute(msg)), children: List(Element(msg))) {
-  html.main([attribute.class("flex-1 p-4")], [
+  html.main([attribute.class("flex-1 px-4 py-8")], [
     html.div(
       [attribute.class("w-full max-w-5xl mx-auto"), ..attributes],
       children,
