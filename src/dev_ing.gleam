@@ -95,12 +95,12 @@ fn under_construction_content(page_name: String) -> Element(Msg) {
           text(page_name),
         ]),
         html.img([
-          attribute.src("https://i.giphy.com/media/aEZgmm8e0I31S/giphy.gif"),
+          attribute.src("/under-construction.png"),
           attribute.alt("Under Construction"),
-          attribute.class("w-1/2 mx-auto mt-8 clip-hex"),
+          attribute.class("w-1/2 mx-auto mt-8 rounded-4xl max-h-80 max-w-80"),
         ]),
         html.div([attribute.class("grid gap-1 mt-2 max-w-lg")], [
-          html.p([attribute.class("dark:text-white")], [
+          html.p([attribute.class("dark:text-white text-xl font-semibold")], [
             text("🚧 This page is under construction 👷‍♂️"),
           ]),
           html.p([attribute.class("dark:text-white mt-2")], [
@@ -150,7 +150,7 @@ fn header() -> Element(Msg) {
   html.header(
     [
       attribute.class(
-        "fixed left-0 right-0 top-0 px-4 py-4 flex align-center justify-between gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        "fixed left-0 right-0 top-0 px-4 py-4 flex items-center justify-between gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
       ),
     ],
     [
