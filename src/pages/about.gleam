@@ -161,15 +161,15 @@ fn personal_projects_card() -> Element(a) {
       html.ul([attribute.class("dark:text-white grid gap-6")], [
         line_item(
           title: "This Website!",
-          icon: "",
-          icon_class: None,
+          icon: "/dev-ing.webp",
+          icon_class: Some(attribute.class("rounded bg-white")),
           description: "Written in Gleam + Lustre with Lustre dev tools",
           projects: [],
           link: "http://www.github.com/kazlim-code/dev-ing",
         ),
         line_item(
           title: "Glelements",
-          icon: "",
+          icon: "/glelements.webp",
           icon_class: None,
           description: "Lustre UI library utilising Tailwindcss",
           projects: [],

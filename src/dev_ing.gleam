@@ -158,9 +158,9 @@ fn header() -> Element(Msg) {
       html.a(
         [
           attribute.href(routes.base_path() <> "/"),
-          attribute.class("font-bold text-xl whitespace-nowrap"),
+          attribute.class("rounded-lg dark:bg-surface-100"),
         ],
-        [text("Dev-Ing")],
+        [html.img([attribute.class("h-10 w-auto"), attribute.src("/dev-ing.webp")])],
       ),
       html.div(
         [
