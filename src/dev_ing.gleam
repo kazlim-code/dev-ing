@@ -8,6 +8,7 @@
 
 // IMPORTS ---------------------------------------------------------------------
 
+import eggs
 import gleam/uri
 import lib/button
 import lib/theme
@@ -41,6 +42,7 @@ pub fn main() {
 
 fn init(_: Nil) -> #(Model, Effect(Msg)) {
   theme.initialize_color_scheme()
+  eggs.ascii()
   let route = routes.init_route()
   let model = Model(route:)
   let effect = modem.init(RouteChanged)

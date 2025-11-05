@@ -61,3 +61,4 @@ glelements = { path = "glelements" }
 lustre = { version = ">= 5.3.5 and < 6.0.0" }
 lustre_dev_tools = { version = ">= 2.0.0 and < 3.0.0" }
 modem = { version = ">= 2.1.1 and < 3.0.0" }
+gleam_community_ansi = { version = ">= 1.4.3 and < 2.0.0" }
