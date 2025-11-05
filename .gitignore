@@ -1,3 +1,4 @@
+.DS_Store
 build/
 # Ensure private Glelements repo isn't exposed
 glelements/
