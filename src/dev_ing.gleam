@@ -163,7 +163,12 @@ fn header() -> Element(Msg) {
           attribute.class("rounded-lg bg-surface-100/95 hover:bg-surface-100"),
           attribute.aria_label("Dev-Ing logo"),
         ],
-        [html.img([attribute.class("h-10 w-auto"), attribute.src("/dev-ing.webp")])],
+        [
+          html.img([
+            attribute.class("h-10 w-auto"),
+            attribute.src("/dev-ing.webp"),
+          ]),
+        ],
       ),
       html.div(
         [

@@ -7,7 +7,8 @@ import gleam_community/ansi
 ///
 ///
 pub fn ascii() -> Nil {
-  let line_one = "                            
+  let line_one =
+    "                            
    ██████  ███████ ██    ██ 
    ██   ██ ██      ██    ██ 
    ██   ██ █████   ██    ██ 
@@ -15,13 +16,16 @@ pub fn ascii() -> Nil {
    ██████  ███████   ████   
                             
                             \n"
-  let line_two = ansi.black("      ██ ███    ██  ██████  
+  let line_two =
+    ansi.black(
+      "      ██ ███    ██  ██████  
       ██ ████   ██ ██       
 █████ ██ ██ ██  ██ ██   ███ 
       ██ ██  ██ ██ ██    ██ 
       ██ ██   ████  ██████  
                             
-                            \n")
+                            \n",
+    )
 
   let text = line_one <> line_two
 
