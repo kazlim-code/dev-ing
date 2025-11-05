@@ -151,14 +151,14 @@ fn header() -> Element(Msg) {
   html.header(
     [
       attribute.class(
-        "fixed left-0 right-0 top-0 px-4 py-4 flex items-center justify-between gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        "fixed left-0 right-0 top-0 px-4 py-2 flex items-center justify-between gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
       ),
     ],
     [
       html.a(
         [
           attribute.href(routes.base_path() <> "/"),
-          attribute.class("rounded-lg dark:bg-surface-100"),
+          attribute.class("rounded-lg bg-surface-100/95 hover:bg-surface-100"),
         ],
         [html.img([attribute.class("h-10 w-auto"), attribute.src("/dev-ing.webp")])],
       ),
@@ -191,7 +191,7 @@ fn header() -> Element(Msg) {
             attribute.href("https://github.com/kazlim-code/dev-ing"),
             attribute.target("_blank"),
             attribute.class(
-              "text-inherit hover:text-primary-500 dark:hover:text-primary-400",
+              "text-inherit hover:text-primary-200",
             ),
           ],
           [
