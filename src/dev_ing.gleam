@@ -192,7 +192,7 @@ fn header() -> Element(Msg) {
             attribute.href("https://github.com/kazlim-code/dev-ing"),
             attribute.target("_blank"),
             attribute.class(
-              "text-inherit hover:text-primary-200",
+              "text-inherit hover:text-primary-400 hover:dark:text-primary-200",
             ),
             attribute.aria_label("GitHub kazlim-code/dev-ing repository link"),
           ],
