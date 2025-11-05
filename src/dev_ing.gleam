@@ -159,6 +159,7 @@ fn header() -> Element(Msg) {
         [
           attribute.href(routes.base_path() <> "/"),
           attribute.class("rounded-lg bg-surface-100/95 hover:bg-surface-100"),
+          attribute.aria_label("Dev-Ing logo"),
         ],
         [html.img([attribute.class("h-10 w-auto"), attribute.src("/dev-ing.webp")])],
       ),
@@ -169,7 +170,7 @@ fn header() -> Element(Msg) {
           ),
         ],
         [
-          html.div([attribute.class("flex items-center gap-4")], [
+          html.nav([attribute.class("flex items-center gap-4")], [
             html.ul([attribute.class("flex flex-row gap-4")], [
               html.li([], [
                 html.a([attribute.href(routes.base_path() <> "/blog")], [
@@ -193,6 +194,7 @@ fn header() -> Element(Msg) {
             attribute.class(
               "text-inherit hover:text-primary-200",
             ),
+            attribute.aria_label("GitHub kazlim-code/dev-ing repository link"),
           ],
           [
             svg.svg(

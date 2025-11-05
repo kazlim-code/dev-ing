@@ -26,6 +26,8 @@ const wyrd_title = "Wyrd Technology"
 
 const wyrd_icon = "/wyrd-technology-icon.webp"
 
+const wyrd_icon_label = "Wyrd Technology logo"
+
 const wyrd_description = "Expert software development and engineering leadership consultancy to clients worldwide."
 
 fn wyrd_projects() -> List(Element(a)) {
@@ -51,6 +53,8 @@ const wyrd_website = "https://wyrd-technology.com"
 const grafa_title = "Grafa"
 
 const grafa_icon = "/grafa-icon.webp"
+
+const grafa_icon_label = "Grafa logo"
 
 const grafa_description = "Finance media technology company that was founded with the vision of making finance entertaining so that anyone, from any background can learn about money."
 
@@ -131,6 +135,7 @@ fn work_card() -> Element(a) {
           title: wyrd_title,
           icon: wyrd_icon,
           icon_class: None,
+          icon_label: wyrd_icon_label,
           description: wyrd_description,
           projects: wyrd_projects(),
           link: wyrd_website,
@@ -139,6 +144,7 @@ fn work_card() -> Element(a) {
           title: grafa_title,
           icon: grafa_icon,
           icon_class: Some(attribute.class("rounded-full")),
+          icon_label: grafa_icon_label,
           description: grafa_description,
           projects: grafa_projects(),
           link: grafa_website,
@@ -162,6 +168,7 @@ fn personal_projects_card() -> Element(a) {
         line_item(
           title: "This Website!",
           icon: "/dev-ing.webp",
+          icon_label: "Dev-Ing website logo",
           icon_class: Some(attribute.class("rounded bg-white")),
           description: "Written in Gleam + Lustre with Lustre dev tools",
           projects: [],
@@ -171,6 +178,7 @@ fn personal_projects_card() -> Element(a) {
           title: "Glelements",
           icon: "/glelements.webp",
           icon_class: None,
+          icon_label: "Glelements UI logo",
           description: "Lustre UI library utilising Tailwindcss",
           projects: [],
           link: "#",
@@ -186,6 +194,7 @@ fn line_item(
   title title: String,
   icon icon_src: String,
   icon_class icon_class: Option(Attribute(a)),
+  icon_label label: String,
   description description: String,
   projects projects: List(Element(a)),
   link href: String,
@@ -205,6 +214,7 @@ fn line_item(
           attribute.class(
             "grid max-w-24 sm:max-w-18 w-full mx-auto sm:mx-0 p-4 h-min relative before:content-[''] before:absolute before:inset-0 before:rounded-lg before:bg-surface-400/25 dark:before:bg-surface-900/25 before:z-0",
           ),
+          attribute.aria_label(label),
         ],
         [
           html.img([
