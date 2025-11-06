@@ -2,73 +2,13 @@
 //// This page contains information about me, my work, and personal projects.
 ////
 
+import data/about
 import gleam/option.{type Option, None, Some}
 import lib/card
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element, text}
 import lustre/element/html
-
-/// Text content ---------------------------------------------------------------
-/// My card
-const me = "My name is Callum Ingley, I'm a software engineer that has for the
-  most part focused on developing experiences for the front end."
-
-const frameworks = " I've explored a few different front end frameworks
-  beginning with using ruby on rails in university. I've since worked with
-  Angular, React, Vue 2.0 & 3.0, Svelte and Lustre. Most of my work has also
-  included working with PWAs and CapacitorJS wrapped web applications."
-
-const hobbies = "When I'm not coding, I'll typically be chilling watching
-  Twitch/YouTube or playing games with friends."
-
-/// Work card
-const wyrd_title = "Wyrd Technology"
-
-const wyrd_icon = "/wyrd-technology-icon.webp"
-
-const wyrd_icon_label = "Wyrd Technology logo"
-
-const wyrd_description = "Expert software development and engineering leadership consultancy to clients worldwide."
-
-fn wyrd_projects() -> List(Element(a)) {
-  [
-    html.p([], [
-      html.span([], [text("Contract work for ")]),
-      html.a(
-        [
-          attribute.href("https://masabi.com"),
-          attribute.target("_blank"),
-          attribute.class(
-            "underline hover:text-primary-500 hover:dark:text-primary-400",
-          ),
-        ],
-        [text("Masabi")],
-      ),
-    ]),
-  ]
-}
-
-const wyrd_website = "https://wyrd-technology.com"
-
-const grafa_title = "Grafa"
-
-const grafa_icon = "/grafa-icon.webp"
-
-const grafa_icon_label = "Grafa logo"
-
-const grafa_description = "Finance media technology company that was founded with the vision of making finance entertaining so that anyone, from any background can learn about money."
-
-fn grafa_projects() -> List(Element(a)) {
-  [
-    html.p([], [
-      text(
-        "Developed the majority of the current application front end, switching from react-native to Vue 2.6 with CapacitorJS.",
-      ),
-    ]),
-  ]
-}
-
-const grafa_website = "https://grafa.com"
+import parser
 
 /// View -----------------------------------------------------------------------
 /// A fragment that renders the content for the about page.
@@ -106,15 +46,18 @@ fn my_card() -> Element(a) {
       [
         html.img([
           attribute.class(
-            "h-52 max-w-52 w-full rounded-full object-cover outline-4 outline-offset-4 outline-surface-300 dark:outline-surface-600 border-4 border-primary-300/75 dark:border-primary-400",
+            "h-50 max-w-50 w-full rounded-full object-cover outline-4 outline-offset-4 outline-surface-300 dark:outline-surface-600 border-4 border-primary-300/75 dark:border-primary-400",
           ),
           attribute.src("/me.jpg"),
         ]),
-        html.div([attribute.class("dark:text-white text-md grid gap-4")], [
-          html.p([], [text(me)]),
-          html.p([], [text(frameworks)]),
-          html.p([], [text(hobbies)]),
-        ]),
+        html.div(
+          [attribute.class("dark:text-white text-md grid gap-4 leading-6")],
+          [
+            element.fragment(parser.to_lustre(about.me)),
+            element.fragment(parser.to_lustre(about.frameworks)),
+            html.p([], [text(about.hobbies)]),
+          ],
+        ),
       ],
     ),
   ])
@@ -129,25 +72,25 @@ fn work_card() -> Element(a) {
         text("Recent Work"),
       ]),
     ]),
-    card.content([attribute.class("mt-4")], [
+    card.content([attribute.class("mt-6")], [
       html.ul([attribute.class("dark:text-white grid gap-6")], [
         line_item(
-          title: wyrd_title,
-          icon: wyrd_icon,
+          title: about.wyrd_title,
+          icon: about.wyrd_icon,
           icon_class: None,
-          icon_label: wyrd_icon_label,
-          description: wyrd_description,
-          projects: wyrd_projects(),
-          link: wyrd_website,
+          icon_label: about.wyrd_icon_label,
+          description: about.wyrd_description,
+          projects: about.wyrd_projects(),
+          link: about.wyrd_website,
         ),
         line_item(
-          title: grafa_title,
-          icon: grafa_icon,
+          title: about.grafa_title,
+          icon: about.grafa_icon,
           icon_class: Some(attribute.class("rounded-full")),
-          icon_label: grafa_icon_label,
-          description: grafa_description,
-          projects: grafa_projects(),
-          link: grafa_website,
+          icon_label: about.grafa_icon_label,
+          description: about.grafa_description,
+          projects: about.grafa_projects(),
+          link: about.grafa_website,
         ),
       ]),
     ]),
@@ -163,7 +106,7 @@ fn personal_projects_card() -> Element(a) {
         text("Personal Projects"),
       ]),
     ]),
-    card.content([attribute.class("mt-4")], [
+    card.content([attribute.class("mt-6")], [
       html.ul([attribute.class("dark:text-white grid gap-6")], [
         line_item(
           title: "This Website!",
@@ -224,7 +167,7 @@ fn line_item(
           ]),
         ],
       ),
-      html.div([attribute.class("grid")], [
+      html.div([attribute.class("grid gap-2 leading-6")], [
         html.a(
           [
             attribute.href(href),
@@ -235,7 +178,7 @@ fn line_item(
           ],
           [text(title)],
         ),
-        html.span(
+        html.p(
           [
             attribute.class("text-on-surface-950 dark:text-on-surface-100"),
           ],
