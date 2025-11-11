@@ -27,7 +27,18 @@ efficient, and well-commented code.
 
 ## Project Structure
 
-- TODO: Update this once project structure has been generated
+- `src/`: Contains all the Gleam source code.
+  - `components/`: For reusable UI components (e.g., `button.gleam`, `navbar.gleam`).
+  - `data/`: For static data and textual content used by pages (e.g., `about.gleam`).
+  - `pages/`: Each file represents a page/route in the application (e.g., `home.gleam`, `about_page.gleam`).
+  - `services/`: For handling side-effects like API calls or local storage.
+  - `types/`: For shared data type definitions (e.g., `post.gleam`, `user.gleam`).
+  - `dev_ing.gleam`: The main application entry point (model, update, view).
+  - `routes.gleam`: Defines the application's URL routing.
+- `assets/`: For static files like CSS, images, and fonts.
+- `test/`: Contains all the tests for the project.
+- `gleam.toml`: The project's manifest file, defining dependencies and metadata.
+- `CHANGELOG.md`: A log of notable changes to the project.
 
 ## Agent's Role: Full-Stack Assistant
 
