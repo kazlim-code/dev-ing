@@ -80,7 +80,7 @@ fn work_card() -> Element(a) {
           icon_class: None,
           icon_label: about.wyrd_icon_label,
           description: about.wyrd_description,
-          projects: about.wyrd_projects(),
+          projects: about.wyrd_projects,
           link: about.wyrd_website,
         ),
         line_item(
@@ -89,7 +89,7 @@ fn work_card() -> Element(a) {
           icon_class: Some(attribute.class("rounded-full")),
           icon_label: about.grafa_icon_label,
           description: about.grafa_description,
-          projects: about.grafa_projects(),
+          projects: about.grafa_projects,
           link: about.grafa_website,
         ),
       ]),
@@ -114,7 +114,7 @@ fn personal_projects_card() -> Element(a) {
           icon_label: "Dev-Ing website logo",
           icon_class: Some(attribute.class("rounded bg-white")),
           description: "Written in Gleam + Lustre with Lustre dev tools",
-          projects: [],
+          projects: "",
           link: "http://www.github.com/kazlim-code/dev-ing",
         ),
         line_item(
@@ -123,7 +123,7 @@ fn personal_projects_card() -> Element(a) {
           icon_class: None,
           icon_label: "Glelements UI logo",
           description: "Lustre UI library utilising Tailwindcss",
-          projects: [],
+          projects: "",
           link: "#",
         ),
       ]),
@@ -139,7 +139,7 @@ fn line_item(
   icon_class icon_class: Option(Attribute(a)),
   icon_label label: String,
   description description: String,
-  projects projects: List(Element(a)),
+  projects projects: String,
   link href: String,
 ) -> Element(a) {
   let icon_class = icon_class |> option.unwrap(attribute.class("h-full w-full"))
@@ -167,25 +167,37 @@ fn line_item(
           ]),
         ],
       ),
-      html.div([attribute.class("grid gap-2 leading-6")], [
-        html.a(
-          [
-            attribute.href(href),
-            attribute.target("_blank"),
-            attribute.class(
-              "font-semibold text-lg w-fit text-on-surface-900 dark:text-on-surface-50 hover:text-primary-500 hover:dark:text-primary-400",
-            ),
-          ],
-          [text(title)],
-        ),
-        html.p(
-          [
-            attribute.class("text-on-surface-950 dark:text-on-surface-100"),
-          ],
-          [text(description)],
-        ),
-        html.p([attribute.class("mt-2")], projects),
-      ]),
+      html.div(
+        [
+          attribute.class(
+            "grid gap-4 sm:gap-1 leading-6 justify-items-center sm:justify-items-start",
+          ),
+        ],
+        [
+          html.a(
+            [
+              attribute.href(href),
+              attribute.target("_blank"),
+              attribute.class(
+                "font-semibold text-lg w-fit text-on-surface-900 dark:text-on-surface-50 hover:text-primary-500 hover:dark:text-primary-400",
+              ),
+            ],
+            [text(title)],
+          ),
+          html.p(
+            [
+              attribute.class(
+                "text-sm font-semibold text-on-surface-950 dark:text-on-surface-100",
+              ),
+            ],
+            [text(description)],
+          ),
+          html.div(
+            [attribute.class("mt-6 sm:mt-2 markdown")],
+            parser.to_lustre(projects),
+          ),
+        ],
+      ),
     ],
   )
 }
