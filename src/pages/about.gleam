@@ -25,11 +25,14 @@ pub fn content_fragment() -> Element(a) {
         text("About me"),
       ],
     ),
-    html.div([attribute.class("flex flex-col gap-12 mt-12")], [
-      my_card(),
-      work_card(),
-      personal_projects_card(),
-    ]),
+    html.div(
+      [attribute.class("flex flex-col gap-12 mt-12 max-w-[80ch] mx-auto")],
+      [
+        my_card(),
+        work_card(),
+        personal_projects_card(),
+      ],
+    ),
   ])
 }
 
@@ -39,25 +42,27 @@ fn my_card() -> Element(a) {
   card.basic([attribute.class("px-8 py-8 [&]:rounded-3xl")], [
     card.content(
       [
-        attribute.class(
-          "grid sm:flex gap-8 justify-items-center sm:justify-items-start sm:items-center",
-        ),
+        attribute.class("grid items-center gap-8 relative pb-16"),
       ],
       [
-        html.img([
-          attribute.class(
-            "h-50 max-w-50 w-full rounded-full object-cover outline-4 outline-offset-4 outline-surface-300 dark:outline-surface-600 border-4 border-primary-300/75 dark:border-primary-400",
-          ),
-          attribute.src("/me.jpg"),
-        ]),
         html.div(
-          [attribute.class("dark:text-white text-md grid gap-4 leading-6")],
+          [
+            attribute.class(
+              "dark:text-white text-md grid gap-4 leading-6 z-1 max-w-[65ch] mx-auto",
+            ),
+          ],
           [
             element.fragment(parser.to_lustre(about.me)),
             element.fragment(parser.to_lustre(about.frameworks)),
             html.p([], [text(about.hobbies)]),
           ],
         ),
+        html.img([
+          attribute.class(
+            "absolute right-0 bottom-0 mx-auto opacity-50 h-40 max-w-40 w-full rounded-full object-cover outline-4 outline-offset-4 outline-surface-300 dark:outline-surface-600 border-4 border-primary-300/75 dark:border-primary-400",
+          ),
+          attribute.src("/me.jpg"),
+        ]),
       ],
     ),
   ])
@@ -66,14 +71,14 @@ fn my_card() -> Element(a) {
 /// Renders a card with my recent work.
 ///
 fn work_card() -> Element(a) {
-  card.basic([attribute.class("px-8 py-8 [&]:rounded-3xl")], [
+  card.basic([attribute.class("px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl")], [
     card.header([], [
       html.h2([attribute.class("font-semibold text-xl")], [
         text("Recent Work"),
       ]),
     ]),
     card.content([attribute.class("mt-6")], [
-      html.ul([attribute.class("dark:text-white grid gap-6")], [
+      html.ul([attribute.class("dark:text-white grid gap-12")], [
         line_item(
           title: about.wyrd_title,
           icon: about.wyrd_icon,
@@ -100,14 +105,14 @@ fn work_card() -> Element(a) {
 /// Renders a card with my personal projects.
 ///
 fn personal_projects_card() -> Element(a) {
-  card.basic([attribute.class("px-8 py-8 [&]:rounded-3xl")], [
+  card.basic([attribute.class("px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl")], [
     card.header([], [
       html.h2([attribute.class("font-semibold text-xl")], [
         text("Personal Projects"),
       ]),
     ]),
     card.content([attribute.class("mt-6")], [
-      html.ul([attribute.class("dark:text-white grid gap-6")], [
+      html.ul([attribute.class("dark:text-white grid gap-12")], [
         line_item(
           title: "This Website!",
           icon: "/dev-ing.webp",
@@ -146,7 +151,7 @@ fn line_item(
   html.li(
     [
       attribute.class(
-        "flex flex-col sm:flex-row gap-2 sm:gap-6 rounded-2xl px-6 py-4 bg-surface-100/25 hover:bg-surface-100/50 dark:bg-surface-700/25 hover:dark:bg-surface-600/25 outline-2 outline-transparent outline-offset-2 hover:outline-primary-500 hover:dark:outline-primary-400 transition",
+        "flex flex-col sm:flex-row gap-2 sm:gap-6 rounded-2xl sm:px-6 sm:py-4 sm:bg-surface-100/25 hover:sm:bg-surface-100/50 dark:sm:bg-surface-700/25 hover:dark:sm:bg-surface-600/25 transition",
       ),
     ],
     [

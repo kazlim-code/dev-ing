@@ -14,4 +14,15 @@
   html {
     font-family: 'JetBrains Mono', monospace;
   }
+
+  .markdown {
+    ul {
+      display: grid;
+      gap: 0.5rem
+    }
+    li {
+      list-style-position: inside;
+      list-style-type: square;
+    }
+  }
 }
