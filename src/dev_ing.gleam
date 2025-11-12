@@ -9,6 +9,7 @@
 // IMPORTS ---------------------------------------------------------------------
 
 import eggs
+import gleam/option.{type Option, None, Some}
 import gleam/uri
 import lib/button
 import lib/theme
@@ -68,7 +69,7 @@ fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
 ///
 fn view(model: Model) -> Element(Msg) {
   element.fragment([
-    header(),
+    header(active_route: model.route),
     html.div([attribute.class("min-h-screen flex flex-col")], [
       html.div([attribute.class("flex flex-1 pt-16")], [
         case model.route {
@@ -149,7 +150,12 @@ fn not_found_content() -> Element(Msg) {
 /// The main header for the site/application that stays fixed to the top of the page.
 /// TODO: Should responsively move to the bottom of the page for mobile.
 ///
-fn header() -> Element(Msg) {
+fn header(active_route route: Route) -> Element(Msg) {
+  let nav_route = case route {
+    routes.Blog -> Some(routes.Blog)
+    routes.About -> Some(routes.About)
+    _ -> None
+  }
   html.header(
     [
       attribute.class(
@@ -177,20 +183,7 @@ fn header() -> Element(Msg) {
           ),
         ],
         [
-          html.nav([attribute.class("flex items-center gap-4")], [
-            html.ul([attribute.class("flex flex-row gap-4")], [
-              html.li([], [
-                html.a([attribute.href(routes.base_path() <> "/blog")], [
-                  text("Blog"),
-                ]),
-              ]),
-              html.li([], [
-                html.a([attribute.href(routes.base_path() <> "/about")], [
-                  text("About"),
-                ]),
-              ]),
-            ]),
-          ]),
+          main_navigation(active_route: nav_route),
         ],
       ),
       html.div([attribute.class("flex items-center gap-4")], [
@@ -230,6 +223,41 @@ fn header() -> Element(Msg) {
       ]),
     ],
   )
+}
+
+/// The main navigation for the application.
+///
+fn main_navigation(active_route route: Option(routes.Route)) -> Element(Msg) {
+  html.nav([], [
+    html.ul([attribute.class("flex items-center gap-8")], [
+      html.li([], [
+        html.a(
+          [
+            attribute.href(routes.base_path() <> "/blog"),
+            attribute.class(case route {
+              Some(routes.Blog) ->
+                "hover:text-primary-500 hover:dark:text-primary-400 font-semibold"
+              _ -> "hover:text-primary-500 hover:dark:text-primary-400"
+            }),
+          ],
+          [text("Blog")],
+        ),
+      ]),
+      html.li([], [
+        html.a(
+          [
+            attribute.href(routes.base_path() <> "/about"),
+            attribute.class(case route {
+              Some(routes.About) ->
+                "hover:text-primary-500 hover:dark:text-primary-400 font-semibold"
+              _ -> "hover:text-primary-500 hover:dark:text-primary-400"
+            }),
+          ],
+          [text("About")],
+        ),
+      ]),
+    ]),
+  ])
 }
 
 /// The default main content container for the application.
