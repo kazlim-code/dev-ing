@@ -20,6 +20,7 @@ pub fn content_fragment() -> Element(a) {
         attribute.class(
           "mt-4 dark:text-white font-semibold text-4xl text-center",
         ),
+        attribute.id("title"),
       ],
       [
         text("About me"),

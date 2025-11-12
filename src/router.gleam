@@ -4,26 +4,17 @@
 
 import gleam/option.{Some}
 import gleam/uri.{type Uri}
+import internal/routes.{type Route}
+
 import modem
-
-/// Routes/pages of the application.
-///
-pub type Route {
-  Home
-  Blog
-  About
-  NotFound
-}
-
-const dev_ing_base_url = "/dev-ing"
 
 /// Returns the initial route of the application based on the current URL.
 /// Useful for Lustres init() function.
 ///
-pub fn init_route() -> Route {
+pub fn init_route() -> routes.Route {
   case modem.initial_uri() {
     Ok(uri) -> on_url_change(uri)
-    Error(_) -> Home
+    Error(_) -> routes.Home
   }
 }
 
@@ -37,7 +28,7 @@ pub fn base_path() -> String {
     Ok(uri) -> {
       case uri.host {
         Some("localhost") -> ""
-        _ -> dev_ing_base_url
+        _ -> routes.dev_ing_base_url
       }
     }
     Error(_) -> ""
@@ -57,10 +48,10 @@ pub fn on_url_change(uri: Uri) -> Route {
 ///
 fn on_local_url_change(path: String) -> Route {
   case uri.path_segments(path) {
-    ["blog"] -> Blog
-    ["about"] -> About
-    [] -> Home
-    _ -> NotFound
+    ["blog"] -> routes.Blog
+    ["about"] -> routes.About
+    [] -> routes.Home
+    _ -> routes.NotFound
   }
 }
 
@@ -68,9 +59,9 @@ fn on_local_url_change(path: String) -> Route {
 ///
 fn on_production_url_change(path: String) -> Route {
   case uri.path_segments(path) {
-    ["dev-ing", "blog"] -> Blog
-    ["dev-ing", "about"] -> About
-    ["dev-ing"] -> Home
-    _ -> NotFound
+    ["dev-ing", "blog"] -> routes.Blog
+    ["dev-ing", "about"] -> routes.About
+    ["dev-ing"] -> routes.Home
+    _ -> routes.NotFound
   }
 }

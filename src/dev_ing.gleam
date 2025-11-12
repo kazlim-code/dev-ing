@@ -11,6 +11,8 @@
 import eggs
 import gleam/option.{type Option, None, Some}
 import gleam/uri
+import internal/routes.{type Route}
+import internal/view_transition
 import lib/button
 import lib/theme
 import lustre
@@ -22,7 +24,7 @@ import lustre/element/svg
 import lustre/event
 import modem
 import pages/about
-import routes.{type Route}
+import router
 
 // APPLICATION -----------------------------------------------------------------
 
@@ -33,6 +35,8 @@ type Model {
 pub type Msg {
   UserToggledColorScheme
   RouteChanged(uri.Uri)
+  ApplyRoute(Route)
+  NoOp
 }
 
 pub fn main() {
@@ -44,7 +48,7 @@ pub fn main() {
 fn init(_: Nil) -> #(Model, Effect(Msg)) {
   theme.initialize_color_scheme()
   eggs.ascii()
-  let route = routes.init_route()
+  let route = router.init_route()
   let model = Model(route:)
   let effect = modem.init(RouteChanged)
   #(model, effect)
@@ -57,9 +61,19 @@ fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
       #(model, effect.none())
     }
     RouteChanged(uri) -> {
-      let route = routes.on_url_change(uri)
-      #(Model(route:), effect.none())
+      let new_route = router.on_url_change(uri)
+      case new_route == model.route {
+        True -> #(model, effect.none())
+        False -> #(
+          model,
+          view_transition.in_transition(fn() { ApplyRoute(new_route) }),
+        )
+      }
     }
+    ApplyRoute(route) -> {
+      #(Model(route: route), effect.none())
+    }
+    NoOp -> #(model, effect.none())
   }
 }
 
@@ -95,9 +109,15 @@ fn under_construction_content(page_name: String) -> Element(Msg) {
         ),
       ],
       [
-        html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [
-          text(page_name),
-        ]),
+        html.h1(
+          [
+            attribute.class("font-semibold text-2xl dark:text-white"),
+            attribute.id("title"),
+          ],
+          [
+            text(page_name),
+          ],
+        ),
         html.img([
           attribute.src("/under-construction.png"),
           attribute.alt("Under Construction"),
@@ -141,9 +161,15 @@ fn about_content() -> Element(Msg) {
 ///
 fn not_found_content() -> Element(Msg) {
   main_content([], [
-    html.h1([attribute.class("font-semibold text-2xl dark:text-white")], [
-      text("Not Found"),
-    ]),
+    html.h1(
+      [
+        attribute.class("font-semibold text-2xl dark:text-white"),
+        attribute.id("title"),
+      ],
+      [
+        text("Not Found"),
+      ],
+    ),
   ])
 }
 
@@ -165,7 +191,7 @@ fn header(active_route route: Route) -> Element(Msg) {
     [
       html.a(
         [
-          attribute.href(routes.base_path() <> "/"),
+          attribute.href(router.base_path() <> "/"),
           attribute.class("rounded-lg bg-surface-100/95 hover:bg-surface-100"),
           attribute.aria_label("Dev-Ing logo"),
         ],
@@ -236,7 +262,7 @@ fn main_navigation(active_route route: Option(routes.Route)) -> Element(Msg) {
       html.li([], [
         html.a(
           [
-            attribute.href(routes.base_path() <> "/blog"),
+            attribute.href(router.base_path() <> "/blog"),
             attribute.class(case route {
               Some(routes.Blog) ->
                 "hover:text-primary-500 hover:dark:text-primary-400 font-semibold"
@@ -249,7 +275,7 @@ fn main_navigation(active_route route: Option(routes.Route)) -> Element(Msg) {
       html.li([], [
         html.a(
           [
-            attribute.href(routes.base_path() <> "/about"),
+            attribute.href(router.base_path() <> "/about"),
             attribute.class(case route {
               Some(routes.About) ->
                 "hover:text-primary-500 hover:dark:text-primary-400 font-semibold"
@@ -266,12 +292,15 @@ fn main_navigation(active_route route: Option(routes.Route)) -> Element(Msg) {
 /// The default main content container for the application.
 ///
 fn main_content(attributes: List(Attribute(msg)), children: List(Element(msg))) {
-  html.main([attribute.class("flex-1 px-4 py-8")], [
-    html.div(
-      [attribute.class("w-full max-w-5xl mx-auto"), ..attributes],
-      children,
-    ),
-  ])
+  html.main(
+    [attribute.class("flex-1 px-4 py-8"), attribute.id("main-content")],
+    [
+      html.div(
+        [attribute.class("w-full max-w-5xl mx-auto"), ..attributes],
+        children,
+      ),
+    ],
+  )
 }
 
 /// The footer for the application.
