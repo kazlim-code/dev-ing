@@ -10,8 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - A content rendering pipeline to convert Markdown strings into Lustre UI elements.
-  - WIP: Build currently fails as dependency Mork does not support Bun due to an upstream crash bug.
+  - WIP: Build currently fails as dependency Mork does not support Bun due to
+  an upstream crash bug.
 - Added content for 'About' page with personal, work, and project information.
+
+### Changed
+
+- General styling of navigation, about page content width and card styling
 
 ## [0.1.0] - 2025-11-03
 
