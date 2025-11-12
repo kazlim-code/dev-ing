@@ -1,10 +1,8 @@
 name = "dev_ing"
-version = "0.1.0"
+version = "0.1.1"
 target = "javascript"
 
-internal_modules = [
-  "glelements/*",
-]
+internal_modules = ["glelements/*"]
 
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
@@ -28,8 +26,8 @@ minify = true
 
 [tools.lustre.html]
 title = "🚧 dev_ing - Under construction"
-meta = [{ description = "Simple showcase my own personal development work and learnings." }]
-body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
-stylesheets = [
-  { href = "/glelements.css" },
+meta = [
+  { description = "Simple showcase my own personal development work and learnings." },
 ]
+body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
+stylesheets = [{ href = "/glelements.css" }]
