@@ -159,7 +159,7 @@ fn header(active_route route: Route) -> Element(Msg) {
   html.header(
     [
       attribute.class(
-        "fixed left-0 right-0 top-0 px-4 py-2 flex items-center justify-between gap-6 dark:text-white bg-surface-100/75 dark:bg-surface-900/75 backdrop-blur-sm",
+        "fixed left-0 right-0 top-0 px-4 py-2 flex items-center justify-between gap-6 dark:text-white bg-surface-100/85 dark:bg-surface-900/85 backdrop-blur-md z-50",
       ),
     ],
     [
@@ -171,7 +171,7 @@ fn header(active_route route: Route) -> Element(Msg) {
         ],
         [
           html.img([
-            attribute.class("h-10 w-auto"),
+            attribute.class("h-10 w-auto hover:cursor-pointer"),
             attribute.src("/dev-ing.webp"),
           ]),
         ],
@@ -216,6 +216,9 @@ fn header(active_route route: Route) -> Element(Msg) {
         ),
         button.theme_toggle(
           [
+            attribute.class(
+              "bg-transparent hover:bg-black/10 hover:dark:bg-white/10",
+            ),
             event.on_click(UserToggledColorScheme),
           ],
           [],

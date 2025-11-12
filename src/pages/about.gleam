@@ -198,7 +198,7 @@ fn line_item(
             [text(description)],
           ),
           html.div(
-            [attribute.class("mt-6 sm:mt-2 markdown")],
+            [attribute.class("mt-6 sm:mt-4 markdown")],
             parser.to_lustre(projects),
           ),
         ],
