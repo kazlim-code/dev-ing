@@ -101,7 +101,7 @@ fn view(model: Model) -> Element(Msg) {
 /// The page content for a page that is under construction.
 ///
 fn under_construction_content(page_name: String) -> Element(Msg) {
-  main_content([], [
+  main_content([attribute.class("relative mt-20")], [
     html.div(
       [
         attribute.class(
@@ -111,7 +111,9 @@ fn under_construction_content(page_name: String) -> Element(Msg) {
       [
         html.h1(
           [
-            attribute.class("font-semibold text-2xl dark:text-white"),
+            attribute.class(
+              "absolute -top-16 left-[15%] z-0 font-semibold text-5xl blur-[1px] text-on-surface-900/25 dark:text-white/25 uppercase",
+            ),
             attribute.id("title"),
           ],
           [
@@ -154,7 +156,7 @@ fn blog_content() -> Element(Msg) {
 /// The page content for the about page (About route: "/about").
 ///
 fn about_content() -> Element(Msg) {
-  main_content([], [about.content_fragment()])
+  main_content([attribute.class("relative")], [about.content_fragment()])
 }
 
 /// The page content representing the 404 Not Found route.

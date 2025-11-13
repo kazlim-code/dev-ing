@@ -21,7 +21,7 @@
       gap: 0.5rem
     }
     li {
-      list-style-position: inside;
+      list-style-position: outside;
       list-style-type: square;
     }
   }
