@@ -2,7 +2,10 @@
 //// This page contains information about me, my work, and personal projects.
 ////
 
-import data/about
+import data/about.{
+  type Technology, TechnologyIcon, TechnologyIconAttributed, TechnologyIconLink,
+}
+import gleam/list
 import gleam/option.{type Option, None, Some}
 import lib/card
 import lustre/attribute.{type Attribute}
@@ -92,7 +95,7 @@ fn work_card() -> Element(a) {
         ]),
       ]),
       card.content([attribute.class("mt-6")], [
-        html.ul([attribute.class("dark:text-white grid gap-12")], [
+        html.ul([attribute.class("dark:text-white grid gap-8")], [
           line_item(
             title: about.wyrd_title,
             icon: about.wyrd_icon,
@@ -101,6 +104,7 @@ fn work_card() -> Element(a) {
             description: about.wyrd_description,
             projects: about.wyrd_projects,
             link: about.wyrd_website,
+            technologies: about.wyrd_technologies,
           ),
           line_item(
             title: about.grafa_title,
@@ -110,6 +114,7 @@ fn work_card() -> Element(a) {
             description: about.grafa_description,
             projects: about.grafa_projects,
             link: about.grafa_website,
+            technologies: about.grafa_technologies,
           ),
         ]),
       ]),
@@ -133,7 +138,7 @@ fn personal_projects_card() -> Element(a) {
         ]),
       ]),
       card.content([attribute.class("mt-6")], [
-        html.ul([attribute.class("dark:text-white grid gap-12")], [
+        html.ul([attribute.class("dark:text-white grid gap-8")], [
           line_item(
             title: about.dev_ing_title,
             icon: about.dev_ing_icon,
@@ -142,6 +147,7 @@ fn personal_projects_card() -> Element(a) {
             description: about.dev_ing_description,
             projects: about.dev_ing_projects,
             link: about.dev_ing_website,
+            technologies: about.dev_ing_technologies,
           ),
           line_item(
             title: about.glelements_title,
@@ -151,6 +157,7 @@ fn personal_projects_card() -> Element(a) {
             description: about.glelements_description,
             projects: about.glelements_projects,
             link: about.glelements_website,
+            technologies: about.glelements_technologies,
           ),
         ]),
       ]),
@@ -168,8 +175,10 @@ fn line_item(
   description description: String,
   projects projects: String,
   link href: String,
+  technologies technologies: List(Technology),
 ) -> Element(a) {
   let icon_class = icon_class |> option.unwrap(attribute.class("h-full w-full"))
+
   html.li(
     [
       attribute.class("grid gap-2 sm:gap-6 rounded-2xl sm:px-6 sm:py-6"),
@@ -177,7 +186,7 @@ fn line_item(
     [
       html.div(
         [
-          attribute.class("flex gap-2 sm:gap-6"),
+          attribute.class("flex gap-2 sm:gap-6 flex-col sm:flex-row"),
         ],
         [
           html.a(
@@ -230,6 +239,84 @@ fn line_item(
         [attribute.class("markdown ml-8 text-sm")],
         parser.to_lustre(projects),
       ),
+      tech_container(attributes: [attribute.class("mt-4")], technologies:),
     ],
   )
+}
+
+/// Renders a container for the technologies used in a project.
+///
+fn tech_container(
+  attributes attributes: List(Attribute(msg)),
+  technologies technologies: List(Technology),
+) -> Element(msg) {
+  let tech_items =
+    technologies
+    |> list.map(fn(tech) {
+      case tech {
+        TechnologyIcon(_, alt, src) ->
+          html.li([], [
+            html.img([
+              attribute.alt(alt),
+              attribute.class(
+                "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
+              ),
+              attribute.src(src),
+            ]),
+          ])
+        TechnologyIconLink(_, alt, src, href) ->
+          html.li([], [
+            html.a(
+              [
+                attribute.class("cursor-pointer"),
+                attribute.href(href),
+                attribute.target("_blank"),
+              ],
+              [
+                html.img([
+                  attribute.alt(alt),
+                  attribute.class(
+                    "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
+                  ),
+                  attribute.src(src),
+                ]),
+              ],
+            ),
+          ])
+        TechnologyIconAttributed(_, alt, src, href, title) ->
+          html.li([], [
+            html.a(
+              [
+                attribute.class("cursor-pointer"),
+                attribute.href(href),
+                attribute.target("_blank"),
+              ],
+              [
+                html.img([
+                  attribute.alt(alt),
+                  attribute.class(
+                    "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
+                  ),
+                  attribute.src(src),
+                  attribute.title(title),
+                ]),
+              ],
+            ),
+          ])
+        _ -> element.fragment([])
+      }
+    })
+  case technologies {
+    [] -> element.none()
+    _ ->
+      html.ul(
+        [
+          attribute.class(
+            "px-6 py-2 rounded-md border border-surface-200 dark:border-surface-600 w-full flex flex-wrap gap-4 justify-center bg-surface-300 dark:bg-surface-700",
+          ),
+          ..attributes
+        ],
+        tech_items,
+      )
+  }
 }
