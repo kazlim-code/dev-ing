@@ -200,7 +200,7 @@ fn header(active_route route: Route) -> Element(Msg) {
         [
           html.img([
             attribute.class("h-10 w-auto hover:cursor-pointer"),
-            attribute.src("/dev-ing.webp"),
+            attribute.src("/icons/dev-ing.webp"),
           ]),
         ],
       ),

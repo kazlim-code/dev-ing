@@ -32,7 +32,7 @@ pub const hobbies = "When I'm not coding, I'll typically be chilling watching
 /// Work card
 pub const wyrd_title = "Wyrd Technology"
 
-pub const wyrd_icon = "/wyrd-technology-icon.webp"
+pub const wyrd_icon = "/icons/wyrd-technology-icon.webp"
 
 pub const wyrd_icon_label = "Wyrd Technology logo"
 
@@ -54,7 +54,7 @@ pub const wyrd_website = "https://wyrd-technology.com"
 
 pub const grafa_title = "Grafa"
 
-pub const grafa_icon = "/grafa-icon.webp"
+pub const grafa_icon = "/icons/grafa-icon.webp"
 
 pub const grafa_icon_label = "Grafa logo"
 
