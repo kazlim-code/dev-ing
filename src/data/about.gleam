@@ -71,3 +71,35 @@ pub const grafa_projects = "
   - Ensured a user-centric approach to development."
 
 pub const grafa_website = "https://grafa.com"
+
+/// PERSONAL PROJECTS CARD
+pub const dev_ing_title = "Dev.Ing - This website!!!"
+
+pub const dev_ing_icon = "/icons/dev-ing.webp"
+
+pub const dev_ing_icon_label = "Dev.Ing logo"
+
+pub const dev_ing_description = "Dev.Ing is a platform for developers to share their knowledge and expertise through articles, tutorials, and other resources."
+
+pub const dev_ing_projects = "
+  - Created the Dev.Ing platform to showcase my skillset and document my learnings
+  - Learned Functional Programming with Gleam and built the site using Lustre
+  - Learned how to host the Lustre build via GitHub pages
+"
+
+pub const dev_ing_website = "http://www.github.com/kazlim-code/dev-ing"
+
+pub const glelements_title = "Glelements"
+
+pub const glelements_icon = "/icons/glelements.webp"
+
+pub const glelements_icon_label = "Glelements UI logo"
+
+pub const glelements_description = "Glelements is a library of reusable components for building web applications utilising Tailwindcss."
+
+pub const glelements_projects = "
+  - Developed a set of UI components for use in web applications
+  - Implemented accessibility best practices to ensure all users can interact with the components
+"
+
+pub const glelements_website = "#"
