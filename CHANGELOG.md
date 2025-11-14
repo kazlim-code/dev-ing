@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Moved icons from /assets to /assets/icons
+- Moved About section card to sections with a heading and project cards
 
 ## 0.1.2 - 2025-11-13
 

@@ -1,6 +1,22 @@
 //// Text content for the about page.
 ////
 
+import gleam/option.{type Option, None, Some}
+import lustre/attribute.{type Attribute}
+
+pub type Project(a) {
+  Project(
+    title: String,
+    icon: String,
+    icon_class: Option(Attribute(a)),
+    icon_label: String,
+    description: String,
+    projects: String,
+    link: String,
+    technologies: List(Technology),
+  )
+}
+
 pub type Technology {
   Technology(label: String)
   TechnologyIcon(label: String, alt: String, src: String)
@@ -42,6 +58,32 @@ pub const hobbies = "When I'm not coding, I'll typically be chilling watching
   Twitch/YouTube or playing games with friends."
 
 /// WORK CARD
+pub fn wyrd_card() {
+  Project(
+    title: wyrd_title,
+    icon: wyrd_icon,
+    icon_class: Some(attribute.class("rounded bg-white")),
+    icon_label: wyrd_icon_label,
+    description: wyrd_description,
+    projects: wyrd_projects,
+    link: wyrd_website,
+    technologies: wyrd_technologies,
+  )
+}
+
+pub fn grafa_card() {
+  Project(
+    title: grafa_title,
+    icon: grafa_icon,
+    icon_class: None,
+    icon_label: grafa_icon_label,
+    description: grafa_description,
+    projects: grafa_projects,
+    link: grafa_website,
+    technologies: grafa_technologies,
+  )
+}
+
 pub const wyrd_title = "Wyrd Technology"
 
 pub const wyrd_icon = "/icons/wyrd-technology-icon.webp"
@@ -243,6 +285,32 @@ pub const grafa_technologies = [
 pub const grafa_website = "https://grafa.com"
 
 /// PERSONAL PROJECTS CARD
+pub fn dev_ing_card() {
+  Project(
+    title: dev_ing_title,
+    icon: dev_ing_icon,
+    icon_class: Some(attribute.class("rounded bg-white")),
+    icon_label: dev_ing_icon_label,
+    description: dev_ing_description,
+    projects: dev_ing_projects,
+    link: dev_ing_website,
+    technologies: dev_ing_technologies,
+  )
+}
+
+pub fn glelements_card() {
+  Project(
+    title: glelements_title,
+    icon: glelements_icon,
+    icon_class: None,
+    icon_label: glelements_icon_label,
+    description: glelements_description,
+    projects: glelements_projects,
+    link: glelements_website,
+    technologies: glelements_technologies,
+  )
+}
+
 pub const dev_ing_title = "Dev.Ing - This website!!!"
 
 pub const dev_ing_icon = "/icons/dev-ing.webp"

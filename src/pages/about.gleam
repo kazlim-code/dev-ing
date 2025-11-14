@@ -6,7 +6,7 @@ import data/about.{
   type Technology, TechnologyIcon, TechnologyIconAttributed, TechnologyIconLink,
 }
 import gleam/list
-import gleam/option.{type Option, None, Some}
+import gleam/option.{type Option}
 import lib/card
 import lustre/attribute.{type Attribute}
 import lustre/element.{type Element, text}
@@ -33,8 +33,8 @@ pub fn content_fragment() -> Element(a) {
       [attribute.class("flex flex-col gap-12 mt-16 max-w-[75ch] mx-auto")],
       [
         my_card(),
-        work_card(),
-        personal_projects_card(),
+        work_section(),
+        personal_projects_section(),
       ],
     ),
   ])
@@ -79,95 +79,57 @@ fn my_card() -> Element(a) {
   )
 }
 
-/// Renders a card with my recent work.
+/// Renders a section with my recent work.
 ///
-fn work_card() -> Element(a) {
-  card.basic(
-    [
-      attribute.class(
-        "px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800",
-      ),
-    ],
-    [
-      card.header([], [
-        html.h2([attribute.class("font-semibold text-2xl")], [
-          text("Recent Work"),
-        ]),
-      ]),
-      card.content([attribute.class("mt-6")], [
-        html.ul([attribute.class("dark:text-white grid gap-8")], [
-          line_item(
-            title: about.wyrd_title,
-            icon: about.wyrd_icon,
-            icon_class: None,
-            icon_label: about.wyrd_icon_label,
-            description: about.wyrd_description,
-            projects: about.wyrd_projects,
-            link: about.wyrd_website,
-            technologies: about.wyrd_technologies,
-          ),
-          line_item(
-            title: about.grafa_title,
-            icon: about.grafa_icon,
-            icon_class: Some(attribute.class("rounded-full")),
-            icon_label: about.grafa_icon_label,
-            description: about.grafa_description,
-            projects: about.grafa_projects,
-            link: about.grafa_website,
-            technologies: about.grafa_technologies,
-          ),
-        ]),
-      ]),
-    ],
-  )
+fn work_section() -> Element(a) {
+  card_section(title: "Recent Work", projects: [
+    about.wyrd_card(),
+    about.grafa_card(),
+  ])
 }
 
-/// Renders a card with my personal projects.
+/// Renders a section with my personal projects.
 ///
-fn personal_projects_card() -> Element(a) {
-  card.basic(
-    [
-      attribute.class(
-        "px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800",
-      ),
-    ],
-    [
-      card.header([], [
-        html.h2([attribute.class("font-semibold text-2xl")], [
-          text("Personal Projects"),
-        ]),
-      ]),
-      card.content([attribute.class("mt-6")], [
-        html.ul([attribute.class("dark:text-white grid gap-8")], [
-          line_item(
-            title: about.dev_ing_title,
-            icon: about.dev_ing_icon,
-            icon_class: Some(attribute.class("rounded bg-white")),
-            icon_label: about.dev_ing_icon_label,
-            description: about.dev_ing_description,
-            projects: about.dev_ing_projects,
-            link: about.dev_ing_website,
-            technologies: about.dev_ing_technologies,
-          ),
-          line_item(
-            title: about.glelements_title,
-            icon: about.glelements_icon,
-            icon_class: None,
-            icon_label: about.glelements_icon_label,
-            description: about.glelements_description,
-            projects: about.glelements_projects,
-            link: about.glelements_website,
-            technologies: about.glelements_technologies,
-          ),
-        ]),
-      ]),
-    ],
-  )
+fn personal_projects_section() -> Element(a) {
+  card_section(title: "Personal Projects", projects: [
+    about.dev_ing_card(),
+    about.glelements_card(),
+  ])
 }
 
-/// Renders a line item for the work card.
+/// Renders an about section with a title and a list of project cards.
 ///
-fn line_item(
+fn card_section(
+  title title: String,
+  projects projects: List(about.Project(a)),
+) -> Element(a) {
+  let project_cards =
+    list.map(projects, fn(project) -> Element(a) {
+      html.li([], [
+        project_card(
+          title: project.title,
+          icon: project.icon,
+          icon_class: project.icon_class,
+          icon_label: project.icon_label,
+          description: project.description,
+          projects: project.projects,
+          link: project.link,
+          technologies: project.technologies,
+        ),
+      ])
+    })
+  html.section([], [
+    html.h2([attribute.class("font-semibold text-2xl dark:text-white")], [
+      text(title),
+    ]),
+
+    html.ul([attribute.class("dark:text-white grid gap-8 mt-8")], project_cards),
+  ])
+}
+
+/// Renders a card based on a specific coding project.
+///
+fn project_card(
   title title: String,
   icon icon_src: String,
   icon_class icon_class: Option(Attribute(a)),
@@ -179,15 +141,15 @@ fn line_item(
 ) -> Element(a) {
   let icon_class = icon_class |> option.unwrap(attribute.class("h-full w-full"))
 
-  html.li(
+  card.basic(
     [
-      attribute.class("grid gap-2 sm:gap-6 rounded-2xl sm:px-6 sm:py-6"),
+      attribute.class(
+        "px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800",
+      ),
     ],
     [
-      html.div(
-        [
-          attribute.class("flex gap-2 sm:gap-6 flex-col sm:flex-row"),
-        ],
+      card.header(
+        [attribute.class("flex gap-2 sm:gap-6 flex-col sm:flex-row")],
         [
           html.a(
             [
@@ -235,11 +197,13 @@ fn line_item(
           ),
         ],
       ),
-      html.div(
-        [attribute.class("markdown ml-8 text-sm")],
+      card.content(
+        [attribute.class("markdown mt-8 ml-8 text-sm")],
         parser.to_lustre(projects),
       ),
-      tech_container(attributes: [attribute.class("mt-4")], technologies:),
+      card.footer([attribute.class("mt-8")], [
+        tech_container(attributes: [], technologies:),
+      ]),
     ],
   )
 }
@@ -312,7 +276,7 @@ fn tech_container(
       html.ul(
         [
           attribute.class(
-            "px-6 py-2 rounded-md border border-surface-200 dark:border-surface-600 w-full flex flex-wrap gap-4 justify-center bg-surface-300 dark:bg-surface-700",
+            "px-6 py-2 rounded-md border border-surface-400 dark:border-surface-600 w-full flex flex-wrap gap-4 justify-center bg-surface-200 dark:bg-surface-700",
           ),
           ..attributes
         ],
