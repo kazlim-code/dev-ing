@@ -10,7 +10,7 @@
 
 import eggs
 import gleam/option.{type Option, None, Some}
-import gleam/uri
+import gleam/uri.{type Uri, Uri}
 import internal/routes.{type Route}
 import internal/view_transition
 import lib/button
@@ -30,13 +30,13 @@ import router
 // APPLICATION -----------------------------------------------------------------
 
 type Model {
-  Model(route: Route)
+  Model(route: #(Route, Uri))
 }
 
 pub type Msg {
   UserToggledColorScheme
   RouteChanged(uri.Uri)
-  ApplyRoute(Route)
+  ApplyRoute(#(Route, Uri))
   NoOp
 }
 
@@ -83,12 +83,14 @@ fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
 /// The main view for the application.
 ///
 fn view(model: Model) -> Element(Msg) {
+  let route = model.route.0
+  let uri = model.route.1
   element.fragment([
-    header(active_route: model.route),
+    header(active_route: route),
     html.div([attribute.class("min-h-screen flex flex-col")], [
       html.div([attribute.class("flex flex-1 pt-16")], [
-        case model.route {
-          routes.Blog -> blog_content()
+        case model.route.0 {
+          routes.Blog -> blog_content(uri)
           routes.About -> about_content()
           routes.Home -> home_content()
           routes.NotFound -> not_found_content()
@@ -150,8 +152,9 @@ fn home_content() -> Element(Msg) {
 
 /// The page content for the blog page (Blog route: "/blog").
 ///
-fn blog_content() -> Element(Msg) {
-  main_content([attribute.class("relative")], [blog.content_fragment(None)])
+fn blog_content(uri uri: Uri) -> Element(Msg) {
+  let Uri(fragment:, ..) = uri
+  main_content([attribute.class("relative")], [blog.content_fragment(fragment)])
 }
 
 /// The page content for the about page (About route: "/about").

@@ -46,7 +46,7 @@ fn my_card() -> Element(a) {
   card.basic(
     [
       attribute.class(
-        "px-8 py-8 [&]:rounded-3xl [&]:bg-transparent [&]:shadow-none",
+        "px-0 py-0 mt-8 [&]:rounded-3xl [&]:bg-transparent [&]:shadow-none",
       ),
     ],
     [
@@ -58,7 +58,7 @@ fn my_card() -> Element(a) {
           html.div(
             [
               attribute.class(
-                "dark:text-white text-md grid gap-4 leading-6 z-1 max-w-[65ch] mx-auto",
+                "dark:text-white text-md grid gap-4 leading-6 z-1",
               ),
             ],
             [

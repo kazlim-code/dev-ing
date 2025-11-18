@@ -3,6 +3,7 @@
 //// displaying full individual posts via slugs.
 ////
 
+import data/about
 import data/blog
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -11,6 +12,7 @@ import lustre/attribute
 import lustre/element.{type Element, text}
 import lustre/element/html
 import parser
+import router
 import tempo
 import tempo/datetime
 
@@ -22,14 +24,14 @@ const datetime_format = "ddd, DD MMMM YYYY h:mm A"
 ///
 pub fn content_fragment(post_id id: Option(String)) -> Element(msg) {
   case id {
-    Some(id) -> post_content_for_id(id)
-    None -> blog_posts()
+    Some(id) -> blog_post(id)
+    None -> latest_blog_posts()
   }
 }
 
+/// Latest blog page content.
 ///
-///
-fn blog_posts() -> Element(msg) {
+fn latest_blog_posts() -> Element(msg) {
   element.fragment([
     html.h1(
       [
@@ -51,6 +53,24 @@ fn blog_posts() -> Element(msg) {
   ])
 }
 
+/// Gets the blog content page for a specific blog post from its id.
+///
+fn blog_post(post_id id: String) -> Element(msg) {
+  html.div([attribute.class("flex flex-col gap-4")], [
+    html.a(
+      [
+        attribute.href(router.base_path() <> "/blog"),
+        attribute.class("flex gap-1"),
+      ],
+      [
+        html.span([], [text("\u{2190}")]),
+        html.span([], [text("BACK")]),
+      ],
+    ),
+    post_content_for_id(id),
+  ])
+}
+
 /// Gets the markdown content for a post by its post id.
 ///
 /// Returns:
@@ -66,16 +86,27 @@ fn post_content_for_id(post_id id: String) -> Element(msg) {
   }
 }
 
-///
+/// Generates the associated article html from a blog post.
 ///
 fn post_to_article(post post: blog.BlogPost) -> Element(msg) {
-  html.article([], [text(post.content)])
+  html.article([attribute.class("mx-auto max-w-[75ch]")], [
+    html.header([], [
+      html.h1(
+        [attribute.class("text-3xl text-on-surface-900 dark:text-white")],
+        [text(post.title)],
+      ),
+    ]),
+    html.div(
+      [attribute.class("markdown mt-12")],
+      post.content |> parser.to_lustre,
+    ),
+  ])
 }
 
 /// Displays a short snippet of the blog post for viewing in a list.
 ///
 fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
-  let href = "/blog/" <> post.id
+  let href = "/blog#" <> post.id
 
   card.basic(
     [
