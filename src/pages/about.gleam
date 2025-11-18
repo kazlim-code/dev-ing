@@ -52,7 +52,7 @@ fn my_card() -> Element(a) {
     [
       card.content(
         [
-          attribute.class("grid items-center gap-8 relative pb-16"),
+          attribute.class("grid items-center gap-8 relative"),
         ],
         [
           html.div(

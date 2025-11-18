@@ -24,6 +24,7 @@ import lustre/element/svg
 import lustre/event
 import modem
 import pages/about
+import pages/blog
 import router
 
 // APPLICATION -----------------------------------------------------------------
@@ -150,7 +151,7 @@ fn home_content() -> Element(Msg) {
 /// The page content for the blog page (Blog route: "/blog").
 ///
 fn blog_content() -> Element(Msg) {
-  under_construction_content("Blog")
+  main_content([attribute.class("relative")], [blog.content_fragment(None)])
 }
 
 /// The page content for the about page (About route: "/about").
