@@ -10,10 +10,9 @@ import lib/card
 import lustre/attribute
 import lustre/element.{type Element, text}
 import lustre/element/html
+import parser
 import tempo
 import tempo/datetime
-
-// import parser
 
 const datetime_format = "ddd, DD MMMM YYYY h:mm A"
 
@@ -80,7 +79,7 @@ fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
 
   card.basic(
     [
-      attribute.class("relative px-8 py-6 [&]:rounded-3xl"),
+      attribute.class("relative px-6 py-6 [&]:rounded-3xl"),
     ],
     [
       html.header(
@@ -94,13 +93,10 @@ fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
           html.p(
             [
               attribute.class(
-                "text-sm text-on-surface-400 dark:text-on-surface-dark-300",
+                "text-xs text-on-surface-400 dark:text-on-surface-dark-300 flex gap-1 justify-between",
               ),
             ],
             [
-              text("By "),
-              html.span([], [text(post.author)]),
-              text(" on "),
               html.time(
                 [
                   attribute.attribute(
@@ -115,19 +111,26 @@ fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
                   )),
                 ],
               ),
+              html.span([], [
+                text("By "),
+                html.span([], [text(post.author)]),
+              ]),
             ],
           ),
         ],
       ),
-      card.content([attribute.class("mt-2 pb-4 text-sm")], [
-        text(post.snippet <> "..."),
-      ]),
+      card.content(
+        [attribute.class("markdown mt-2 pb-4 text-xs")],
+        { post.snippet <> "..." } |> parser.to_lustre,
+      ),
       card.footer(
         [attribute.class("absolute bottom-2 right-6 text-md flex justify-end")],
         [
           html.a(
             [
-              attribute.class("text-accent dark:text-accent-dark font-semibold"),
+              attribute.class(
+                "text-on-surface-700 hover:text-primary-600 dark:text-on-surface-200 font-semibold text-sm",
+              ),
               attribute.href(href),
               attribute.aria_label("Read more about " <> post.title),
             ],

@@ -23,7 +23,7 @@ pub type BlogPost {
   )
 }
 
-const snippet_length = 200
+const snippet_length = 300
 
 /// Text content ---------------------------------------------------------------
 /// Posts
@@ -37,7 +37,9 @@ pub fn all_posts() {
       latest: datetime.literal("2024-11-17T20:00:00+08:00"),
       author: "Callum Ingley",
       title: "Experimenting with VCS other than Git",
-      snippet: what_is_jj_content |> string.slice(0, snippet_length),
+      snippet: what_is_jj_snippet
+        |> string.slice(0, snippet_length)
+        |> string.trim,
       content: what_is_jj_content,
       tags: [JJ],
     ),
@@ -55,8 +57,24 @@ pub fn find_post_by_id(post_id id: String) -> Result(BlogPost, Nil) {
   |> list.find(fn(post) { post.id == id })
 }
 
-pub const what_is_jj_content = "
-# Experimenting with VCS other than Git
+pub const what_is_jj_snippet = "When doing my casual exploring of the web and
+  youtube, I came across a [video that caught my
+  interest](https://www.youtube.com/watch?v=MR6KSB6I_60&t=4s) that discussed a
+  Version Control System (VCS) that seemed to flip the standard Git process on
+  its head and allow for more flexibility with your workflow process. Now I
+  have only previously used Git in the past and even more recently had been
+  happy working with a LazyGit workflow but was very intrigued with some of the
+  ideas that this VCS was putting forth.
+  "
+
+pub const what_is_jj_content = "When doing my casual exploring of the web and
+  youtube, I came across a (video that caught my
+  interest)[https://www.youtube.com/watch?v=MR6KSB6I_60&t=4s] that discussed a
+  Version Control System (VCS) that seemed to flip the standard Git process on
+  its head and allow for more flexibility with your workflow process. Now I
+  have only previously used Git in the past and even more recently had been
+  happy working with a LazyGit workflow but was very intrigued with some of the
+  ideas that this VCS was putting forth.
 
 ## Learning Jujutsu
 
