@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added routing for individual blog posts (utilising uri fragments to work with GitHub pages + SPA)
+- Added first blog post
+- Added blog data as markdown
+- Support converting blog markdown to Lustre representation
+
 ## 0.1.3 - 2025-11-14
 
 ### Added
