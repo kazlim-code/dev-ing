@@ -3,7 +3,6 @@
 //// displaying full individual posts via slugs.
 ////
 
-import data/about
 import data/blog
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -92,12 +91,12 @@ fn post_to_article(post post: blog.BlogPost) -> Element(msg) {
   html.article([attribute.class("mx-auto max-w-[75ch]")], [
     html.header([], [
       html.h1(
-        [attribute.class("text-3xl text-on-surface-900 dark:text-white")],
+        [attribute.class("text-5xl text-on-surface-900 dark:text-white")],
         [text(post.title)],
       ),
     ]),
     html.div(
-      [attribute.class("markdown mt-12")],
+      [attribute.class("markdown mt-10")],
       post.content |> parser.to_lustre,
     ),
   ])
