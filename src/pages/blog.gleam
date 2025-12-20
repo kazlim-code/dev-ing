@@ -59,7 +59,7 @@ fn blog_post(post_id id: String) -> Element(msg) {
     html.a(
       [
         attribute.href(router.base_path() <> "/blog"),
-        attribute.class("flex gap-1"),
+        attribute.class("flex gap-1 dark:text-white"),
       ],
       [
         html.span([], [text("\u{2190}")]),
@@ -154,7 +154,7 @@ fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
         { post.snippet <> "..." } |> parser.to_lustre,
       ),
       card.footer(
-        [attribute.class("absolute bottom-2 right-6 text-md flex justify-end")],
+        [attribute.class("absolute bottom-4 right-6 text-md flex justify-end")],
         [
           html.a(
             [
