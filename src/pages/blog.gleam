@@ -154,7 +154,7 @@ fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
         { post.snippet <> "..." } |> parser.to_lustre,
       ),
       card.footer(
-        [attribute.class("absolute bottom-2 right-6 text-md flex justify-end")],
+        [attribute.class("absolute bottom-4 right-6 text-md flex justify-end")],
         [
           html.a(
             [

@@ -53,5 +53,8 @@
       line-height: var(--text-lg--line-height);
       margin-block: 1rem;
     }
+    p:only-child {
+      margin-block: 0;
+    }
   }
 }
