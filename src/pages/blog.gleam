@@ -59,7 +59,7 @@ fn blog_post(post_id id: String) -> Element(msg) {
     html.a(
       [
         attribute.href(router.base_path() <> "/blog"),
-        attribute.class("flex gap-1"),
+        attribute.class("flex gap-1 dark:text-white"),
       ],
       [
         html.span([], [text("\u{2190}")]),
