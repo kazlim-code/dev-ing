@@ -37,6 +37,7 @@ efficient, and well-commented code.
   - `routes.gleam`: Defines the application's URL routing.
 - `assets/`: For static files like CSS, images, and fonts.
 - `test/`: Contains all the tests for the project.
+- `glelements/`: Hidden (git ignored folder) dependency (private GitHub project) that contains a collection of UI elements (like cards, buttons, etc...)
 - `gleam.toml`: The project's manifest file, defining dependencies and metadata.
 - `CHANGELOG.md`: A log of notable changes to the project.
 

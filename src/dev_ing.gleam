@@ -25,6 +25,7 @@ import lustre/event
 import modem
 import pages/about
 import pages/blog
+import pages/home
 import router
 
 // APPLICATION -----------------------------------------------------------------
@@ -103,51 +104,51 @@ fn view(model: Model) -> Element(Msg) {
 
 /// The page content for a page that is under construction.
 ///
-fn under_construction_content(page_name: String) -> Element(Msg) {
-  main_content([attribute.class("relative mt-20")], [
-    html.div(
-      [
-        attribute.class(
-          "flex flex-col items-center justify-center gap-4 text-center w-full",
-        ),
-      ],
-      [
-        html.h1(
-          [
-            attribute.class(
-              "absolute -top-16 left-[15%] z-0 font-semibold text-5xl blur-[1px] text-on-surface-900/25 dark:text-white/25 uppercase",
-            ),
-            attribute.id("title"),
-          ],
-          [
-            text(page_name),
-          ],
-        ),
-        html.img([
-          attribute.src(router.base_path() <> "/under-construction.png"),
-          attribute.alt("Under Construction"),
-          attribute.class("w-1/2 mx-auto mt-8 rounded-4xl max-h-80 max-w-80"),
-        ]),
-        html.div([attribute.class("grid gap-1 mt-2 max-w-lg")], [
-          html.p([attribute.class("dark:text-white text-xl font-semibold")], [
-            text("🚧 This page is under construction 👷‍♂️"),
-          ]),
-          html.p([attribute.class("dark:text-white mt-2")], [
-            text("Our developers are currently powered by coffee and dreams."),
-          ]),
-          html.p([attribute.class("dark:text-white mt-2")], [
-            text("Please check back later for updates."),
-          ]),
-        ]),
-      ],
-    ),
-  ])
-}
+// fn under_construction_content(page_name: String) -> Element(Msg) {
+//   main_content([attribute.class("relative mt-20")], [
+//     html.div(
+//       [
+//         attribute.class(
+//           "flex flex-col items-center justify-center gap-4 text-center w-full",
+//         ),
+//       ],
+//       [
+//         html.h1(
+//           [
+//             attribute.class(
+//               "absolute -top-16 left-[15%] z-0 font-semibold text-5xl blur-[1px] text-on-surface-900/25 dark:text-white/25 uppercase",
+//             ),
+//             attribute.id("title"),
+//           ],
+//           [
+//             text(page_name),
+//           ],
+//         ),
+//         html.img([
+//           attribute.src(router.base_path() <> "/under-construction.png"),
+//           attribute.alt("Under Construction"),
+//           attribute.class("w-1/2 mx-auto mt-8 rounded-4xl max-h-80 max-w-80"),
+//         ]),
+//         html.div([attribute.class("grid gap-1 mt-2 max-w-lg")], [
+//           html.p([attribute.class("dark:text-white text-xl font-semibold")], [
+//             text("🚧 This page is under construction 👷‍♂️"),
+//           ]),
+//           html.p([attribute.class("dark:text-white mt-2")], [
+//             text("Our developers are currently powered by coffee and dreams."),
+//           ]),
+//           html.p([attribute.class("dark:text-white mt-2")], [
+//             text("Please check back later for updates."),
+//           ]),
+//         ]),
+//       ],
+//     ),
+//   ])
+// }
 
 /// The page content for the home page (Home route: "/").
 ///
 fn home_content() -> Element(Msg) {
-  under_construction_content("Home")
+  main_content([attribute.class("relative")], [home.content_fragment()])
 }
 
 /// The page content for the blog page (Blog route: "/blog").
@@ -265,6 +266,19 @@ fn header(active_route route: Route) -> Element(Msg) {
 fn main_navigation(active_route route: Option(routes.Route)) -> Element(Msg) {
   html.nav([], [
     html.ul([attribute.class("flex items-center gap-8")], [
+      html.li([], [
+        html.a(
+          [
+            attribute.href(router.base_path() <> "/"),
+            attribute.class(case route {
+              Some(_) -> "hover:text-primary-500 hover:dark:text-primary-400"
+              _ ->
+                "hover:text-primary-500 hover:dark:text-primary-400 font-semibold"
+            }),
+          ],
+          [text("Home")],
+        ),
+      ]),
       html.li([], [
         html.a(
           [

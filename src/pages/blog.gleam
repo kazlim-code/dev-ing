@@ -104,7 +104,7 @@ fn post_to_article(post post: blog.BlogPost) -> Element(msg) {
 
 /// Displays a short snippet of the blog post for viewing in a list.
 ///
-fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
+pub fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
   let href = router.base_path() <> "/blog#" <> post.id
 
   card.basic(
