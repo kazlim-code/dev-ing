@@ -124,7 +124,7 @@ fn under_construction_content(page_name: String) -> Element(Msg) {
           ],
         ),
         html.img([
-          attribute.src("/under-construction.png"),
+          attribute.src(router.base_path() <> "/under-construction.png"),
           attribute.alt("Under Construction"),
           attribute.class("w-1/2 mx-auto mt-8 rounded-4xl max-h-80 max-w-80"),
         ]),
@@ -204,7 +204,7 @@ fn header(active_route route: Route) -> Element(Msg) {
         [
           html.img([
             attribute.class("h-10 w-auto hover:cursor-pointer"),
-            attribute.src("/icons/dev-ing.webp"),
+            attribute.src(router.base_path() <> "/icons/dev-ing.webp"),
           ]),
         ],
       ),
