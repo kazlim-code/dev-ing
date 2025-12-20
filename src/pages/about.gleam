@@ -12,6 +12,7 @@ import lustre/attribute.{type Attribute}
 import lustre/element.{type Element, text}
 import lustre/element/html
 import parser
+import router
 
 /// View -----------------------------------------------------------------------
 /// A fragment that renders the content for the about page.
@@ -71,7 +72,7 @@ fn my_card() -> Element(a) {
             attribute.class(
               "absolute right-0 bottom-0 mx-auto opacity-25 max-h-40 max-w-40 h-full w-full rounded-full object-cover border-4 border-primary-300/75 dark:border-primary-400 z-1",
             ),
-            attribute.src("/me.jpg"),
+            attribute.src(router.base_path() <> "/me.jpg"),
           ]),
         ],
       ),
@@ -162,7 +163,7 @@ fn project_card(
             ],
             [
               html.img([
-                attribute.src(icon_src),
+                attribute.src(router.base_path() <> icon_src),
                 icon_class,
                 attribute.class("object-contain mx-auto z-1"),
               ]),
@@ -225,7 +226,7 @@ fn tech_container(
               attribute.class(
                 "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
               ),
-              attribute.src(src),
+              attribute.src(router.base_path() <> src),
             ]),
           ])
         TechnologyIconLink(_, alt, src, href) ->
@@ -242,7 +243,7 @@ fn tech_container(
                   attribute.class(
                     "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
                   ),
-                  attribute.src(src),
+                  attribute.src(router.base_path() <> src),
                 ]),
               ],
             ),
@@ -261,7 +262,7 @@ fn tech_container(
                   attribute.class(
                     "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
                   ),
-                  attribute.src(src),
+                  attribute.src(router.base_path() <> src),
                   attribute.title(title),
                 ]),
               ],
