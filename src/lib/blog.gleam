@@ -38,7 +38,7 @@ pub fn post_to_snippet(post post: BlogPost) -> Element(msg) {
     [
       html.header(
         [
-          attribute.class("flex flex-col gap-1"),
+          attribute.class("flex flex-col gap-2"),
         ],
         [
           html.h2([attribute.class("text-xl font-semibold")], [
@@ -47,7 +47,7 @@ pub fn post_to_snippet(post post: BlogPost) -> Element(msg) {
           html.p(
             [
               attribute.class(
-                "text-xs text-on-surface-400 dark:text-on-surface-dark-300 flex gap-1 justify-between",
+                "text-xs text-on-surface-500 dark:text-on-surface-dark-300 flex gap-1 justify-between",
               ),
             ],
             [
@@ -74,8 +74,19 @@ pub fn post_to_snippet(post post: BlogPost) -> Element(msg) {
         ],
       ),
       card.content(
-        [attribute.class("markdown mt-2 pb-4 text-xs")],
-        { post.snippet <> "..." } |> parser.to_lustre,
+        [
+          attribute.class("mb-6"),
+        ],
+        [
+          html.div(
+            [
+              attribute.class(
+                "markdown mt-6 text-xs line-clamp-3 overflow-ellipsis overflow-hidden",
+              ),
+            ],
+            { post.snippet <> "..." } |> parser.to_lustre,
+          ),
+        ],
       ),
       card.footer(
         [attribute.class("absolute bottom-4 right-6 text-md flex justify-end")],

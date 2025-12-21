@@ -17,6 +17,9 @@
     h1,h2,h3,h4,h5,h6,p,li {
       color: var(--color-on-surface-100);
     }
+    p {
+      color: var(--color-on-surface-200);
+    }
   }
 
   .markdown {
@@ -37,21 +40,21 @@
     }
     h1,h2,h3,h4,h5,h6 {
       color: var(--color-on-surface-900);
-      margin-block: 2rem 1rem;
+      margin-block: 2.5rem 2rem;
     }
     h1 {
+      font-size: var(--text-5xl);
+      line-height: var(--text-5xl--line-height);
+    }
+    h2 {
       font-size: var(--text-3xl);
       line-height: var(--text-3xl--line-height);
     }
-    h2 {
-      font-size: var(--text-2xl);
-      line-height: var(--text-2xl--line-height);
-    }
     p {
-      color: var(--color-on-surface-900);
+      color: var(--color-on-surface-800);
       font-size: var(--text-base);
       line-height: var(--text-lg--line-height);
-      margin-block: 1rem;
+      margin-block: 2rem;
     }
     p:only-child {
       margin-block: 0;

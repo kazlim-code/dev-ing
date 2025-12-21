@@ -13,7 +13,6 @@ import lustre/element/html
 import parser
 import router
 
-
 /// View -----------------------------------------------------------------------
 /// A fragment that renders the content for the blog page - for both viewing a
 /// blog post or showing all the latest posts.
@@ -52,7 +51,7 @@ fn latest_blog_posts() -> Element(msg) {
 /// Gets the blog content page for a specific blog post from its id.
 ///
 fn blog_post(post_id id: String) -> Element(msg) {
-  html.div([attribute.class("flex flex-col gap-4")], [
+  html.div([attribute.class("flex flex-col gap-4 mx-auto max-w-[75ch]")], [
     html.a(
       [
         attribute.href(router.base_path() <> "/blog"),
@@ -85,8 +84,8 @@ fn post_content_for_id(post_id id: String) -> Element(msg) {
 /// Generates the associated article html from a blog post.
 ///
 fn post_to_article(post post: blog_component.BlogPost) -> Element(msg) {
-  html.article([attribute.class("mx-auto max-w-[75ch]")], [
-    html.header([], [
+  html.article([], [
+    html.header([attribute.class("mt-6 mb-12")], [
       html.h1(
         [attribute.class("text-5xl text-on-surface-900 dark:text-white")],
         [text(post.title)],
@@ -98,5 +97,3 @@ fn post_to_article(post post: blog_component.BlogPost) -> Element(msg) {
     ),
   ])
 }
-
-
