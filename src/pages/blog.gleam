@@ -6,16 +6,12 @@
 import data/blog
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import lib/card
+import lib/blog as blog_component
 import lustre/attribute
 import lustre/element.{type Element, text}
 import lustre/element/html
 import parser
 import router
-import tempo
-import tempo/datetime
-
-const datetime_format = "ddd, DD MMMM YYYY h:mm A"
 
 /// View -----------------------------------------------------------------------
 /// A fragment that renders the content for the blog page - for both viewing a
@@ -47,7 +43,7 @@ fn latest_blog_posts() -> Element(msg) {
       [
         attribute.class("flex flex-col gap-12 mt-16 max-w-[75ch] mx-auto py-8"),
       ],
-      blog.all_posts() |> list.map(post_to_snippet),
+      blog.all_posts() |> list.map(blog_component.post_to_snippet),
     ),
   ])
 }
@@ -55,7 +51,7 @@ fn latest_blog_posts() -> Element(msg) {
 /// Gets the blog content page for a specific blog post from its id.
 ///
 fn blog_post(post_id id: String) -> Element(msg) {
-  html.div([attribute.class("flex flex-col gap-4")], [
+  html.div([attribute.class("flex flex-col gap-4 mx-auto max-w-[75ch]")], [
     html.a(
       [
         attribute.href(router.base_path() <> "/blog"),
@@ -87,9 +83,9 @@ fn post_content_for_id(post_id id: String) -> Element(msg) {
 
 /// Generates the associated article html from a blog post.
 ///
-fn post_to_article(post post: blog.BlogPost) -> Element(msg) {
-  html.article([attribute.class("mx-auto max-w-[75ch]")], [
-    html.header([], [
+fn post_to_article(post post: blog_component.BlogPost) -> Element(msg) {
+  html.article([], [
+    html.header([attribute.class("mt-6 mb-12")], [
       html.h1(
         [attribute.class("text-5xl text-on-surface-900 dark:text-white")],
         [text(post.title)],
@@ -100,74 +96,4 @@ fn post_to_article(post post: blog.BlogPost) -> Element(msg) {
       post.content |> parser.to_lustre,
     ),
   ])
-}
-
-/// Displays a short snippet of the blog post for viewing in a list.
-///
-fn post_to_snippet(post post: blog.BlogPost) -> Element(msg) {
-  let href = router.base_path() <> "/blog#" <> post.id
-
-  card.basic(
-    [
-      attribute.class("relative px-6 py-6 [&]:rounded-3xl"),
-    ],
-    [
-      html.header(
-        [
-          attribute.class("flex flex-col gap-1"),
-        ],
-        [
-          html.h2([attribute.class("text-xl font-semibold")], [
-            html.a([attribute.href(href)], [text(post.title)]),
-          ]),
-          html.p(
-            [
-              attribute.class(
-                "text-xs text-on-surface-400 dark:text-on-surface-dark-300 flex gap-1 justify-between",
-              ),
-            ],
-            [
-              html.time(
-                [
-                  attribute.attribute(
-                    "datetime",
-                    datetime.to_string(post.created),
-                  ),
-                ],
-                [
-                  text(datetime.format(
-                    post.created,
-                    tempo.Custom(datetime_format),
-                  )),
-                ],
-              ),
-              html.span([], [
-                text("By "),
-                html.span([], [text(post.author)]),
-              ]),
-            ],
-          ),
-        ],
-      ),
-      card.content(
-        [attribute.class("markdown mt-2 pb-4 text-xs")],
-        { post.snippet <> "..." } |> parser.to_lustre,
-      ),
-      card.footer(
-        [attribute.class("absolute bottom-4 right-6 text-md flex justify-end")],
-        [
-          html.a(
-            [
-              attribute.class(
-                "text-on-surface-700 hover:text-primary-600 dark:text-on-surface-200 font-semibold text-sm",
-              ),
-              attribute.href(href),
-              attribute.aria_label("Read more about " <> post.title),
-            ],
-            [text("Read more")],
-          ),
-        ],
-      ),
-    ],
-  )
 }
