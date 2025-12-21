@@ -3,25 +3,8 @@
 
 import gleam/list
 import gleam/string
-import tempo.{type DateTime}
+import lib/blog.{type BlogPost, JJ, Post}
 import tempo/datetime
-
-pub type Tag {
-  JJ
-}
-
-pub type BlogPost {
-  Post(
-    id: String,
-    created: DateTime,
-    latest: DateTime,
-    author: String,
-    title: String,
-    snippet: String,
-    content: String,
-    tags: List(Tag),
-  )
-}
 
 const snippet_length = 300
 
