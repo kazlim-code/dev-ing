@@ -30,9 +30,10 @@ efficient, and well-commented code.
 - `src/`: Contains all the Gleam source code.
   - `components/`: For reusable UI components (e.g., `button.gleam`, `navbar.gleam`).
   - `data/`: For static data and textual content used by pages (e.g., `about.gleam`).
+  - `internal/`: TODO
   - `pages/`: Each file represents a page/route in the application (e.g., `home.gleam`, `about_page.gleam`).
   - `services/`: For handling side-effects like API calls or local storage.
-  - `types/`: For shared data type definitions (e.g., `post.gleam`, `user.gleam`).
+  - `lib/`: For shared types and rendering functions (e.g. project.gleam)
   - `dev_ing.gleam`: The main application entry point (model, update, view).
   - `routes.gleam`: Defines the application's URL routing.
 - `assets/`: For static files like CSS, images, and fonts.
