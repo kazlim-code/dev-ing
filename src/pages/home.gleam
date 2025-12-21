@@ -1,10 +1,12 @@
 import data/blog
+import data/project
 import gleam/list
+import lib/blog as blog_component
 import lib/card
+import lib/project as project_component
 import lustre/attribute
 import lustre/element.{type Element, text}
 import lustre/element/html
-import pages/blog as blog_page
 import router
 
 /// View -----------------------------------------------------------------------
@@ -81,10 +83,10 @@ pub fn whats_new() -> Element(a) {
   let latest_post = blog.all_posts() |> list.first()
 
   let content = case latest_post {
-    Ok(post) -> blog_page.post_to_snippet(post)
-    Error(_) -> 
+    Ok(post) -> blog_component.post_to_snippet(post)
+    Error(_) ->
       card.basic([attribute.class("p-6 rounded-3xl")], [
-        html.p([], [text("No new updates yet.")])
+        html.p([], [text("No new updates yet.")]),
       ])
   }
 
@@ -104,6 +106,12 @@ pub fn whats_new() -> Element(a) {
 /// Latest Projects Section
 ///
 fn latest_projects() -> Element(a) {
+  let projects = [project.dev_ing_card(), project.glelements_card()]
+
+  let project_cards =
+    projects
+    |> list.map(fn(project) { project_component.card(project: project) })
+
   html.section([attribute.class("flex flex-col gap-6")], [
     html.h2(
       [
@@ -113,22 +121,8 @@ fn latest_projects() -> Element(a) {
       ],
       [text("Latest Projects")],
     ),
-    // Placeholder content
-    html.div([attribute.class("grid grid-cols-1 md:grid-cols-2 gap-6")], [
-      project_placeholder_card("Project 1"),
-      project_placeholder_card("Project 2"),
-    ]),
+    html.div([attribute.class("grid grid-cols-1 gap-6")], project_cards),
   ])
-}
-
-fn project_placeholder_card(title: String) -> Element(a) {
-  card.basic(
-    [attribute.class("p-6 rounded-3xl border border-surface-200 dark:border-surface-800")],
-    [
-      html.h3([attribute.class("text-xl font-semibold mb-2")], [text(title)]),
-      html.p([attribute.class("text-on-surface-500 dark:text-on-surface-dark-400")], [text("Project description coming soon...")]),
-    ]
-  )
 }
 
 /// Featured Articles Section
@@ -145,8 +139,13 @@ fn featured_articles() -> Element(a) {
     ),
     // Placeholder content
     html.p(
-      [attribute.class("text-on-surface-500 dark:text-on-surface-dark-400 italic")],
+      [
+        attribute.class(
+          "text-on-surface-500 dark:text-on-surface-dark-400 italic",
+        ),
+      ],
       [text("Curated articles coming soon...")],
     ),
   ])
 }
+
