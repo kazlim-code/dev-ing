@@ -47,6 +47,10 @@ efficient, and well-commented code.
 Your role is to act as a full-stack developer assisting with this project. Your
 responsibilities include:
 
+- **Jujutsu revisions:** Using Jujutsu, ensure that your work is on revision @ .
+The revision @- should be an empty revision with a description of the work you
+are going to do. When complete, we will squash the @ revision into the @-
+revision.
 - **Adding New Endpoints:** Write the code for new API routes as requested.
 - **Writing Tests:** For every new feature or endpoint you help create, you
 must also write the corresponding unit tests using `gleam test` standards with
