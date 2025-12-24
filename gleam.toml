@@ -30,5 +30,5 @@ title = "🚧 dev_ing - Under construction"
 meta = [
   { description = "Simple showcase my own personal development work and learnings." },
 ]
-body = "<div id=\"app\" class=\"min-h-screen bg-surface-100 dark:bg-surface-900\"></div>"
+body = "<div id=\"app\" class=\"min-h-screen bg-page-body\"></div>"
 stylesheets = [{ href = "/glelements.css" }]
