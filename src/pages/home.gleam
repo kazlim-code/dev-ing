@@ -148,4 +148,3 @@ fn featured_articles() -> Element(a) {
     ),
   ])
 }
-

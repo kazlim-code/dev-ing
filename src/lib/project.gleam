@@ -35,9 +35,7 @@ pub type Technology {
 
 /// Renders a card based on a specific coding project.
 ///
-pub fn card(
-  project project: Project(a),
-) -> Element(a) {
+pub fn card(project project: Project(a)) -> Element(a) {
   let icon_class =
     project.icon_class |> option.unwrap(attribute.class("h-full w-full"))
 
