@@ -10,6 +10,23 @@
     font-display: swap;
     src: url('/assets/fonts/JetBrainsMono-Regular.woff2') format('woff2');
   }
+
+  html {
+    min-height: 100vh;
+    background-color: var(--color-surface-200);
+    background-attachment: fixed;
+    background-image: radial-gradient(circle closest-side at center, var(--color-surface-100) 0%, var(--color-surface-200) 100%);
+  }
+
+  /* Handle dark mode globally on html */
+  html.dark {
+    background-color: var(--color-surface-950);
+    background-image: radial-gradient(circle closest-side at center, var(--color-surface-900) 0%, var(--color-surface-950) 100%);
+  }
+
+  body {
+    min-height: 100vh;
+  }
 }
 
 @layer components {
@@ -81,17 +98,5 @@
     p:only-child {
       margin-block: 0;
     }
-  }
-
-  .bg-page-body {
-    background-attachment: fixed;
-    background-image:
-      radial-gradient(circle at center, var(--color-surface-50) 0%, var(--color-surface-200) 100%);
-  }
-
-  .dark .bg-page-body {
-    background-attachment: fixed;
-    background-image:
-      radial-gradient(circle at center, var(--color-surface-800) 0%, var(--color-surface-950) 100%);
   }
 }
