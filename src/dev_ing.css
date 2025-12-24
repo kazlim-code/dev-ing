@@ -10,13 +10,39 @@
     font-display: swap;
     src: url('/assets/fonts/JetBrainsMono-Regular.woff2') format('woff2');
   }
+
+  html {
+    min-height: 100vh;
+    background-color: var(--color-surface-200);
+    background-attachment: fixed;
+    background-image: radial-gradient(circle closest-side at center, var(--color-surface-100) 0%, var(--color-surface-200) 100%);
+  }
+
+  /* Handle dark mode globally on html */
+  html.dark {
+    background-color: var(--color-surface-950);
+    background-image: radial-gradient(circle closest-side at center, var(--color-surface-900) 0%, var(--color-surface-950) 100%);
+  }
+
+  body {
+    min-height: 100vh;
+  }
 }
 
 @layer components {
   .dark .markdown {
-    h1,h2,h3,h4,h5,h6,p,li {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    li {
       color: var(--color-on-surface-100);
     }
+
     p {
       color: var(--color-on-surface-200);
     }
@@ -27,35 +53,48 @@
       display: grid;
       gap: 0.75rem
     }
+
     li {
       list-style-position: outside;
       list-style-type: square;
       margin-left: 1rem;
     }
+
     a {
       color: var(--color-primary);
+
       &:hover {
         color: var(--color-primary-600);
       }
     }
-    h1,h2,h3,h4,h5,h6 {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       color: var(--color-on-surface-900);
       margin-block: 2.5rem 2rem;
     }
+
     h1 {
       font-size: var(--text-5xl);
       line-height: var(--text-5xl--line-height);
     }
+
     h2 {
       font-size: var(--text-3xl);
       line-height: var(--text-3xl--line-height);
     }
+
     p {
       color: var(--color-on-surface-800);
       font-size: var(--text-base);
       line-height: var(--text-lg--line-height);
       margin-block: 2rem;
     }
+
     p:only-child {
       margin-block: 0;
     }

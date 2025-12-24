@@ -35,16 +35,14 @@ pub type Technology {
 
 /// Renders a card based on a specific coding project.
 ///
-pub fn card(
-  project project: Project(a),
-) -> Element(a) {
+pub fn card(project project: Project(a)) -> Element(a) {
   let icon_class =
     project.icon_class |> option.unwrap(attribute.class("h-full w-full"))
 
   card.basic(
     [
       attribute.class(
-        "px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800",
+        "px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800 transform-gpu",
       ),
     ],
     [
@@ -56,7 +54,7 @@ pub fn card(
               attribute.href(project.link),
               attribute.target("_blank"),
               attribute.class(
-                "grid max-w-24 sm:max-w-18 w-full mx-auto sm:mx-0 p-4 h-min relative before:content-[''] before:absolute before:inset-0 before:rounded-lg before:bg-surface-400/25 dark:before:bg-surface-900/25 before:z-0",
+                "grid max-w-24 sm:max-w-18 w-full mx-auto sm:mx-0 p-4 h-min relative before:content-[''] before:absolute before:inset-0 before:rounded-lg before:bg-surface-400/25 dark:before:bg-surface-900/25 before:z-0 transform-gpu",
               ),
               attribute.aria_label(project.icon_label),
             ],
@@ -64,7 +62,7 @@ pub fn card(
               html.img([
                 attribute.src(router.base_path() <> project.icon),
                 icon_class,
-                attribute.class("object-contain mx-auto z-1"),
+                attribute.class("object-contain mx-auto z-1 transform-gpu"),
               ]),
             ],
           ),
@@ -123,8 +121,10 @@ fn tech_container(
             html.img([
               attribute.alt(alt),
               attribute.class(
-                "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
+                "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition transform-gpu",
               ),
+              attribute.attribute("width", "20"),
+              attribute.attribute("height", "20"),
               attribute.src(router.base_path() <> src),
             ]),
           ])
@@ -140,8 +140,10 @@ fn tech_container(
                 html.img([
                   attribute.alt(alt),
                   attribute.class(
-                    "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
+                    "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition transform-gpu",
                   ),
+                  attribute.attribute("width", "20"),
+                  attribute.attribute("height", "20"),
                   attribute.src(router.base_path() <> src),
                 ]),
               ],
@@ -159,8 +161,10 @@ fn tech_container(
                 html.img([
                   attribute.alt(alt),
                   attribute.class(
-                    "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition",
+                    "h-5 w-5 object-cover opacity-75 hover:opacity-100 hover:scale-125 transition transform-gpu",
                   ),
+                  attribute.attribute("width", "20"),
+                  attribute.attribute("height", "20"),
                   attribute.src(router.base_path() <> src),
                   attribute.title(title),
                 ]),

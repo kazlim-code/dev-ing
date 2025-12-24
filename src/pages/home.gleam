@@ -54,7 +54,7 @@ fn hero_section() -> Element(a) {
     html.p(
       [
         attribute.class(
-          "text-xl text-on-surface-600 dark:text-on-surface-dark-200 leading-relaxed",
+          "text-xl text-on-surface-600 dark:text-on-surface-200 leading-relaxed",
         ),
       ],
       [
@@ -85,9 +85,16 @@ pub fn whats_new() -> Element(a) {
   let content = case latest_post {
     Ok(post) -> blog_component.post_to_snippet(post)
     Error(_) ->
-      card.basic([attribute.class("p-6 rounded-3xl")], [
-        html.p([], [text("No new updates yet.")]),
-      ])
+      card.basic(
+        [
+          attribute.class(
+            "px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800 transform-gpu",
+          ),
+        ],
+        [
+          html.p([], [text("No new updates yet.")]),
+        ],
+      )
   }
 
   html.section([attribute.class("flex flex-col gap-6")], [
@@ -140,12 +147,9 @@ fn featured_articles() -> Element(a) {
     // Placeholder content
     html.p(
       [
-        attribute.class(
-          "text-on-surface-500 dark:text-on-surface-dark-400 italic",
-        ),
+        attribute.class("text-on-surface-500 dark:text-on-surface-400 italic"),
       ],
       [text("Curated articles coming soon...")],
     ),
   ])
 }
-
