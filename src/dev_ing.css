@@ -84,11 +84,13 @@
   }
 
   .bg-page-body {
+    background-attachment: fixed;
     background-image:
       radial-gradient(circle at center, var(--color-surface-50) 0%, var(--color-surface-200) 100%);
   }
 
   .dark .bg-page-body {
+    background-attachment: fixed;
     background-image:
       radial-gradient(circle at center, var(--color-surface-800) 0%, var(--color-surface-950) 100%);
   }

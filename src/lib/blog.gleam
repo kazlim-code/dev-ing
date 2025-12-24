@@ -33,7 +33,9 @@ pub fn post_to_snippet(post post: BlogPost) -> Element(msg) {
 
   card.basic(
     [
-      attribute.class("relative px-6 py-6 [&]:rounded-3xl"),
+      attribute.class(
+        "relative px-6 py-6 sm:px-8 sm:py-8 [&]:rounded-3xl bg-linear-to-b from-surface-200 to-surface-300 dark:from-surface-700 dark:to-surface-800 transform-gpu",
+      ),
     ],
     [
       html.header(
