@@ -49,7 +49,7 @@ pub fn post_to_snippet(post post: BlogPost) -> Element(msg) {
           html.p(
             [
               attribute.class(
-                "text-xs text-on-surface-500 dark:text-on-surface-dark-300 flex gap-1 justify-between",
+                "text-xs text-on-surface-500 dark:text-on-surface-300 flex gap-1 justify-between",
               ),
             ],
             [

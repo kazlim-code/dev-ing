@@ -54,7 +54,7 @@ fn hero_section() -> Element(a) {
     html.p(
       [
         attribute.class(
-          "text-xl text-on-surface-600 dark:text-on-surface-dark-200 leading-relaxed",
+          "text-xl text-on-surface-600 dark:text-on-surface-200 leading-relaxed",
         ),
       ],
       [
@@ -147,9 +147,7 @@ fn featured_articles() -> Element(a) {
     // Placeholder content
     html.p(
       [
-        attribute.class(
-          "text-on-surface-500 dark:text-on-surface-dark-400 italic",
-        ),
+        attribute.class("text-on-surface-500 dark:text-on-surface-400 italic"),
       ],
       [text("Curated articles coming soon...")],
     ),
